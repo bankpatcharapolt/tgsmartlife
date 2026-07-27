@@ -1,0 +1,1029 @@
+<!-- #BeginEditable "bodytag" -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<style>
+
+   
+ #product-content {
+        /* 💡 ใช้ เพื่อทับ Inline Style ของคุณ */
+        margin-top: 0px;
+        left: 30px;         
+        padding-right: 0px; /* อาจต้องลบ padding-right ด้วย */
+    }
+.owl-carousel-item img {
+height: 400px !important;
+width: 100% !important;
+object-fit: contain !important;
+}
+.img-responsive{
+    max-height: fit-content !important;
+}
+    @media (max-width: 767px) {
+        .product__details__tab .nav-tabs .nav-item .nav-link.active {
+            border-bottom: 0px !important;
+        }
+        .owl-carousel-item img {
+            height: 200px !important;
+        }
+    #product-content {
+        /* 💡 ใช้ !important เพื่อทับ Inline Style ของคุณ */
+         margin-top: 20px;
+        left: 0px !important;      
+        padding-left: 0px !important; /* อาจต้องลบ padding-right ด้วย */   
+        padding-right: 0px !important; /* อาจต้องลบ padding-right ด้วย */
+    }
+}
+
+    .spec-item-title{
+        font-size: 0.875rem;
+        font-weight: bold;
+        letter-spacing: 0em;
+        line-height: 1.25rem;
+        text-transform: none;
+    }
+    .spec-title{
+        color: rgb(0, 0, 0);
+      
+        font-size: 1.5rem;
+        font-weight: bold;
+        letter-spacing: 0em;
+        line-height: 2rem;
+        opacity: 1;
+        text-transform: None;
+        transition-duration: 600ms;
+    
+    }
+    .spec-item-detail{
+        color: rgb(0, 0, 0);
+    
+        font-size: 0.875rem;
+        font-weight: normal;
+        letter-spacing: 0em;
+        line-height: 1.25rem;
+        opacity: 0.8;
+        text-transform: None;
+    }
+    #pdf-viewer {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ddd;
+    }
+
+    canvas {
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+<style>
+    /* ... โค้ด CSS เดิมของคุณ ... */
+
+    /* แก้ไขการแสดงผลราคาที่ถูกขีดฆ่าให้ชัดเจน */
+    .collapse-arrow{
+        color:black;
+    }
+    .product__details__text{
+        color: #2F2F2F;
+
+font-size: 26px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+    }
+    .product__details__text span.sale_price {
+        color: #b7b7b7;
+        font-size: 18px; /* คงขนาดเดิม */
+        font-weight: 400;
+        margin-left: 10px;
+        text-decoration: line-through;
+    }
+
+    /* แก้ไขการแสดงผลรูปภาพย่อ (Thumbnails) */
+    .product__thumb__pic.set-bg {
+        /* ตรวจสอบให้แน่ใจว่ารูปภาพย่อมีสัดส่วนที่ชัดเจน */
+        height: 80px; /* กำหนดความสูงให้แน่นอน */
+        background-size: cover;
+        background-position: center;
+        border: 1px solid #eee;
+    }
+    
+    /* แก้ไขการจัดวาง tab menu ด้านข้างรูปภาพ */
+    #product-image-position .nav-tabs {
+        border-bottom: none; /* ลบเส้นด้านล่างของ tab nav ออก */
+        flex-direction: column; /* จัดเมนู tab ให้อยู่ในแนวตั้ง */
+    }
+    #product-image-position .nav-item {
+        margin-bottom: 10px;
+    }
+</style>
+<style>
+
+    @media (max-width: 991.98px) {
+
+        /* Tablet and below */
+        .addtocart {
+            height: auto;
+        }
+    }
+
+    .addtocart {
+        background-color: #005EB8;
+        color: #fff;
+        border-radius: unset;
+        height: auto;
+        font-size: inherit;
+        /* ให้ไอคอนเท่ากับขนาดของปุ่ม */
+    }
+
+    .numberCart {
+        width: 45px;
+        height: 29px;
+        text-align: center;
+        border-radius: unset;
+        border: 1px solid #A4A4A4;
+        box-sizing: border-box;
+        background-color: #FFF;
+
+    }
+
+    div.form-increase {
+        position: relative;
+        top: -25px !important;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .value-button {
+        /* width: 40px;
+        height: 40px; */
+        padding-bottom: 4px;
+        padding-top:2px;
+        width: 35px;
+        height: 29px;
+        border-radius: unset;
+        border: 1px solid #A4A4A4;
+        box-sizing: border-box;
+        background-color: #FFF;
+
+    }
+
+    .value-button:hover {
+        cursor: pointer;
+    }
+
+    .product__details__text .sale_price {
+        color: #b7b7b7;
+        font-size: 18px;
+        font-weight: 400;
+        margin-left: 10px;
+        text-decoration: line-through;
+    }
+</style>
+<!-- Breadcrumb Section Begin -->
+
+<section class="breadcrumb-option body-padding" style="background-color: white;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4 style="color: #2F2F2F;
+
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;">ผลิตภัณฑ์</h4>
+                    <div class="breadcrumb__links">
+                        <a href="<?= base_url(); ?>">หน้าแรก</a>
+                        <a href="<?= base_url('products'); ?>">สินค้าทั้งหมด</a>
+                        <span>เครื่องฟอกอากาศระบบสัมผัส</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- product Details Section Begin -->
+<section class="product__details spad body-padding" style="padding-top: 0px;padding-bottom:0px;">
+    <div class="product__details__pic">
+        <div class="container">
+            <div class="row">
+                  <?php $this->load->view('desktop/product_detail_slide'); ?>
+                <!-- <div class="col-lg-2 col-md-3" id="product-image-position">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-1.png">
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-2.png">
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-3.png">
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-4.png">
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-1.png">
+                                    <i class="fa fa-play"></i>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-9" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-1.png">
+                                    <i class="fa fa-play"></i>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-6 col-md-9" id="product-image-tab-position">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            <div class="product__details__pic__item">
+                                <img src="img/product-details/air-purifier-ozone/product-big.png" alt="">
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                            <div class="product__details__pic__item">
+                                <img src="img/product-details/air-purifier-ozone/product-big-1.png" alt="">
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-3" role="tabpanel">
+                            <div class="product__details__pic__item">
+                                <img src="img/product-details/air-purifier-ozone/product-big-2.png" alt="">
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-4" role="tabpanel">
+                            <div class="product__details__pic__item">
+                                <img src="img/product-details/air-purifier-ozone/product-big-3.png" alt="">
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-5" role="tabpanel">
+                            <div class="product__details__pic__item">
+                                <img src="img/product-details/air-purifier-ozone/product-big.png" alt="">
+                                <a href="https://video01.alibaba.com/vod-icbu/lyiYYDyzGqdphnerW6D/IDlRp3O8FEFSicP8K8Q%40%40sd.mp4?w=896&h=504&e=sd&t=2101311616884381039416195e9335&b=unknown_video_6751963&p=*_icbu_vod_publish&tr=mp4-264-sd" class="video-popup"><i class="fa fa-play"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+               <div class="col-lg-4 col-md-3 pl-md-3" id="product-content" style="/* ลบ left:30px; ออก */">
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="product__details__content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12" style="padding:0px;">
+                    <div class="product__details__tab">
+                       <ul class="nav nav-tabs justify-content-start" role="tablist">
+                        <li class="nav-item ">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">รายละเอียดสินค้า</a>
+                        </li>
+                         <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-9999" role="tab">ข้อมูลรับประกันสินค้า</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+
+                            <div class="tab-pane" id="tabs-9999" role="tabpanel">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+  <div class="container body-padding" style="margin-top:50px;margin-bottom:50px;">
+    <span style="color: #2F2F2F;font-family:'Prompt', sans-serif;
+
+    font-size: 20px;
+
+    font-weight: bold;
+    line-height: normal;">ข้อมูลจำเพาะ</span>
+    <!-- แถวที่ 1 -->
+    <div class="row" id="productDetailContainer" style="margin-top: 20px;">
+            <div class="container" style="padding-left:2px;padding-right:0px;">
+    <div class="content">
+        <div class="accordion" id="productAccordion"> 
+        
+            
+            
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+
+   <div class="container body-padding" style="margin-top:50px;margin-bottom:50px;">
+    <span style="color: #2F2F2F;font-family:'Prompt', sans-serif;
+
+    font-size: 20px;
+
+    font-weight: bold;
+    line-height: normal;">เอกสารคู่มือ และข้อมูลสินค้า</span>
+    <!-- แถวที่ 1 -->
+    <div class="row" id="docContainer" style="">
+
+        
+    </div>
+</div>
+<!-- Shop Details Section End -->
+<!-- Warranty Section  -->
+
+
+<!-- Related Section Begin -->
+<section class="related spad body-padding" style="padding-top:55px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="related-title" style="color: #2F2F2F;
+margin-bottom:20px;
+text-align:left;
+font-size: 24px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;">สินค้าแนะนำ</h3>
+            </div>
+        </div>
+        <div class="row" id="product_related">
+          
+        </div>
+    </div>
+</section>
+<!-- Related Section End -->
+<!-- #EndEditable -->
+
+   <!-- new product spread version -->
+     <?php $this->load->view('desktop/product_interest'); ?>
+<!-- Shop Section End -->
+
+<script src="<?= base_url('assete/js/add_to_cart.js') ?>"></script>
+<script>
+    var base_url = "<?= base_url(); ?>";
+    drawcontens(base_url);
+$("#header_product_interest").html("บริการอื่นๆ");
+  /**
+ * ฟังก์ชันสำหรับเปิดลิงก์เป้าหมายในหน้าต่าง/แท็บใหม่เสมอ
+ * @param {string} target - URL เต็ม (เช่น https://google.drive.com/...)
+ */
+function redirectToLink(target) {
+    if (target && typeof target === 'string') {
+        // 💡 1. เตรียม URL ให้สมบูรณ์ (เพิ่ม https:// ถ้าจำเป็น)
+        // เพื่อให้แน่ใจว่าเบราว์เซอร์รับรู้ว่าเป็นลิงก์ภายนอก
+        let url = target;
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+
+        // 💡 2. เปิดลิงก์ในแท็บใหม่
+        // ใช้ window.open(url, '_blank') ซึ่งเป็นโค้ดที่คุณต้องการ
+        window.open(url, '_blank');
+    } else {
+        console.error("Invalid target URL provided to redirectToLink.");
+    }
+}
+jQuery(document).ready(function() {
+        loadDocuments();
+
+         loadSpecDetails();
+    });
+
+
+   // ใช้ $(document).on เพื่อให้ดักจับแท็บที่เกิดจากการ append ได้
+$(document).on('shown.bs.tab', '.product__details__tab a[data-toggle="tab"]', function (e) {
+    var targetId = $(e.target).attr('href');
+    
+    // หา Container ของข้อมูลจำเพาะและคู่มือ (เลือกตัวที่อยู่ถัดจาก product__details)
+    var $specSection = $('#productDetailContainer').closest('.container');
+    var $docSection = $('#docContainer').closest('.container');
+
+    if (targetId === '#tabs-9999') {
+        // เมื่อกด "ข้อมูลรับประกันสินค้า" -> สั่งซ่อน
+        $specSection.stop().fadeOut(200);
+        $docSection.stop().fadeOut(200);
+    } else {
+        // เมื่อกดแท็บอื่นๆ (เช่น รายละเอียดสินค้า) -> สั่งแสดง
+        $specSection.stop().fadeIn(200);
+        $docSection.stop().fadeIn(200);
+    }
+});
+/**
+ * ฟังก์ชันสำหรับโหลดและสร้าง Dynamic Accordion
+ */
+function loadSpecDetails() {
+    const product_id = "<?= $id; ?>";
+    const api_url = base_url + 'Main/get_product_spec_details';
+    const $accordionContainer = jQuery('#productAccordion'); // Container หลัก
+    
+    // ตั้งค่าสถานะการโหลดเป็น True เพื่อไม่ให้มีการโหลดซ้ำ
+    $accordionContainer.data('loaded', true); 
+
+    jQuery.ajax({
+        url: api_url,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'product_id': product_id
+        },
+        beforeSend: function() {
+            $accordionContainer.html('<p style="text-align: center;">กำลังโหลดข้อมูลจำเพาะ...</p>');
+        },
+        success: function(response) {
+            
+            if (response && response.status === true && response.datas && response.datas.length > 0) {
+                
+                // ข้อมูลจำเพาะจากสินค้าตัวแรก
+                const specDataGroups = response.datas[0].spec_details_html; 
+                let accordionHTML = '';
+                let index = 0; 
+                
+                // ตรวจสอบว่าเป็น Object และมีข้อมูลหรือไม่
+                if (typeof specDataGroups === 'object' && specDataGroups !== null) {
+                    
+                    // วนลูปผ่าน Object specDataGroups (กลุ่มข้อมูลจำเพาะ)
+                    jQuery.each(specDataGroups, function(groupId, group) {
+                        const collapseId = 'collapseSpec' + groupId;
+                      
+                        const headingId = 'headingSpec' + groupId;
+                        // 💡 NEW: เปิด Accordion ตัวแรกเสมอ 
+                        const isShow = (index === 0) ? 'show' : ''; 
+                        const isExpanded = (index === 0) ? 'true' : 'false';
+                        
+                        // --- 1. สร้าง Content Body (Panel Body) ---
+                
+                        
+                        // วนลูปผ่านรายการ Items ภายในแต่ละกลุ่ม
+                 let detailBodyHTML = '<div class="row">'; // 💡 เปิด div.row เพียงครั้งเดียว (ด้านนอก Loop)
+
+// วนลูปผ่านรายการ Items ภายในแต่ละกลุ่ม
+jQuery.each(group.items, function(itemIndex, item) {
+    
+    // 💡 NEW: สร้างคอลัมน์ col-6/col-md-6 สำหรับแต่ละ Item
+    detailBodyHTML += `
+        <div class="col-12 col-md-6 spec-item-container" style="margin-bottom: 10px; padding: 10px;">
+            <div class="spec-item-group">
+                
+                <div class="spec-item-title" style="">${item.title}</div>
+                
+                <div class="spec-item-detail" style="font-weight: 500; color: #2F2F2F; margin-top: 2px;">${item.detail}</div>
+            </div>
+            
+            <div style="border-bottom: 1px solid #eee; margin-top: 10px;"></div>
+        </div>
+    `;
+});
+
+detailBodyHTML += '</div>';
+                        
+                        // --- 2. สร้างโครงสร้าง Accordion Item ทั้งหมด ---
+                      accordionHTML += `
+                            <div class="card" style="border:none;">
+                                <div class="card-header" id="${headingId}" style="padding: 0; background-color: #fff; border: none;">
+                                    <h2 class="mb-0 panel-title">
+                                        <button class="btn btn-link btn-block text-left d-flex justify-content-between ${isShow ? '' : 'collapsed'}" 
+                                                type="button" 
+                                                data-toggle="collapse" 
+                                                data-target="#${collapseId}" 
+                                                aria-expanded="${isExpanded}" 
+                                                aria-controls="${collapseId}">
+                                            
+                                            <span class="spec-title" style="font-size: 18px; font-weight: 600;">${group.title}</span>
+                                            
+                                            <span class="collapse-arrow" id="set_${collapseId}" onclick="setCollapse('${collapseId}')"><i class="fa fa-chevron-${index == 0 ? 'right' : 'up'}"></i></span>
+                                        </button>
+                                    </h2>
+                                </div>
+
+                                <div id="${collapseId}" class="collapse ${isShow}" aria-labelledby="${headingId}"> 
+                                    <div class="card-body" style="padding: 10px 1.25rem;">
+                                        ${detailBodyHTML}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        index++;
+                    });
+                    
+                    // 3. ใส่ HTML ที่สร้างเสร็จแล้วลงใน Container หลัก
+                    $accordionContainer.html(accordionHTML);
+
+                
+                } else {
+                    $accordionContainer.html('<p style="text-align: center;">ไม่พบข้อมูลจำเพาะสำหรับสินค้านี้</p>');
+                }
+
+            } else {
+                $accordionContainer.html('<p style="text-align: center;">ไม่พบข้อมูลจำเพาะสำหรับสินค้านี้</p>');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX Error:", status, error);
+            $accordionContainer.html('<p style="text-align: center; color: #cc0000;">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>');
+        }
+    });
+}
+
+/**
+ * ฟังก์ชันสำหรับควบคุม Icon เท่านั้น (โดยอาศัยการทำงานของ data-toggle ในการเปิด/ปิดเนื้อหา)
+ * @param {string} targetId - ID ของ Collapse Pane (เนื้อหา) ที่ต้องการควบคุม (เช่น 'collapseSpec49')
+ */
+function setCollapse(targetId) {
+    // // 1. ค้นหา Icon Element โดยใช้ ID ที่ตั้งไว้: set_{targetId}
+    // const $icon = jQuery('#set_' + targetId).find('i'); 
+    
+    // // 2. ค้นหา Collapse Pane เพื่อตรวจสอบสถานะ
+    // const $collapsePane = jQuery('#' + targetId); 
+    
+    // // 3. ตรวจสอบสถานะ: ถ้าตอนนี้มี class 'show' (กำลังเปิดอยู่)
+    // const isCurrentlyOpen = $collapsePane.hasClass('show');
+
+    // if (isCurrentlyOpen) {
+    //     // --- สถานะ: ปัจจุบันเปิดอยู่ -> กำลังจะปิด (เปลี่ยนเป็น Icon ปิด) ---
+        
+    //     // 💡 ลบ fa-chevron-right ออก และเพิ่ม fa-chevron-up
+    //     $icon.removeClass('fa-chevron-right').addClass('fa-chevron-up');
+        
+    // } else {
+    //     // --- สถานะ: ปัจจุบันปิดอยู่ -> กำลังจะเปิด (เปลี่ยนเป็น Icon เปิด) ---
+        
+    //     // 💡 ลบ fa-chevron-up ออก และเพิ่ม fa-chevron-right
+    //     $icon.removeClass('fa-chevron-up').addClass('fa-chevron-right');
+    // }
+    
+    // // 4. ไม่มีการสั่ง .collapse('toggle'); หรือ slideUp/slideDown ในฟังก์ชันนี้
+    // //    ปล่อยให้ data-toggle="collapse" ที่อยู่ใน HTML จัดการการเปิด/ปิดเนื้อหาเอง
+}
+
+jQuery(document).on('shown.bs.collapse', '.collapse', function () {
+    const collapseId = this.id;
+    const $icon = jQuery(`[data-target="#${collapseId}"]`).find('.collapse-arrow i');
+    // เมื่อเปิด -> เป็น fa-chevron-right
+    $icon.removeClass('fa-chevron-up fa-chevron-down').addClass('fa-chevron-right');
+});
+
+jQuery(document).on('hidden.bs.collapse', '.collapse', function () {
+    const collapseId = this.id;
+    const $icon = jQuery(`[data-target="#${collapseId}"]`).find('.collapse-arrow i');
+    // เมื่อปิด -> เป็น fa-chevron-up
+    $icon.removeClass('fa-chevron-right fa-chevron-down').addClass('fa-chevron-up');
+});
+
+
+
+
+function loadDocuments() {
+    // 💡 1. กำหนดค่า ID สินค้า (เหมือนเดิม)
+    const product_id = "<?= $id; ?>"; 
+
+    // 💡 2. URL ของ Controller/API (เหมือนเดิม)
+    const api_url = base_url + 'Main/get_document_list'; 
+
+    jQuery.ajax({
+        url: api_url,
+        type: 'POST', 
+        dataType: 'json',
+        async: true,
+        
+        // 💡 ส่งค่า ID สินค้าไปกับ Request (เหมือนเดิม)
+        data: {
+            'product_id': product_id 
+        },
+        
+        beforeSend: function() {
+            jQuery('#docContainer').html('<div style="text-align: center;" class="col-md-12">ไม่พบข้อมูล</div>');
+        },
+        success: function(response) {
+            
+            // 💡 NEW: ตรวจสอบสถานะ 'status: true' และตรวจสอบว่ามี 'datas' และ 'manual_details_html' หรือไม่
+            if (
+                response && 
+                response.status === true && // เปลี่ยนการเช็คสถานะเป็น true
+                response.datas && 
+                response.datas.length > 0 && 
+                response.datas[0].manual_details_html // ต้องแน่ใจว่ามี manual_details_html ในสินค้าตัวแรก
+            ) {
+                
+                // ดึงอาร์เรย์คู่มือออกจากสินค้าตัวแรก
+                const manualDocuments = response.datas[0].manual_details_html;
+                
+                if (manualDocuments.length > 0) {
+                    
+                    let documentsHTML = '';
+                    
+                    // 💡 วนลูปในอาร์เรย์ manualDocuments (ซึ่งคือ manual_details_html)
+                    jQuery.each(manualDocuments, function(index, doc) {
+                        
+                        // doc.title คือชื่อคู่มือ (เช่น คู่มือA)
+                        const docTitle = doc.title; 
+                        // doc.detail คือ Link/URL (เช่น google.drive.com/...)
+                        const targetLink = doc.detail || '#'; 
+                        
+                        const clickAction = `redirectToLink('${targetLink}')`;
+                        
+                        documentsHTML += `
+                            <div class="col-sm-4" style="cursor:pointer; margin-top:20px;" onclick="${clickAction}">
+                                <div>
+                                    <div class="product-title" style="color: #2F2F2F; font-size: 16px; font-weight: 500;">${docTitle}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    jQuery('#docContainer').html(documentsHTML);
+                } else {
+                     // หากไม่พบรายการคู่มือใน manual_details_html
+                     jQuery('#docContainer').html('<p style="text-align: center; color: #606060;">ไม่พบรายการเอกสารคู่มือสำหรับสินค้านี้</p>');
+                }
+
+            } else {
+                // หากสถานะไม่สำเร็จ หรือโครงสร้างข้อมูลไม่ถูกต้อง
+                jQuery('#docContainer').html('<p style="text-align: center; color: #606060;">ไม่พบรายการเอกสารคู่มือเพิ่มเติม</p>');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX Error:", status, error);
+            jQuery('#docContainer').html('<p style="text-align: center; color: #cc0000;">เกิดข้อผิดพลาดในการดึงข้อมูลเอกสาร</p>');
+        }
+    });
+}
+
+
+function drawcontens(base_url) {
+
+        //###  image ###//
+        var product_images = get_product_images(base_url);
+        if (product_images.datas.length > 0) {
+            buildCarouselGallery(product_images.datas, base_url);
+        }
+
+        //###  ressults ###//
+        var results = get_results(base_url);
+        var contents = '';
+        if (results.datas.length > 0) {
+            var reslt = results.datas[0];
+
+            //### product-content ###//
+            $('.breadcrumb-option .breadcrumb__text span').html(reslt.name);
+            var product_content_html = '';
+            product_content_html += '<div class="product__details__text">';
+            product_content_html += '<h4>' + reslt.name + '</h4>';
+
+            var price_html = '';
+            if ((reslt.saleprice != null && reslt.saleprice != '') && reslt.saleprice > 0) {
+                price_html = '<div><h3 class="" style="color: #2F2F2F;font-size: 24px;font-style: normal;font-weight: 700;line-height: normal;">฿' + addCommas(reslt.saleprice) + ' <span class="sale_price">฿' + addCommas(reslt.price) + '</span></h3></div>';
+            } else {
+                price_html = '<div><h3 class="" style="color: #2F2F2F;font-size: 24px;font-style: normal;font-weight: 700;line-height: normal;">฿' + addCommas(reslt.price) + '</h3></div>';
+            }
+         
+            product_content_html += '<p style="margin-bottom:0px;">' + reslt.subtitle + '</p>';
+            product_content_html += price_html;
+            product_content_html += '<div class="product__details__cart__option">';
+            // เพิ่ม input เพิ่มจำนวนสินค้า 
+            product_content_html += `<div class="form-increase d-flex align-items-center" style="margin-top:30px;">
+             
+                <button class="value-button btn btn-light " id="decrease_${reslt.id}" onclick="decreaseValue(${reslt.id})" value="Decrease Value">-</button>
+                <input type="number" id="number_${reslt.id}" class="numberCart form-control " value="1" style=" margin: 0;">
+                <button class="value-button btn btn-light " id="increase_${reslt.id}" onclick="increaseValue(${reslt.id})" value="Increase Value">+</button>
+             
+               
+                <button class="btn btn-primary ml-4 ml-md-auto addtocart d-flex align-items-center" style="color: #FFF;
+text-align: center;
+height:41px;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;" onclick="addToCart(${reslt.id})"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="16" viewBox="0 0 15 16" fill="none">
+  <path d="M12.1836 14.8631C12.7248 14.8631 13.1636 14.3892 13.1636 13.8046C13.1636 13.22 12.7248 12.7461 12.1836 12.7461C11.6424 12.7461 11.2036 13.22 11.2036 13.8046C11.2036 14.3892 11.6424 14.8631 12.1836 14.8631Z" fill="black" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M5.64992 14.8631C6.19114 14.8631 6.62992 14.3892 6.62992 13.8046C6.62992 13.22 6.19114 12.7461 5.64992 12.7461C5.10868 12.7461 4.66992 13.22 4.66992 13.8046C4.66992 14.3892 5.10868 14.8631 5.64992 14.8631Z" fill="black" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M2.71 2.16132H13.8167L12.51 9.92357H4.01667L2.71 2.16132ZM2.71 2.16132C2.60111 1.69088 2.05667 0.75 0.75 0.75" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12.51 9.92383H4.01666H2.86076C1.69501 9.92383 1.07666 10.4751 1.07666 11.3351C1.07666 12.1952 1.69501 12.7465 2.86076 12.7465H12.1833" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>&nbsp;เพิ่มไปยังรถเข็น</button>
+            </div></li>`;
+            product_content_html += '<span class="md-3" style="color: #606060;font-size: 16px;font-style: normal;font-weight: 500;line-height: 150%; /* 24px */">หรือสั่งซื้อได้ที่</span>';
+
+            if (reslt.salerphone != null && reslt.salerphone != '') {
+                product_content_html += '<p class="call-center" style="margin-bottom: 0px;"><a  style="" href="#">Call Center : ' + reslt.salerphone + '</a></p>';
+            }
+
+            product_content_html += '<p class="line-tag" style="color: #005EB8;font-size: 16px;font-style: normal;font-weight: 500;margin-bottom:0px;">';
+            product_content_html += '<a href="" style="">LINE : @tgsmartlife</a>';
+            product_content_html += '</p>';
+            product_content_html += '</div>';
+            product_content_html += '<div class="product__details__cart__option">';
+            product_content_html += '<ul>';
+
+            product_content_html += '<li><span style="color: #606060;font-size: 12px;font-style: normal;font-weight: 500;line-height: 150%;">รหัสสินค้า : '+ reslt.productcode + '</span></li>';
+
+
+            console.log(reslt);
+            product_content_html += '</ul>';
+
+            product_content_html += '</div>';
+            product_content_html += '</div>';
+            $('#product-content').html(product_content_html);
+
+            //### product-detail ###//
+            
+            $('.product__details__tab ul li:first-child').html('<a class="nav-link active" data-toggle="tab" href="#tabs-' + reslt.id + '" role="tab">รายละเอียดสินค้า</a>');
+
+            var product_tab_content_html = '';
+            product_tab_content_html += '<div class="tab-pane active" id="tabs-' + reslt.id + '" role="tabpanel">';
+            product_tab_content_html += '<div class="product__details__tab__content">';
+            product_tab_content_html += '<div class="row">';
+            product_tab_content_html += '<div class="col-lg-12 col-md-12 col-sm-12">';
+            product_tab_content_html += reslt.detail;
+            product_tab_content_html += '</div>';
+            product_tab_content_html += '</div>';
+            product_tab_content_html += '</div>';
+            product_tab_content_html += '</div>';
+            $('.product__details__tab .tab-content').html(product_tab_content_html);
+
+            // warranty section 
+
+            var product_warranty_content_html = '';
+            product_warranty_content_html += '<div class="tab-pane " id="tabs-9999" role="tabpanel">';
+            product_warranty_content_html += '<div class="product__warranty__tab__content">';
+            product_warranty_content_html += '<div class="row">';
+            product_warranty_content_html += '<div class="col-lg-12 col-md-12 col-sm-12">';
+            product_warranty_content_html += reslt.warranty;
+            product_warranty_content_html += '</div>';
+            product_warranty_content_html += '</div>';
+            product_warranty_content_html += '</div>';
+            product_warranty_content_html += '</div>';
+            $('.product__details__tab .tab-content').append(product_warranty_content_html);
+
+            var product_manual_file = "";
+            product_manual_file += '<div class="tab-pane" id="tabs-10" role="tabpanel">';
+            product_manual_file += '<div class="product__warranty__tab__content" id="pdfView">';
+            product_manual_file += '<div class="row">';
+            product_manual_file += '<div class="col-lg-12 col-md-12 col-sm-12" id="pdf-viewer">';
+            if (reslt.manual_path != '' && reslt.manual_path != null) {
+                const filePath = reslt.manual_path;
+                const url = new URL(filePath, window.location.href); // Create a URL object
+                const fileName = url.pathname.split('/').pop(); // Extract the filename
+                console.log(fileName); // Output: tg_smartlife_timeline_20240519.pdf
+                var fullFilePath = base_url + "uploads/images/product/" + reslt.id + "/" + fileName;
+                product_manual_file += '<iframe src="'+fullFilePath+'" style="width:100%;height:100%;"></iframe>'; 
+               
+              //  readerPdf(base_url + "uploads/images/product/" + reslt.id + "/" + fileName);
+            }
+       
+            product_manual_file += '</div>';
+            product_manual_file += '</div>';
+            product_manual_file += '</div>';
+            product_manual_file += '</div>';
+
+            $('.product__details__tab .tab-content').append(product_manual_file);
+          
+          
+
+        }
+    }
+
+
+    function readerPdf(url) {
+            var loadingTask = pdfjsLib.getDocument(url);
+
+            loadingTask.promise.then(function(pdf) {
+                console.log('PDF loaded');
+
+                var numPages = pdf.numPages;
+                console.log('Number of pages: ' + numPages);
+                var pdfViewer = document.getElementById('pdf-viewer');
+
+                // ฟังก์ชันสำหรับเรนเดอร์หน้า PDF
+                function renderPage(pageNum) {
+                    pdf.getPage(pageNum).then(function(page) {
+                        console.log('Page ' + pageNum + ' loaded');
+
+                        var scale = 1.0; // ค่าขยายเริ่มต้น
+                        var viewport = page.getViewport({ scale: scale });
+
+                        // คำนวณขนาดที่เหมาะสม
+                        var containerWidth = pdfViewer.clientWidth;
+                        var containerHeight = pdfViewer.clientHeight;
+
+                        // ปรับขนาดของ scale ให้พอดีกับ container
+                        if (viewport.width > containerWidth || viewport.height > containerHeight) {
+                            scale = Math.min(containerWidth / viewport.width, containerHeight / viewport.height);
+                            viewport = page.getViewport({ scale: scale });
+                        }
+
+                        // สร้าง canvas สำหรับการเรนเดอร์
+                        var canvas = document.createElement('canvas');
+                        var context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        // ตรวจสอบขนาดของ canvas
+                        console.log(`Canvas size: ${canvas.width}x${canvas.height}`);
+
+                        pdfViewer.appendChild(canvas);
+
+                        // เรนเดอร์หน้า PDF ลงใน canvas
+                        var renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+                        var renderTask = page.render(renderContext);
+                        renderTask.promise.then(function() {
+                            console.log('Page ' + pageNum + ' rendered');
+                        }).catch(function(error) {
+                            console.error('Error rendering page ' + pageNum + ': ' + error);
+                        });
+                    }).catch(function(error) {
+                        console.error('Error loading page ' + pageNum + ': ' + error);
+                    });
+                }
+
+                // เรียกใช้ฟังก์ชัน renderPage สำหรับทุกหน้า
+                for (var i = 1; i <= numPages; i++) {
+                    renderPage(i);
+                }
+            }).catch(function(reason) {
+                console.error('Error loading PDF: ' + reason);
+            });
+        }
+    function get_results(base_url) {
+        var res = null;
+        $.ajax({
+            url: base_url + 'Main/get_product_detail_once', //ทำงานกับไฟล์นี้
+            data: {
+                'id': "<?= $id; ?>"
+            }, //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) {
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    function get_product_images(base_url) {
+        var res = null;
+        $.ajax({
+            url: base_url + 'Main/get_product_images', //ทำงานกับไฟล์นี้
+            data: {
+                'id': "<?= $id; ?>"
+            }, //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) {
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    draw_products_related(base_url);
+
+    function draw_products_related(base_url) {
+        var products_related = get_product_related(base_url, 2); // 2 = สินค้าแนะนำ
+        if (products_related.datas.length > 0) {
+            var products_related_html = '';
+            $.each(products_related.datas, function(key, related) {
+
+                products_related_html += '<div class="row-cols-5 col-md-6 col-sm-6 col-sm-6">';
+                products_related_html += '<a href="' + base_url + 'product_detail/' + related.id + '" style="color: #111111;">';
+                products_related_html += '<div class="product__item">';
+                products_related_html += '<div class="product__item__pic set-bg" data-setbg="' + base_url + '/' + related.thumnal + '?random=' + Math.random() + '">';
+
+                //### product tag ###//
+                if (related.tag != null && related.tag != '') {
+                    var products_tags = get_products_tag(base_url, related.tag);
+                    if (products_tags.datas.length > 0) {
+                        var tag_top = 10;
+                        $.each(products_tags.datas, function(key, tag) {
+                            var tag_styles = 'style="background: ' + tag.backgroundcolor + '; top: ' + tag_top + 'px;"';
+                            products_related_html += '<span class="label" ' + tag_styles + '>' + tag.name + '</span>';
+                            tag_top += 25;
+                        });
+                    }
+                }
+                //products_related_html += price_html;
+                //products_related_html += '<span class="label">'+related.name+'</span>';
+                // products_related_html += '<ul class="product__hover">';
+                // products_related_html += '<li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>';
+                // products_related_html += '<li><a href="#"><img src="img/icon/search.png" alt=""></a></li>';
+                // products_related_html += '</ul>';
+                products_related_html += '</div>';
+                products_related_html += '<div class="product__item__text">';
+                products_related_html += '<span style="color: #2F2F2F;font-size: 16px;font-style: normal;font-weight: 500;line-height: normal;">' + related.name + '</span><br>';
+                // products_related_html += '<div class="add-cart add-cart-online">';
+                // products_related_html += '<a href="#" class="add-cart-shopee"><img src="img/shopee-logo.png" alt=""></a>';
+                // products_related_html += '<a href="#" class="add-cart-lazada"><img src="img/lazada-logo.png" alt=""></a>';
+                // products_related_html += '</div>';
+                //products_related_html += '<span>ราคา  <b class="h5 fw-7 text-danger">43,999.00 บาท</b></span>';
+
+                // var price_html = '';
+                // if((related.saleprice != null && related.saleprice != '') && related.saleprice > 0){
+                //     price_html = '<span>ราคา  <b class="h5 fw-7 text-danger">'+addCommas(related.saleprice)+' บาท</b></span><span class="sale_price">฿'+addCommas(related.price)+'<span>';
+                // }else{
+                //     price_html = '<span>ราคา  <b class="h5 fw-7 text-danger">'+addCommas(related.price)+' บาท</b></span>';
+                // }
+                products_related_html += '<span style="color: #2F2F2F;font-size: 20px;font-style: normal;font-weight: 700;line-height: normal;">  <b class="h5 fw-7 ">฿' + addCommas(related.price) + '</b></span>';
+
+                products_related_html += '</div>';
+                products_related_html += '</div>';
+                products_related_html += '</a>';
+                products_related_html += '</div>';
+
+            });
+            $('#product_related').html(products_related_html);
+        } else {
+            $('.related').css("display", "none");
+        }
+    }
+
+    function get_product_related(base_url, tag) {
+        var res = null;
+        $.ajax({
+            url: base_url + 'Main/get_product_related', //ทำงานกับไฟล์นี้
+            data: {
+                'tag': tag
+            }, //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) {
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    function get_products_tag(base_url, tag) {
+        var res = null;
+        $.ajax({
+            url: base_url + 'Main/get_products_tag', //ทำงานกับไฟล์นี้
+            data: {
+                'tag': tag
+            }, //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) {
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    function addCommas(numberString) {
+        numberString += '';
+        var x = numberString.split('.'),
+            x1 = x[0],
+            x2 = x.length > 1 ? '.' + x[1] : '',
+            rgxp = /(\d+)(\d{3})/;
+
+        while (rgxp.test(x1)) {
+            x1 = x1.replace(rgxp, '$1' + ',' + '$2');
+        }
+
+        return x1 + x2 + '.00';
+    }
+</script>

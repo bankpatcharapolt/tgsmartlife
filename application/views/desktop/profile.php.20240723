@@ -1,0 +1,718 @@
+<style>
+    .btnSubmit {
+        background-color: #005EB8;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+
+    .btnProfile {
+        color: #007bff;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .btnProfile:hover {
+        color: #007bff;
+        text-decoration: underline;
+    }
+
+    .btnProfile:focus {
+        color: #005EB8;
+        text-decoration: underline;
+    }
+
+    .btnAddr {
+        color: #007bff;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+
+    .btnAddr:hover {
+        color: #007bff;
+        text-decoration: underline;
+    }
+
+    .btnAddr:focus {
+        color: #005EB8;
+        text-decoration: underline;
+    }
+
+
+    .card-header-divider::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        border-top: 1px solid #dee2e6;
+        z-index: -1;
+    }
+
+    .card-header-divider .left-content,
+    .card-header-divider .right-content {
+        position: relative;
+        z-index: 1;
+        background-color: #fff;
+        padding: 0 10px;
+    }
+
+    */
+
+    /* .login .container-2 {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border: 1px solid #717171;
+  position: relative;
+  margin: 0 0 25px 2px;
+  padding: 12px 23px 17px 23px;
+  width: fit-content;
+  box-sizing: border-box;
+} */
+    .btn {
+        line-height: 32px;
+    }
+
+    .form-control {
+        line-height: 32px;
+        height: 48px;
+        width: 100%;
+    }
+</style>
+<script src="<?= base_url('assete/sweetalert2/sweetalert2.all.min.js') ?>"></script>
+<link href="<?= base_url('assete/sweetalert2/sweetalert2.min.css') ?>" rel="stylesheet">
+
+<div class="container">
+    <div class="row justify-content-center mt-5 mb-5">
+        <div class="col-md-10" >
+            <div class="card" style="border:0px;">
+                <div class="card-body" id="profile-div" style="border: 1px solid #E2E2E2;">
+                    <form action="#" method="post" id="profile-form">
+
+                        <div class="form-group row">
+                            <label for="username" class="col-sm-2 col-form-label">ชื่อผู้ใช้:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="username" name="username" value="<?php echo $profile[0]['username'] ?>" required disabled>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label for="email" class="col-sm-2 col-form-label">อีเมล:</label>
+                            <div class="col-sm-8">
+                                <input type="email" class="form-control" id="email" name="email" value="<?php echo $profile[0]['email'] ?>" required disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="phone" class="col-sm-2 col-form-label">เบอร์โทร:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="phone" name="phone" value="<?php echo $profile[0]['phone'] ?>" required disabled>
+                            </div>
+                            <div class="col-sm-2">
+                                <span class="btnProfile" id="btnEditProfile" onclick="goToChangeProfile()">เปลี่ยนข้อมูลส่วนบุคคล</span>
+                                <span class="btnProfile" id="btnCancleEditProfile" style="display: none;" onclick="goToUndoChangeProfile()">ยกเลิกการแก้ไขข้อมูล</>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3" align="center" style="display: none;" id="divSaveProfile">
+                            <button type="submit" class="btn btn-primary btn-block btnSubmit col-md-8">บันทึก</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+        <?php
+
+        function getAddr($value, $province, $amphur, $districts, $addr)
+        {
+            $addr_name = empty($value['address_name']) ? "-" : $value['address_name'];
+            $province_name = "-";
+            $keyP = array_search($value['province_id'], array_column($province, 'id'));
+
+            if (is_numeric($keyP)) {
+                $province_name = $province[$keyP]['name_th'];
+            }
+
+            $amphur_name = "-";
+            $keyA = array_search($value['amphur_id'], array_column($amphur, 'id'));
+            if (is_numeric($keyA)) {
+                $amphur_name = $amphur[$keyA]['name_th'];
+            }
+            $district_name = "-";
+            $keyD = array_search($value['district_id'], array_column($districts, 'id'));
+            if (is_numeric($keyD)) {
+                $district_name = $districts[$keyD]['name_th'];
+            }
+            $zip_code = empty($value['zipcode']) ? "-" : $value['zipcode'];
+            $addr .= " ชื่อสถานที่ " . $addr_name;
+            $addr .= " จังหวัด " . $province_name;
+            $addr .= " เขต " . $amphur_name;
+            $addr .= " แขวง " . $district_name;
+            $addr .= " รหัสไปรษณีย์ " . $zip_code;
+
+            return $addr;
+        }
+        ?>
+        <div class="col-md-10">
+            <div class="card" style="border:0px;">
+                <div class="card-body pb-0 " id="address-div">
+
+
+                    <form action="#" method="post" id="address-form">
+                        <div class="addr-div p-2" style="background: rgba(0, 94, 184, 0.1);border: 1px solid #E2E2E2;display:none;">
+                            <h6>แก้ไขที่อยู่จัดส่ง</h6>
+                        </div>
+                        <div class="form-group row">
+                            <label for="address" class="col-sm-10 col-form-label">ที่อยู่จัดส่ง:<?php
+                                                                                                $addr = "";
+
+
+                                                                                                foreach ($address as $addrk => $value) {
+                                                                                                    if ($value['addr_type'] == 1) {
+                                                                                                        $addr = getAddr($value, $province, $amphur, $districts, $addr);
+                                                                                                    }
+                                                                                                }
+                                                                                                echo $addr;
+
+                                                                                                ?></label>
+                            <div class="col-sm-2">
+                                <span class="btnAddr" id="btnEditAddr" onclick="goToChangeAddr()">เปลี่ยน</span>
+                                <span class="btnAddr" id="btnCancleEditAddr" onclick="goToUndoChangeAddr()" style="display:none;">ยกเลิกการแก้ไข</span>
+
+                            </div>
+                        </div>
+
+                        <div class="addr-div " style="display:none;">
+                            <?php
+                            $addr_array = [];
+                            foreach ($address as $addrkk => $v) {
+
+                                if ($v['addr_type'] == 1) {
+                                    $addr_array = $v;
+                                }
+                            }
+
+                            ?>
+                            <div class="form-group">
+                                <label for="addr">ที่อยู่</label>
+                                <input type="text" class="form-control" id="addr" name="addr" placeholder="กรอกที่อยู่" required>
+                            </div>
+                            <!-- เพิ่มเลือกตำบล/แขวง, อำเภอ/เขต, จังหวัด -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group mb-2">
+                                        <label for="province" class=" col-md-12 " style="padding-left:0px;">จังหวัด</label>
+                                        <select class="form-control" id="province" name="province" required>
+                                            <option value="">กรุณาเลือก</option>
+
+                                            <!-- เพิ่มจังหวัดอื่น ๆ ตามต้องการ -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="district" class=" col-md-12" style="padding-left:0px;">อำเภอ/เขต</label>
+                                        <select class="form-control" id="district" name="district" required>
+                                            <option value="">กรุณาเลือก</option>
+
+                                            <!-- เพิ่มอำเภอ/เขตอื่น ๆ ตามต้องการ -->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="subdistrict" class=" col-md-12" style="padding-left:0px;">ตำบล/แขวง</label>
+                                        <select class="form-control" id="subdistrict" style="margin-bottom: 8px;" name="subdistrict" required>
+                                            <option value="">กรุณาเลือก</option>
+
+                                            <!-- เพิ่มตำบล/แขวงอื่น ๆ ตามต้องการ -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- เพิ่ม input รหัสไปรษณีย์ -->
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="zipcode">รหัสไปรษณีย์</label>
+                                        <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="กรอกรหัสไปรษณีย์" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-3" align="center" id="divSaveAddr">
+                                <button type="submit" class="btn btn-primary btn-block btnSubmit col-md-6">บันทึก</button>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-10">
+            <div class="card" style="border:0px;">
+                <div class="card-body pt-0" id="address-tax-div" style="margin-top:0px;">
+                    
+                    <form action="#" method="post" id="address-tax-form">
+                    <div class="addr-tax-div p-2" style="background: rgba(0, 94, 184, 0.1);border: 1px solid #E2E2E2;display:none;">
+                            <h6>แก้ไขที่อยู่ขอใบกำกับภาษี</h6>
+                        </div>
+                        <div class="form-group row">
+                            
+                            <label for="address-tax" class="col-sm-10 col-form-label">ที่อยู่สำหรับขอใบกำกับภาษี :<?php
+                                                                                                                    $addr = "";
+
+
+                                                                                                                    foreach ($address as $addrk => $value) {
+                                                                                                                        if ($value['addr_type'] == 2) {
+                                                                                                                            $addr = getAddr($value, $province, $amphur, $districts, $addr);
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                    echo $addr;
+
+                                                                                                                    ?></label>
+                            <div class="col-sm-2">
+                                <span class="btnAddr" id="btnEditAddrTax" onclick="goToChangeAddrTax()">เปลี่ยน</span>
+                                <span class="btnAddr" id="btnCancleEditAddrTax" onclick="goToUndoChangeAddrTax()" style="display:none;">ยกเลิกการแก้ไข</span>
+
+                            </div>
+                        </div>
+
+                        <div class="addr-tax-div " style="display:none;">
+                            <?php
+                            $addr_tax_array = [];
+                            foreach ($address as $addrkk => $v) {
+
+                                if ($v['addr_type'] == 2) {
+                                    $addr_tax_array = $v;
+                                }
+                            }
+
+                            ?>
+
+                            <!-- เพิ่มช่องกรอกข้อมูล -->
+                            <div class="form-group">
+                                <label for="fullnameComp">ชื่อ/สกุล/ชื่อบริษัท</label>
+                                <input type="text" class="form-control" id="fullnameComp" name="fullnameComp" placeholder="กรอกชื่อ/สกุล/ชื่อบริษัท" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="tax_id">เลขที่ผู้เสียภาษี</label>
+                                <input type="text" class="form-control" id="tax_id" name="tax_id" placeholder="กรอกเลขที่ผู้เสียภาษี" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phoneComp">เบอร์โทร</label>
+                                <input type="text" class="form-control" id="phoneComp" name="phoneComp" placeholder="กรอกเบอร์โทร" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="addrComp">ที่อยู่</label>
+                                <input type="text" class="form-control" id="addrComp" name="addrComp" placeholder="กรอกที่อยู่" required>
+                            </div>
+                            <!-- เพิ่มช่องกรอกข้อมูล -->
+
+                            <!-- เพิ่มเลือกตำบล/แขวง, อำเภอ/เขต, จังหวัด -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group mb-2">
+                                        <label for="provinceComp" class=" col-md-12 " style="padding-left:0px;">จังหวัด</label>
+                                        <select class="form-control" id="provinceComp" name="provinceComp" required>
+                                            <option value="">กรุณาเลือก</option>
+
+                                            <!-- เพิ่มจังหวัดอื่น ๆ ตามต้องการ -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="districtComp" class=" col-md-12" style="padding-left:0px;">อำเภอ/เขต</label>
+                                        <select class="form-control" id="districtComp" name="districtComp" required>
+                                            <option value="">กรุณาเลือก</option>
+
+                                            <!-- เพิ่มอำเภอ/เขตอื่น ๆ ตามต้องการ -->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="subdistrictComp" class=" col-md-12" style="padding-left:0px;">ตำบล/แขวง</label>
+                                        <select class="form-control" id="subdistrictComp" style="margin-bottom: 8px;" name="subdistrictComp" required>
+                                            <option value="">กรุณาเลือก</option>
+
+                                            <!-- เพิ่มตำบล/แขวงอื่น ๆ ตามต้องการ -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- เพิ่ม input รหัสไปรษณีย์ -->
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="zipcodeComp">รหัสไปรษณีย์</label>
+                                        <input type="text" class="form-control" id="zipcodeComp" name="zipcodeComp" placeholder="กรอกรหัสไปรษณีย์" required>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group mt-3" align="center" id="divSaveAddr">
+                                <button type="submit" class="btn btn-primary btn-block btnSubmit col-md-6">บันทึก</button>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script>
+    var base_url = "<?= base_url(); ?>";
+    var province = '<?php echo json_encode($province) ?>';
+    province = JSON.parse(province);
+
+
+
+    var amphur = '<?php echo json_encode($amphur) ?>';
+    amphur = JSON.parse(amphur);
+
+    var profile = '<?php echo !empty($profile) ? json_encode($profile) : "0"; ?>';
+    profile  = JSON.parse(profile);
+
+    var AddressValue = '<?php echo !empty($addr_array) ? json_encode($addr_array) : "0"; ?>';
+    AddressValue = JSON.parse(AddressValue);
+
+    var AddressValueTax = '<?php echo !empty($addr_tax_array) ? json_encode($addr_tax_array) : "0"; ?>';
+    AddressValueTax = JSON.parse(AddressValueTax);
+</script>
+<script src="<?= base_url('./assete/js/handleDropdown.js'); ?>"></script>
+
+<?php
+// print_r($addr_array);exit();
+?>
+
+<script>
+    $(document).ready(function() {
+
+        populateProvinceSelect();
+        populateProvinceCompSelect();
+
+
+
+    });
+    window.onload = function() {
+        // โค้ด JavaScript ที่คุณต้องการเรียกใช้งานหลังจากที่หน้าเว็บโหลดเสร็จสมบูรณ์
+
+        // ใช้ setTimeout เพื่อเรียกใช้ฟังก์ชันหลังจากผ่านไปเวลาที่กำหนด (ในที่นี้คือ 3000 มิลลิวินาทีหรือ 3 วินาที)
+
+        // โค้ดที่คุณต้องการให้ทำงานหลังจากผ่านไปเวลาที่กำหนด
+        setInitAddrValue(AddressValue);
+        setInitAddrValueTax(AddressValueTax , profile);
+
+
+    };
+
+    function setInitAddrValue(AddressValue) {
+
+        if (AddressValue.addr != undefined) {
+            $("#addr").val(AddressValue.addr);
+            //$("#province").val(AddressValue.province_id).trigger('change');
+            document.getElementById('province').value = AddressValue.province_id;
+            document.getElementById('province').dispatchEvent(new Event('change'));
+
+            document.getElementById('district').value = AddressValue.amphur_id;
+            document.getElementById('district').dispatchEvent(new Event('change'));
+
+
+            setTimeout(function() {
+                // โค้ดที่คุณต้องการให้ทำงานหลังจากผ่านไปเวลาที่กำหนด
+                setsub(AddressValue)
+            }, 2000);
+
+
+            // $("#zipcode").val(AddressValue.zipcode);
+
+
+        }
+
+
+
+    }
+
+    function setsub(AddressValue) {
+
+        document.getElementById('subdistrict').value = String(AddressValue.district_id);
+        document.getElementById('subdistrict').dispatchEvent(new Event('change'));
+
+
+
+    }
+
+    function setInitAddrValueTax(AddressValue , profile) {
+      
+        if (AddressValue.addr != undefined) {
+           
+            $("#fullnameComp").val(AddressValue.address_name);
+
+            $("#tax_id").val(profile[0].tax_id);
+
+            $("#phoneComp").val(AddressValue.phone);
+
+            $("#addrComp").val(AddressValue.addr);
+            //$("#province").val(AddressValue.province_id).trigger('change');
+            document.getElementById('provinceComp').value = AddressValue.province_id;
+            document.getElementById('provinceComp').dispatchEvent(new Event('change'));
+
+            document.getElementById('districtComp').value = AddressValue.amphur_id;
+            document.getElementById('districtComp').dispatchEvent(new Event('change'));
+
+
+            setTimeout(function() {
+                // โค้ดที่คุณต้องการให้ทำงานหลังจากผ่านไปเวลาที่กำหนด
+                setsubtax(AddressValue)
+            }, 2000);
+
+
+            // $("#zipcode").val(AddressValue.zipcode);
+
+
+        }
+
+
+
+    }
+
+    function setsubtax(AddressValue) {
+
+        document.getElementById('subdistrictComp').value = String(AddressValue.district_id);
+        document.getElementById('subdistrictComp').dispatchEvent(new Event('change'));
+
+
+
+    }
+
+    function goToUndoChangeProfile() {
+        $("#profile-form input").prop('disabled', true);
+        $("#divSaveProfile").hide();
+
+        $("#btnEditProfile").show();
+        $("#btnCancleEditProfile").hide();
+
+        $("#address-div").show();
+        $("#address-tax-div").show();
+    }
+
+
+    function goToChangeProfile() {
+        $("#profile-form input").removeAttr("disabled");
+        $("#divSaveProfile").show();
+        $("#btnEditProfile").hide();
+        $("#btnCancleEditProfile").show();
+
+        $("#address-div").hide();
+        $("#address-tax-div").hide();
+    }
+
+    function goToChangeAddrTax() {
+
+        $("#btnCancleEditAddrTax").show();
+        $("#btnEditAddrTax").hide();
+
+
+        $("#address-div").hide();
+        $("#profile-div").hide();
+
+        $(".addr-div").hide();
+        $(".addr-tax-div").show();
+    }
+
+    function goToUndoChangeAddrTax() {
+        $("#btnCancleEditAddrTax").hide();
+        $("#btnEditAddrTax").show();
+
+
+        $("#address-div").show();
+        $("#profile-div").show();
+
+        $(".addr-div").hide();
+        $(".addr-tax-div").hide();
+
+
+    }
+
+    function goToChangeAddr() {
+
+        $("#btnCancleEditAddr").show();
+        $("#btnEditAddr").hide();
+
+        $("#address-tax-div").hide();
+        $("#profile-div").hide();
+
+
+        $(".addr-div").show();
+
+
+    }
+
+    function goToUndoChangeAddr() {
+        $("#btnCancleEditAddr").hide();
+        $("#btnEditAddr").show();
+
+
+        $("#address-tax-div").show();
+        $("#profile-div").show();
+
+        $(".addr-div").hide();
+
+
+    }
+    $('#address-tax-form').submit(function(e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        var formData = new FormData($(this)[0]); // Wrap the form in jQuery and pass it to FormData
+
+        // Additional data can be appended to the FormData object if needed
+        // formData.append('key', 'value');
+
+        $.ajax({
+            url: base_url + 'Profile/edit_address_tax',
+            type: "POST",
+            dataType: 'json',
+            data: formData, // Use FormData object as the data
+            contentType: false, // Prevent jQuery from setting contentType
+            processData: false, // Prevent jQuery from processing data
+            success: function(response) {
+                console.log(response);
+                if (response.status == "success") {
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: '<span style="font-weight:bold;">แก้ไขที่อยู่ขอใบกำกับภาษี</span>',
+                        html: 'บันทึกข้อมูลสำเร็จ',
+                        allowOutsideClick: false,
+                        showCancelButton: false,
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload(); // โหลดหน้าเว็บใหม่
+                        }
+                    });
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '<span style="font-weight:bold;">บันทึกข้อมูลไม่สำเร็จ</span>',
+                        html: response.message
+                    });
+                }
+
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('#address-form').submit(function(e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        var formData = new FormData($(this)[0]); // Wrap the form in jQuery and pass it to FormData
+
+        // Additional data can be appended to the FormData object if needed
+        // formData.append('key', 'value');
+
+        $.ajax({
+            url: base_url + 'Profile/edit_address',
+            type: "POST",
+            dataType: 'json',
+            data: formData, // Use FormData object as the data
+            contentType: false, // Prevent jQuery from setting contentType
+            processData: false, // Prevent jQuery from processing data
+            success: function(response) {
+                console.log(response);
+                if (response.status == "success") {
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: '<span style="font-weight:bold;">แก้ไขที่อยู่จัดส่ง</span>',
+                        html: 'บันทึกข้อมูลสำเร็จ',
+                        allowOutsideClick: false,
+                        showCancelButton: false,
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload(); // โหลดหน้าเว็บใหม่
+                        }
+                    });
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '<span style="font-weight:bold;">บันทึกข้อมูลไม่สำเร็จ</span>',
+                        html: response.message
+                    });
+                }
+
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('#profile-form').submit(function(e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        var formData = new FormData($(this)[0]); // Wrap the form in jQuery and pass it to FormData
+
+        // Additional data can be appended to the FormData object if needed
+        // formData.append('key', 'value');
+
+        $.ajax({
+            url: base_url + 'Profile/edit_user',
+            type: "POST",
+            dataType: 'json',
+            data: formData, // Use FormData object as the data
+            contentType: false, // Prevent jQuery from setting contentType
+            processData: false, // Prevent jQuery from processing data
+            success: function(response) {
+                console.log(response);
+                if (response.status == "success") {
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: '<span style="font-weight:bold;">แก้ไขข้อมูลส่วนบุคคล</span>',
+                        html: 'บันทึกข้อมูลสำเร็จ',
+                        allowOutsideClick: false,
+                        showCancelButton: false,
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload(); // โหลดหน้าเว็บใหม่
+                        }
+                    });
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '<span style="font-weight:bold;">บันทึกข้อมูลไม่สำเร็จ</span>',
+                        html: response.message
+                    });
+                }
+
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>

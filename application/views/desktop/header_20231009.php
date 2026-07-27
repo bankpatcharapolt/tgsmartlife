@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en"><!-- InstanceBegin template="/Templates/template.dwt" codeOutsideHTMLIsLocked="false" -->
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html"> -->
+    <!-- <link rel="apple-touch-icon" href="<?=base_url('./uploaded/tg-01.png');?>"> -->
+    <link rel="icon" type="image/x-icon" href="<?=base_url('./uploaded/tg-01.png');?>">
+    <?php
+    $title = 'บริษัท ทีจี สมาร์ท ไลฟ์ จํากัด (TG SMART LIFE Co., Ltd.) ';
+    $keywords = '"เครื่องเคหภัณฑ์ครัวเรือน,เฟอร์นิเจอร์เครื่องแก้ว" , "เตาแม่เหล็กไฟฟ้า " ,"เครื่องครัวสแตนเลส"  ,"หม้อหุนแรงดันไฟฟ้า"  ,"เครื่องฟอกอากาศ"  ,"เครื่องทําความเย็น"  ,"เตาอบไมโครเวฟ"  ,"เตารีดไฟฟ้า" , "เครื่องดูดอากาศ" ," เครื่องใช้ไฟฟ้า" ,"อุปกรณ์ไฟฟ้า"';
+    $description = 'บริษัทดำเนินการธุรกิจประเภท ผลิต และจำหน่าย เครื่องใช้ไฟฟ้าในครัวเรือน ภายใต้แบรนด์ TG Smart Life Smart Home เป็นบริษัทผู้นำทางด้านนวัตกรรมล้ำสมัย และจำหน่ายสินค้าประเภทผลิตภัณฑ์มีดังนี้ เครื่องเคหภัณฑ์ครัวเรือน เฟอร์นิเจอร์เครื่องแก้ว เตาแม่เหล็กไฟฟ้า เครื่องครัวสแตนเลส หม้อหุนแรงดันไฟฟ้า เครื่องฟอกอากาศ เครื่องทําความเย็น เตาอบไมโครเวฟ เตารีดไฟฟ้า เครื่องดูดอากาศ เครื่องใช้ไฟฟ้า อุปกรณ์ไฟฟ้า แผงโซล่าเชล อุปกรณ์โซล่าเชล รวมทั้งอะไหล์ และอุปกรณ์ของสินค้าดังกล่าว ผลิตภัณฑ์ได้รับการออกแบบมาเพื่อให้สดคล้องกับชีวิตไลฟ์สไตล์ของคนรุ่นใหม่ เพื่อเป็นการตอบสนองความต้องการของลูกค้าให้ครอบคลุมทุกกลุ่ม';
+    $img = base_url('/uploads/header.jpg');
+    if($seo){
+        $title = (!empty($seo[0]['seo_title'])? $seo[0]['seo_title']:'');
+        $keywords =  (!empty($seo[0]['seo_keyword'])? $seo[0]['seo_keyword']:'');
+        $description =  (!empty($seo[0]['seo_description'])? $seo[0]['seo_description']:'');
+        if(!empty($seo[0]['thumnal'])){
+            $img = base_url($seo[0]['thumnal']);
+        }
+    }
+    //php print_r($seo['datas'][0]['page']);  
+    ?>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content='<?=$keywords?>'>
+    <meta name="description" content="<?=$description?>">
+    <meta property="fb:app_id" content="1684677531811838">
+    <meta property="og:url" content="<?=current_url()?>">
+    <meta property="og:title" content="<?=$title?>">
+    <meta property="og:description" content="<?=$description?>">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="<?=$img?>">
+    <meta property="og:image:width" content="640">
+    <meta property="og:image:height" content="442"> 
+
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title><?=$title?></title>
+    <link rel="stylesheet" href="<?=base_url('assete/theme/css/owl.carousel.min-review.css')?>">
+    <link rel="stylesheet" href="<?=base_url('assete/theme/css/owl.theme.default.min-review.css')?>">
+    <!-- InstanceEndEditable -->
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+    <!-- Js Plugins -->
+    
+    <script src="<?=base_url('assete/theme/js/jquery-3.3.1.min.js')?>"></script>
+    <script src="<?=base_url('assete/theme/js/owl.carousel.min.js')?>"></script>
+    <!-- Css Styles -->
+	<!--bootstrap.min.css-->
+    <link rel="stylesheet" href="<?=base_url('assete/theme/css/bootstrap.min.css')?>" type="text/css">
+	
+	<!--font-awesome.min.css-->
+    <link rel="stylesheet" href="<?=base_url('assete/theme/css/font-awesome.min.css')?>" type="text/css">
+	
+	<!--elegant-icons.css-->
+    <link rel="stylesheet" href="<?=base_url('assete/theme/css/elegant-icons.css')?>" type="text/css">
+	
+	<!--magnific-popup.css-->
+    <link rel="stylesheet" href="<?=base_url('assete/theme/css/magnific-popup.css')?>" type="text/css">
+	
+	<!--nice-select.css-->
+    <link rel="stylesheet" href="<?=base_url('assete/theme/css/nice-select.css')?>" type="text/css">
+	
+	<!--owl.carousel.css-->
+    <link rel="stylesheet" href="<?=base_url('assete/theme/css/owl.carousel.min.css')?>" type="text/css">
+	
+	<!--slicknav.min.css-->
+    <link rel="stylesheet" href="<?=base_url('assete/theme/css/slicknav.min.css')?>" type="text/css">
+	
+	<!--style.css-->
+    <link rel="stylesheet" href="<?=base_url('assete/theme/css/style.css')?>" type="text/css">
+
+	<!--google font-->
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Prompt&display=swap');
+	</style>
+
+	
+	<!--script fix-nav-->
+	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function(){
+		
+		window.addEventListener('scroll', function() {
+	       
+			if (window.scrollY > 0) {
+				document.getElementById('navbar_top').classList.add('fixed-top');
+				// add padding top to show content behind navbar
+				navbar_height = document.querySelector('.navbar').offsetHeight;
+				document.body.style.paddingTop = navbar_height + 'px';
+			} else {
+			 	document.getElementById('navbar_top').classList.remove('fixed-top');
+				 // remove padding top from body
+				document.body.style.paddingTop = '0';
+			} 
+		});
+	}); 
+	// DOMContentLoaded  end
+	</script>
+	<!-- InstanceBeginEditable name="head" -->
+	<!-- InstanceEndEditable -->
+</head>
+<style>
+    p img{height: auto !important; width: 100%!important;}
+    p a iframe{ width: -webkit-fill-available!important;}
+</style>
+
+<body>
+
+<header class="header" id="navbar_top">
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+	
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__option">
+			<div><a href="<?=base_url()?>"><img src="<?=base_url('assete/theme/img/logo.png')?>" alt="logo image"></a></div>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__text">
+            <p class="company_call">
+				<a href="tel:063-746-6851">Call Center : 063-746-6851</a>
+			</p>
+			<p class="company_service">
+				<a href="tel:083-928-8765">Service : 083-928-8765</a>
+			</p>
+        </div>
+		<div class="offcanvas__links">
+            <a class="company_facebook" href="#"><i class="fa fa-facebook"></i></a>
+			<a class="company_line" href="https://lin.ee/gR7kYqK"><img src="<?=base_url('assete/theme/img/icon/line.png')?>"></a>
+        </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-8 col-md-7">
+                        <div class="header__top__left">
+                            <div class="header__top__links">
+								<p>
+									<a class="company_call" href="tel:063-746-6851">Call Center : 063-746-6851</a>
+									<a class="company_service" href="tel:083-928-8765">Service : 083-928-8765</a>
+								</p>
+							</div>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-5">
+                        <div class="header__top__right">
+                            <div class="tg__social">
+                                <a class="company_facebook" href="#"><i class="fa fa-facebook"></i></a>
+								<a class="company_line" href="https://lin.ee/gR7kYqK"><img src="<?=base_url('assete/theme/img/icon/line.png')?>"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 col-md-2">
+                    <div class="header__logo">
+                        <a class="navbar-brand" href="<?=base_url()?>"><img src="<?=base_url('assete/theme/img/logo.png')?>" alt="logo image"></a>
+                    </div>
+                </div>
+                <div class="col-lg-10 col-md-10">
+                    <nav class="header__menu mobile-menu header__responsive">
+                        <ul class="">
+        					<li class="nav-item">
+            					<a class="nav-link" href="<?=base_url()?>">หน้าแรก</a>
+         					</li>
+                             <li class="nav-item">
+            					<a class="nav-link" href="<?=base_url('products')?>">ผลิตภัณฑ์</a>
+         					</li>
+							<!-- <li class="nav-item submenu"><a href="#">ผลิตภัณฑ์ </a>
+                                <ul class="dropdown">
+                                    <li><a class="submenu-link" href="<?=base_url('products')?>">สินค้าทั้งหมด</a></li>
+									<li><a class="submenu-link" href="air-purifier-ozone-detail.html">เครื่องฟอกอากาศระบบสัมผัส</a></li>
+									<li><a class="submenu-link" href="air-purifier-super-hepa-detail.html">เครื่องกรองอากาศ  Wifi</a></li>
+									<li><a class="submenu-link" href="purifier-0-1-micron-detail.html">เครื่องฟอกอากาศไอออน 0.1 ไมครอน</a></li>
+									<li><a class="submenu-link" href="air-purifier-detail.html">เครื่องฟอกอากาศ</a></li>
+									<li><a class="submenu-link" href="electric-cooker-detail.html">เตาแม่เหล็กไฟฟ้า 2 หัว</a></li>
+									<li><a class="submenu-link" href="water-purifier-hot-cold-detail.html">เครื่องกรองน้ำระบบ ร้อน เย็น</a></li>
+									<li><a class="submenu-link" href="ro-water-purifier-detail.html">เครื่องกรองน้ำระบบ RO</a></li>
+									<li><a class="submenu-link" href="cookware-set-detail.html">ภาชนะ Luxury ชุดหม้อฝาแก้ว</a></li>
+									<li><a class="submenu-link" href="product.html">สินค้า PREMIUMS</a></li>
+									<li><a class="submenu-link" href="product.html">โปรโมชั่น</a></li>
+                                </ul>
+                            </li> -->
+                            
+							<li class="nav-item">
+            					<a class="nav-link" href="<?=base_url('knowledge')?>">องค์ความรู้</a>
+         					</li>
+							<!-- <li class="nav-item submenu"><a href="#">ข้อมูลสินค้า</a>
+                                <ul class="dropdown">
+									<li><a class="submenu-link" href="purifier-0-1-micron.html">เครื่องฟอกอากาศไอออน 0.1 ไมครอน</a></li>
+                                    <li><a class="submenu-link" href="air-purifier.html">เครื่องฟอกอากาศ</a></li>
+									<li><a class="submenu-link" href="electric-cooker.html">เตาแม่เหล็กไฟฟ้า 2 หัว</a></li>
+									<li><a class="submenu-link" href="water-purifier-hot-cold.html">เครื่องกรองน้ำระบบ ร้อน เย็น</a></li>
+									<li><a class="submenu-link" href="ro-water-purifier.html">เครื่องกรองน้ำระบบ RO</a></li>
+									<li><a class="submenu-link" href="cookware-set.html">ภาชนะ Luxury ชุดหม้อฝาแก้ว</a></li>
+                                </ul>
+                            </li> -->
+							<li class="nav-item submenu"><a href="#">บริการช่วยเหลือ</a>
+                                <ul class="dropdown">
+									<li><a class="submenu-link" href="<?=base_url('support')?>">บริการช่วยเหลือ</a></li>
+                                    <li><a class="submenu-link" href="<?=base_url('tg-help')?>">ขั้นตอนการสั่งซื้อสินค้า</a></li>
+									<li><a class="submenu-link" href="<?=base_url('service-center')?>">ศูนย์บริการ TG smart life</a></li>
+									<li><a class="submenu-link" href="<?=base_url('product-data-center')?>">ศูนย์รวมข้อมูลผลิตภัณฑ์</a></li>
+									<li><a class="submenu-link" href="<?=base_url('register-product')?>">ตรวจสอบลงทะเบียนสินค้า</a></li>
+                                    <li><a class="submenu-link" href="<?=base_url('installation-agent')?>">ตัวแทนติดตั้ง</a></li>
+                                </ul>
+                            </li>
+							<li class="nav-item submenu"><a href="#">เกี่ยวกับเรา</a>
+                                <ul class="dropdown">
+                                    <li><a class="submenu-link" href="<?=base_url('about')?>">เกี่ยวกับเรา</a></li>
+                                    <li><a class="submenu-link" href="<?=base_url('contact-us')?>">ติดต่อเรา</a></li>
+									<li><a class="submenu-link" href="<?=base_url('tg-service')?>">TG Smart life Service</a></li>
+									<li><a class="submenu-link" href="<?=base_url('tg-project')?>">TG Smart life Project</a></li>
+									<li><a class="submenu-link" href="<?=base_url('career')?>">ร่วมงานกับเรา</a></li>
+                                </ul>
+                            </li>
+							<li class="nav-item">
+            					<a class="nav-link" href="<?=base_url('review')?>">รีวิว</a>
+         					</li>
+        				</ul>
+                    </nav>
+                </div>
+            </div>
+            <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        </div>
+		
+		
+    </header>
+    <!-- Header Section End -->
+</header>

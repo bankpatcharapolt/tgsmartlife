@@ -1,0 +1,208 @@
+
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-12 col-sm-12">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="#"><img src="<?=base_url('assete/theme/img/footer-logo.png')?>" alt=""></a>
+                        </div>
+                        <h5 class="text-white company_name"><b>บริษัท ทีจี สมาร์ท ไลฟ์ จํากัด</b></h5>
+                            <p class="company_email"><i class="fa fa-envelope" aria-hidden="true"></i><a class="text-white" href="mailto:smartliftj@gmail.com"> smartliftj@gmail.com</a></p>
+                        <p class="company_tax"> เลขประจำตัวผู้เสียภาษี 0425565000820</p>
+						<p class="company_contact"><i class="fa fa-phone" aria-hidden="true"></i> 065-295-8885 ,063-746-6851, 083-928-8765</p>
+					
+                    </div>
+                </div>
+				<div class="col-lg-3 col-md-12 col-sm-12">
+                    <div class="footer__widget">
+                        <h6>นโยบาย</h6>
+                        <ul>
+                            <li><a href="<?=base_url('about')?>">เงื่อนไขและข้อตกลงในการใช้งาน</a></li>
+                            <li><a href="<?=base_url('about')?>">เงื่อนไขการเปลี่ยน/คืนสินค้า และคืนเงิน</a></li>
+                             <li><a href="<?=base_url('about')?>">นโยบายคุ้มครองความเป็นส่วนตัว</a></li>
+                              <li><a href="<?=base_url('aboutprofile')?>">นโยบายการจัดส่งและรับประกันสินค้า</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-12 col-sm-12">
+                    <div class="footer__widget">
+                        <h6>บริการช่วยเหลือ</h6>
+                        <ul>
+                         
+                            <li><a href="<?=base_url('service-center')?>">ศูนย์บริการ</a></li>
+                            <li><a href="<?=base_url('product-data-center')?>">ข้อมูลผลิตภัณฑ์</a></li>
+							<li><a href="<?=base_url('knowledge')?>">ข้อมูลด้านเทคนิค</a></li>
+                            <li><a href="<?=base_url('installation-agent')?>">ตัวแทนติดตั้ง</a></li>
+                             <li><a href="<?=base_url('installation-agent')?>">วันนัดติดตั้งเครื่องกรองน้ำ</a></li>
+                            
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-12 col-sm-12">
+                    <div class="footer__widget">
+                        <h6>เกี่ยวกับบริษัท</h6>
+                        <ul>
+                            <li><a href="<?=base_url('about')?>">เกี่ยวกับเรา</a></li>
+							<li><a href="<?=base_url('career')?>">ร่วมงานกับเรา</a></li>
+                            <li><a href="<?=base_url('contact-us')?>">ติดต่อเรา</a></li>
+                                <li><a href="<?=base_url('company-profile')?>">ข้อมูลทั่วไป</a></li>
+                            <li><a href="<?=base_url('service-center')?>">ช่องทางติดต่อ</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-12 col-sm-12">
+                    <div class="footer__widget">
+                        <h6>แอพพลิเคชั่น</h6>
+                        <ul>
+                            <li><a href="#">แอพช่าง TG</a></li>
+							<li><a href="#">แอพ TG SMART LIFE</a></li>
+                        </ul>
+						<a href="https://apps.apple.com/th/app/psi-energy/id1561898719?l=th"><img class="mb-2" src="<?=base_url('assete/theme/img/ios-icon.png')?>" alt=""></a>
+						<a href="https://play.google.com/store/apps/details?id=com.softtechnetwork.ongridsolarsystem&pli=1"><img src="<?=base_url('assete/theme/img/android-icon.png')?>" alt=""></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="footer__copyright__text">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        <p>Copyright ©
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script>
+                            All rights reserved | TG Smart Life
+                        </p>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->
+    
+    <!-- Js Plugins -->
+
+    <script src="<?=base_url('assete/theme/js/bootstrap.min.js')?>"></script>
+    <script src="<?=base_url('assete/theme/js/jquery.nice-select.min.js')?>"></script>
+    <script src="<?=base_url('assete/theme/js/jquery.nicescroll.min.js')?>"></script>
+    <script src="<?=base_url('assete/theme/js/jquery.magnific-popup.min.js')?>"></script>
+    <script src="<?=base_url('assete/theme/js/jquery.countdown.min.js')?>"></script>
+    <script src="<?=base_url('assete/theme/js/jquery.slicknav.js')?>"></script>
+    <script src="<?=base_url('assete/theme/js/mixitup.min.js')?>"></script>
+    <script src="<?=base_url('assete/theme/js/main.js')?>"></script>
+
+    <!-- <script src="<?=base_url('assete/theme/js/jquery.min.js')?>"></script>
+    <script src="<?=base_url('assete/theme/js/popper.js')?>"></script> -->
+    <script src="<?=base_url('assete/theme/js/bootstrap.min.js')?>"></script>
+    <script src="<?=base_url('assete/theme/js/main-review.js')?>"></script>
+    
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyDFrU3nDkSCgrMCKuEZdR5vOnydMMsvEyE&sensor=false" defer></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="<?=base_url('assete/jquery-axgmap-master/jquery.axgmap.js')?>"></script>
+
+    
+</body>
+
+<!-- InstanceEnd --></html>
+<script>
+    var base_url = "<?=base_url();?>";
+    drawgenerals(base_url);
+    function drawgenerals(base_url){
+        //###  ressults ###//
+        var results = get_general_results(base_url);
+        if(results.datas.length > 0){
+            var conpany_contact = '';
+            $.each( results.datas, function( key, val ) {
+                switch (val.method) {
+                    case 'companyname':
+                        if(val.text != '' && val.text != null){
+                            var html = '<b>'+val.text+'</b>';
+                            $('.footer .footer__about .company_name').html(html);
+                        }
+                    break;
+                    case 'callcenter':
+                        if(val.text != '' && val.text != null){
+                            conpany_contact += ' '+val.text;
+                            $('.offcanvas__text .company_call').html('<a href="tel:call center :'+val.text+'">Call Center : '+val.text+'</a>');
+                            $('.header__top .header__top__links .company_call').html('Call Center : '+val.text);
+                            $('.header__top .header__top__links .company_call').attr('href', 'tel:'+val.text);
+                            
+                            // $('.product__details__cart__option .call-center a').html('Call Center : '+val.text);
+                            // $('.product__details__cart__option .call-center a').attr('href', 'tel:'+val.text);
+                        }
+                    break;
+                    case 'servicenumber':
+                        if(val.text != '' && val.text != null){
+                            conpany_contact += ' '+val.text;
+                            $('.offcanvas__text .company_service').html('<a href="tel:service center :'+val.text+'">Service : '+val.text+'</a>');
+                            $('.header__top .header__top__links .company_service').html('Service : '+val.text);
+                            $('.header__top .header__top__links .company_service').attr('href', 'tel:'+val.text);
+
+                            //$('.product__details__cart__option .line-tag a').html(val.text);
+                        }
+                    break;
+                    case 'emailcompany':
+                        if(val.text != '' && val.text != null){
+                            var html = '<i class="fa fa-envelope" aria-hidden="true"></i><a class="text-white" href="mailto:'+val.text+'"> '+val.text+'</a>';
+                            $('.footer .footer__about .company_email').html(html);
+                        }
+                    break;
+                    case 'taxidentification':
+                        if(val.text != '' && val.text != null){
+                            $('.footer .footer__about .company_tax').html('เลขประจำตัวผู้เสียภาษี '+val.text);
+                        }
+                    break;
+                    case 'facebook':
+                        if(val.text != '' && val.text != null){
+                            $('.offcanvas__links .company_facebook').attr('href', val.text);
+                            $('.header__top .tg__social .company_facebook').attr('href', val.text);
+                        }
+                    break;
+                    case 'line':
+                        if(val.text != '' && val.text != null){
+                            $('.offcanvas__links .company_facebook').attr('href', val.text);
+                            $('.header__top .tg__social .company_line').attr('href', val.text);
+                            
+                            $('.product__details__cart__option .line-tag a').attr('href', val.text);
+                        }
+                    break;
+                    default:
+                        break;
+                }
+                
+            });
+            $('.footer .footer__about .company_contact').html('<i class="fa fa-phone" aria-hidden="true"></i>'+conpany_contact);
+        }
+    }
+    function get_general_results(base_url){
+        var res = null;
+        $.ajax({
+            url: base_url+'Main/get_general_results', //ทำงานกับไฟล์นี้
+            data: '',  //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async:false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) { 
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+</script>

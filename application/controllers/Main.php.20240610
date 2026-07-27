@@ -1,0 +1,956 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Main extends CI_Controller {
+
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see https://codeigniter.com/userguide3/general/urls.html
+	 */
+	function __construct() { 
+    
+        parent::__construct(); 
+
+		$this->load->library('session');
+		$this->load->library('email');
+		$this->load->library("pagination");
+		
+     	//เรียกใช้งาน Class helper     
+        $this->load->helper('url'); 
+      	$this->load->helper('form');
+		$this->load->helper('file'); 
+    }
+	public function index(){
+		$menu['mainmenu'] = 'home';
+		$menu['submenu'] = 'home';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		
+		//echo '<PRE>';print_r($menu);exit();
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/home');
+		$this->load->view('desktop/footer');                          
+	}
+	public function get_home_products_results() {  
+		//$cate_id = $this->input->post('cate_id');
+        $Query = "SELECT  `product`.*, `product_category`.`name` as category_name
+		,CASE
+			WHEN `product`.`tag` IS NULL OR `product`.`tag` = '' THEN ''
+			ELSE  (SELECT `name` FROM `product_tag` WHERE `product_tag`.`id` in(`product`.`tag`))
+		END as tag_name
+		FROM `product` 
+		LEFT JOIN `product_category` ON `product`.`category` = `product_category`.`id` 
+		WHERE `product_category`.`active` = 1  AND `product`.`active` = 1
+		ORDER BY `product`.`sortting`  limit 6 ";
+		
+		$result = $this->db->query($Query)->result_array();
+		
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_s(){
+		echo '55';exit();
+	}
+	public function get_home_tg_slide_results() {  
+		//$cate_id = $this->input->post('cate_id');
+        $Query = "SELECT `slide`.*
+		FROM `slide` 
+		WHERE `slide`.`active` = 1
+		ORDER BY `slide`.`updated` DESC ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_home_knowledge_results() {  
+		//$cate_id = $this->input->post('cate_id');
+        $Query = "SELECT `article`.*
+		FROM `article` 
+		WHERE `article`.`active` = 1
+		ORDER BY `article`.`updated` DESC  LIMIT 3 ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_producttype_results() {  
+		//$cate_id = $this->input->post('cate_id');
+        $Query = "SELECT `product_type`.*
+		FROM `product_type` 
+		WHERE `product_type`.`active` = 1
+		ORDER BY `product_type`.`updated` DESC  LIMIT 3 ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_seo_id($id) {  
+		//$id = $this->input->post('id');
+        $Query = "SELECT *, '' as thumnal FROM page_seo WHERE id = $id ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		return $res;
+	}
+
+	public function about(){
+		$menu['mainmenu'] = 'about';
+		$menu['submenu'] = 'about';
+		$menu['seo'] = $this->get_seo_id(5)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/about');
+		$this->load->view('desktop/footer');                          
+	}
+
+	public function tg_help(){
+		$menu['mainmenu'] = 'tg_help';
+		$menu['submenu'] = 'tg_help';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/tg_help');
+		$this->load->view('desktop/footer');                          
+	}
+	public function service_center(){
+		$menu['mainmenu'] = 'service_center';
+		$menu['submenu'] = 'service_center';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/service_center');
+		$this->load->view('desktop/footer');                          
+	}
+	public function product_data_center(){
+		$menu['mainmenu'] = 'product_data_center';
+		$menu['submenu'] = 'product_data_center';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/product_data_center');
+		$this->load->view('desktop/footer');                          
+	}
+	
+
+	public function register_product(){
+		$menu['mainmenu'] = 'register_product';
+		$menu['submenu'] = 'register_product';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/register_product');
+		$this->load->view('desktop/footer');                          
+	}
+	public function get_register_product_results() {  
+		$register_code = $this->input->post('register_code');
+		
+        $Query = "SELECT `product_regis`.*, `product`.`name` FROM `product_regis` 
+		LEFT JOIN `product` ON `product_regis`.`product_id` = `product`.`id`
+		where `product_regis`.`bill_number` = '".$register_code."' OR `product_regis`.`tel_cus` = '".$register_code."' OR `product_regis`.`tel_idcart` = '".$register_code."' ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+
+	
+    //####  Review ###//
+	public function review(){
+		$menu['mainmenu'] = 'review';
+		$menu['submenu'] = 'review';
+		$menu['seo'] = $this->get_seo_id(6)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/review');
+		$this->load->view('desktop/footer');                          
+	}
+	public function review_detail($id){
+		$menu['mainmenu'] = 'review';
+		$menu['submenu'] = 'review';
+		$menu['seo'] = $this->get_review_detail_seo_once($id)->datas;
+		if(empty($menu['seo'][0]['seo_title'])){
+			$menu['seo'] = $this->get_seo_id(6)->datas;
+		}
+		$data['id'] = $id;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/review_detail',$data);
+		$this->load->view('desktop/footer');                          
+	}
+	
+	public function get_review_results() {  
+		//$cate_id = $this->input->post('cate_id');
+        $Query = "SELECT `review`.*, `product_category`.`name` as category_name 
+		FROM `review` 
+		LEFT JOIN `product_category` ON `review`.`product_cate` = `product_category`.`id` 
+		WHERE `review`.`active` = 1
+		ORDER BY `review`.`updated` DESC limit 10";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_review_once() {  
+		$id = $this->input->post('id');
+        $Query = "SELECT `review`.* FROM `review` WHERE `review`.`active` = 1 AND `review`.`id` = $id  ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_review_images() {  
+		$id = $this->input->post('id');
+        $Query = "SELECT * FROM `images` WHERE `ref_id` = $id AND `group` = 'review' ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_review_detail_seo_once($id) {  
+		//$id = $this->input->post('id');
+        $Query = "SELECT `review`.`picture` as thumnal,`page_seo`.`seo_title`,`page_seo`.`seo_keyword`,`page_seo`.`seo_description`  
+		FROM `review`
+		LEFT JOIN `page_seo` ON `review`.`seo_id` = `page_seo`.`id`
+		WHERE `review`.`id` = $id ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		return $res;
+	}
+
+	//####  Career ###//
+	public function careers(){
+		$menu['mainmenu'] = 'career';
+		$menu['submenu'] = 'career';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/career');
+		$this->load->view('desktop/footer');                          
+	}
+	public function get_career_results() {  
+		//$cate_id = $this->input->post('cate_id');
+		$Query = "SELECT * FROM `career` WHERE `active` = 1";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+	//####  tg service ###//
+	public function tg_service(){
+		$menu['mainmenu'] = 'tg_service';
+		$menu['submenu'] = 'tg_service';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/tg_service');
+		$this->load->view('desktop/footer');                          
+	}
+	public function get_tg_service_results() {  
+		//$cate_id = $this->input->post('cate_id');
+		$Query = "SELECT * FROM `others` WHERE `method` = 'tgsmartlifeservice'";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+	//#### tg project ###//
+	public function tg_project(){
+		$menu['mainmenu'] = 'tg_project';
+		$menu['submenu'] = 'tg_project';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/tg_project');
+		$this->load->view('desktop/footer');                          
+	}
+	public function get_tg_project_results() {  
+		//$cate_id = $this->input->post('cate_id');
+		$Query = "SELECT * FROM `others` WHERE `method` = 'tgsmartlifeproject'";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+	//#### Blog ###//
+	public function get_product_detail_results() {  
+		$id = $this->input->post('id');
+
+		$Query = "SELECT  `product_spec`.`product_id`, `product_spec`.`detail` FROM `product_spec`
+		
+		WHERE `product_spec`.`product_id` = ".$id;
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+	public function get_product_warranty_results() {  
+		$id = $this->input->post('id');
+
+		$Query = "SELECT  `product`.`name`, `product`.`warranty` FROM `product`
+		
+		WHERE `product`.`id` = ".$id;
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function knowledge(){
+		$menu['mainmenu'] = 'blog';
+		$menu['submenu'] = 'blog';
+		$menu['seo'] = $this->get_seo_id(3)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/knowledge');
+		$this->load->view('desktop/footer');                          
+	}
+	public function term_of_condition(){
+		$menu['mainmenu'] = 'contactus';
+		$menu['submenu'] = 'term_of_condition';
+		$menu['seo'] = $this->get_seo_id(3)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/term_of_condition');
+		$this->load->view('desktop/footer');                          
+	}
+	public function term_of_refund(){
+		$menu['mainmenu'] = 'contactus';
+		$menu['submenu'] = 'term_of_refund';
+		$menu['seo'] = $this->get_seo_id(3)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/term_of_refund');
+		$this->load->view('desktop/footer');                          
+	}
+	public function pdpa(){
+		$menu['mainmenu'] = 'contactus';
+		$menu['submenu'] = 'pdpa';
+		$menu['seo'] = $this->get_seo_id(3)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/pdpa');
+		$this->load->view('desktop/footer');                          
+	}
+	public function shipping_policy(){
+		$menu['mainmenu'] = 'contactus';
+		$menu['submenu'] = 'shipping_policy';
+		$menu['seo'] = $this->get_seo_id(3)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/shipping_policy');
+		$this->load->view('desktop/footer');                          
+	}
+	
+	public function warranty($id){
+	
+		$menu['mainmenu'] = 'warranty';
+		$menu['submenu'] = 'warranty';
+		$menu['seo'] = $this->get_seo_id(3)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/warranty' , ['id'=>$id]);
+		$this->load->view('desktop/footer');                          
+	}
+	public function knowledge_detail($id){
+		$menu['mainmenu'] = 'blog';
+		$menu['submenu'] = 'blog';
+		$menu['seo'] = $this->get_knowledge_detail_seo_once($id)->datas;
+		if(empty($menu['seo'][0]['seo_title'])){
+			$menu['seo'] = $this->get_seo_id(3)->datas;
+		}
+		$data['id'] = $id;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/knowledge_detail',$data);
+		$this->load->view('desktop/footer');                          
+	}
+	public function get_knowledge_results() {  
+		//$cate_id = $this->input->post('cate_id');
+        $Query = "SELECT `article`.*, `product_category`.`name` as category_name 
+		FROM `article` 
+		LEFT JOIN `product_category` ON `article`.`product_cate` = `product_category`.`id` 
+		WHERE `article`.`active` = 1
+		ORDER BY `article`.`updated` DESC ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_knowledge_once() {  
+		$id = $this->input->post('id');
+        $Query = "SELECT `article`.* FROM `article` WHERE `article`.`active` = 1 AND `article`.`id` = $id  ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_knowledge_images() {  
+		$id = $this->input->post('id');
+        $Query = "SELECT * FROM `images` WHERE `ref_id` = $id AND `group` = 'blog' ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_knowledge_detail_seo_once($id) {  
+		//$id = $this->input->post('id');
+        $Query = "SELECT `article`.`picture` as thumnal,`page_seo`.`seo_title`,`page_seo`.`seo_keyword`,`page_seo`.`seo_description` 
+		FROM `article` 
+		LEFT JOIN `page_seo` ON `article`.`seo_id` = `page_seo`.`id`
+		 WHERE `article`.`id` = $id ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		return $res;
+	}
+
+	//#### Product ###//
+	public function products(){
+		
+
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'product';
+		$menu['seo'] = $this->get_seo_id(2)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/products');
+		$this->load->view('desktop/footer');                          
+	}
+	public function products_test(){
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'product';
+		$menu['seo'] = $this->get_seo_id(2)->datas;
+		$data['category'] = $this->get_product_category_use();
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/products_test',$data);
+		$this->load->view('desktop/footer');                          
+	}
+
+	public function get_product_data_center_count_results() {  
+		//$cate_id = $this->input->post('cate_id');
+        $Query = "SELECT  `product`.*, `product_spec`.`link` as spec_link, `product_spec`.`file_path` as spec_path, `product_spec`.`detail` as spec_detail
+		FROM `product` 
+		LEFT JOIN `product_spec` ON `product`.`id` = `product_spec`.`product_id` 
+		WHERE `product`.`active` = 1  
+		ORDER BY `product`.`sortting`, `product`.`updated` DESC ";
+		$result = $this->db->query($Query)->result_array();
+
+		return count($result);
+	}
+
+	// product data center page 
+	public function get_product_data_center_results($rowno = null) {  
+		
+		$rowno= $this->input->post('rowno') ? $this->input->post('rowno') : 0;
+		$rowperpage =12;
+		// row position
+		  if($rowno != 0){
+			$rowno = ($rowno-1) * $rowperpage;
+		  }
+	
+        $Query = "SELECT  `product`.*, `product_spec`.`link` as spec_link, `product_spec`.`file_path` as spec_path
+		, `product`.`warranty` as spec_warranty
+		FROM `product` 
+		LEFT JOIN `product_spec` ON `product`.`id` = `product_spec`.`product_id` 
+		WHERE `product`.`active` = 1  
+		ORDER BY `product`.`sortting`, `product`.`updated` DESC ";
+		$Query .= " limit {$rowno},{$rowperpage}";	
+		// echo $Query;exit();
+		$result = $this->db->query($Query)->result_array();
+
+		// pagniation setup 
+		$config = $this->paginationConfig();
+		$config['base_url'] = base_url().'product-data-center';
+		$config['total_rows'] = $this->get_product_data_center_count_results();
+		$config['per_page'] = 12;
+		$config["uri_segment"] = 3;		
+		 $this->pagination->initialize($config);
+
+		// eof 
+		$res = new stdClass();
+		$res->status = true;
+		$res->pagination = $this->pagination->create_links();
+		$res->row = $rowno;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+
+	public function get_review_results_count_paginate($cate_id = null) {
+		$Query = "SELECT `review`.*, `product_category`.`name` as category_name 
+		FROM `review` 
+		LEFT JOIN `product_category` ON `review`.`product_cate` = `product_category`.`id` 
+		WHERE `review`.`active` = 1";
+		if(!empty($cate_id)){
+			$Query .= " AND `product_category`.`id` = ".$cate_id ;
+		}
+		$Query .=  " ORDER BY `review`.`updated` ";
+		$result = $this->db->query($Query)->result_array();
+		return count($result);
+	}
+	public function get_review_results_paginate() {  
+		//echo $row_number;exit();
+		$category_id = $this->input->post('category_id');
+		$rowno= $this->input->post('rowno') ? $this->input->post('rowno') : 0;
+		$rowperpage =9;
+		// row position
+		  if($rowno != 0){
+			$rowno = ($rowno-1) * $rowperpage;
+		  }
+	
+		//$cate_id = $this->input->post('cate_id');
+        $Query = "SELECT `review`.*, `product_category`.`name` as category_name 
+		FROM `review` 
+		LEFT JOIN `product_category` ON `review`.`product_cate` = `product_category`.`id` 
+		WHERE `review`.`active` = 1 ";
+		if(!empty($category_id)){
+			$Query .= " AND `product_category`.`id` = ".$category_id ;
+		}
+		$Query .= " ORDER BY `review`.`updated` DESC limit {$rowno},{$rowperpage}";	
+		
+		$result = $this->db->query($Query)->result_array();
+		// pagniation setup 
+		$config = $this->paginationConfig();
+		$config['base_url'] = base_url().'review';
+		$config['total_rows'] = $this->get_review_results_count_paginate($category_id);
+		
+		$config['per_page'] = 9;
+		$config["uri_segment"] = 3;
+	
+        $this->pagination->initialize($config);
+
+		// eof 
+
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->pagination = $this->pagination->create_links();
+		
+		$res->row = $rowno;
+		
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+	 // Select total records
+	 public function get_products_count($cate_id = null) {
+
+		$Query = "SELECT  `product`.*, `product_subcategory`.`subcategory_name`, `product_tag`.`name` as `tag_name`, `product_tag`.`backgroundcolor`
+		FROM `product` 
+		LEFT JOIN `product_subcategory` ON `product`.`category` = `product_subcategory`.`id` 
+		LEFT JOIN `product_tag` ON `product`.`tag` = `product_tag`.`id` 
+		WHERE  `product`.`active` = 1 ";
+		if(!empty($cate_id)){
+		
+			$Query .= " AND `product`.`sub_category_id` = ".$cate_id ;
+		}
+		$Query .= " ORDER BY `product`.`sortting`, `product`.`updated` DESC ";		
+		$result = $this->db->query($Query)->result_array();
+
+		return count($result);
+	  }
+
+	  public function get_product_subcategory() {   
+		
+		$Query = "  SELECT product_category.id as cate_id,product_subcategory.id,product_subcategory.subcategory_name,category_rel_subcategory.subcategory_id,product_category.name FROM category_rel_subcategory
+		inner join product_subcategory on product_subcategory.id = category_rel_subcategory.subcategory_id 
+		inner join product_category on product_category.id = category_rel_subcategory.category_id
+		";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_products_results($row_number = null) {
+		//echo $row_number;exit();
+		$sub_category_id = $this->input->post('sub_category_id');
+		$rowno= $this->input->post('rowno') ? $this->input->post('rowno') : 0;
+		$rowperpage =9;
+		// row position
+		  if($rowno != 0){
+			$rowno = ($rowno-1) * $rowperpage;
+		  }
+	 
+		// echo $rowno;exit();
+		
+	
+        $Query = "SELECT  `product`.*, `product_category`.`name` as `category_name`, `product_tag`.`name` as `tag_name`, `product_tag`.`backgroundcolor`
+		
+		FROM `product` 
+		LEFT JOIN `product_category` ON `product`.`category` = `product_category`.`id` 
+		LEFT JOIN `product_tag` ON `product`.`tag` = `product_tag`.`id` 
+		WHERE `product_category`.`active` = 1  AND `product`.`active` = 1 ";
+		if(!empty($sub_category_id)){
+			$Query .= " AND `product`.`sub_category_id` = ".$sub_category_id ;
+		}
+		$Query .= " ORDER BY `product`.`sortting`, `product`.`updated` DESC limit {$rowno},{$rowperpage}";		
+		$result = $this->db->query($Query)->result_array();
+		// echo $Query;exit();
+		// pagniation setup 
+		$config = $this->paginationConfig();
+		$config['base_url'] = base_url().'products';
+		$config['total_rows'] = $this->get_products_count($sub_category_id);
+		$config['per_page'] = 9;
+		$config["uri_segment"] = 3;
+		
+        $this->pagination->initialize($config);
+
+		// eof 
+
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->pagination = $this->pagination->create_links();
+		
+		$res->row = $rowno;
+	
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function paginationConfig(){
+		$config = [];
+		
+		// $config['use_page_numbers'] = TRUE;
+	
+		$config['per_page'] = 9;
+		$config["use_page_numbers"] = TRUE;
+	  
+	    $config['full_tag_open'] = '<ul class="pagination" style="float:right !important;">';
+		$config['full_tag_close'] = '</ul>';
+		$config['first_link'] = false;
+		$config['last_link'] = false;
+		$config['first_tag_open'] = '<li>';
+		$config['first_tag_close'] = '</li>';
+		$config['prev_link'] = '&laquo';
+		$config['prev_tag_open'] = '<li class="prev">';
+		$config['prev_tag_close'] = '</li>';
+		$config['next_link'] = '&raquo';
+		$config['next_tag_open'] = '<li>';
+		$config['next_tag_close'] = '</li>';
+		$config['last_tag_open'] = '<li>';
+		$config['last_tag_close'] = '</li>';
+		$config['cur_tag_open'] = '<li class="active" ><a class="" href="#" style="background-color:red;color:white;">';
+		$config['cur_tag_close'] = '</a></li>';
+		$config['num_tag_open'] = '<li>';
+		$config['num_tag_close'] = '</li>';
+		
+		return $config;
+		
+	}
+	public function get_products_tag() {  
+		$tag = $this->input->post('tag');
+        $Query = "SELECT * FROM `product_tag` WHERE `product_tag`.`id` in($tag)  AND `product_tag`.`active` = 1";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function product_detail($id){
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'product';
+		$menu['seo'] = $this->get_product_detail_seo_once($id)->datas;
+		$data['id'] = $id;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/product_detail',$data);
+		$this->load->view('desktop/footer');                          
+	}
+	public function get_product_detail_once() {  
+		$id = $this->input->post('id');
+        $Query = "SELECT `product`.* FROM `product` WHERE `product`.`active` = 1 AND `product`.`id` = $id  ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_detail_seo_once($id) {  
+		//$id = $this->input->post('id');
+        $Query = "SELECT `product`.`thumnal`,`page_seo`.`seo_title`,`page_seo`.`seo_keyword`,`page_seo`.`seo_description`  FROM `product` 
+		LEFT JOIN `page_seo` ON `product`.`seo_id` = `page_seo`.`id`
+		WHERE `product`.`id` = $id ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		return $res;
+	}
+	public function get_product_images() {  
+		$id = $this->input->post('id');
+        $Query = "SELECT * FROM `images` WHERE `ref_id` = $id AND `group` = 'product' ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_related() {  
+		$tag = $this->input->post('tag');
+        $Query = "SELECT `product`.* FROM `product` WHERE `product`.`active` = 1 AND `product`.`tag` LIKE '%".$tag."%';";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_category_used() {   
+	
+		$Query = " SELECT * FROM product_category WHERE active = '1'";
+		$result = $this->db->query($Query)->result();
+		
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_category_use() {   
+		$Query = " SELECT * FROM product_category WHERE active = '1'";
+		$result = $this->db->query($Query)->result();
+		return $result;
+	}
+	public function get_product_tags_used() {   
+	
+		$Query = " SELECT * FROM product_tag WHERE active = '1'";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+	//#### Generals ###//
+	public function get_general_results() {  
+		//$cate_id = $this->input->post('cate_id');
+        $Query = "SELECT `general_setting`.* FROM `general_setting`  WHERE `general_setting`.`active` = 1 ORDER BY `general_setting`.`updated` DESC ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+	//#### company profile ###//
+	public function companyprofile() {  
+		$menu['mainmenu'] = 'companyprofile';
+		$menu['submenu'] = 'companyprofile';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/company_profile');
+		$this->load->view('desktop/footer');      
+	}
+
+	//#### service center ###//
+	public function servicecenter() {  
+		$menu['mainmenu'] = 'servicecenter';
+		$menu['submenu'] = 'servicecenter';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/service_center');
+		$this->load->view('desktop/footer');      
+	}
+
+	//#### support ###//
+	public function support() {  
+		$menu['mainmenu'] = 'support';
+		$menu['submenu'] = 'support';
+		$menu['seo'] = $this->get_seo_id(4)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/support');
+		$this->load->view('desktop/footer');      
+	}
+
+	//#### contact us ###//
+	public function contactus() {  
+		$menu['mainmenu'] = 'contactus';
+		$menu['submenu'] = 'contactus';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/contactus');
+		$this->load->view('desktop/footer');      
+	}
+	public function contactus_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$name = $this->input->post('name');
+		$tel = $this->input->post('tel');
+		$email = $this->input->post('email');
+        $message = $this->input->post('message');
+		//$active = $this->input->post('active');
+		
+        $obj = array( 
+			'name' => $name,
+			'tel' => $tel,
+			'email' => $email,
+			'message' => $message,
+			'active' => 0,
+			'created' => $curent_date,
+			'updated' => $curent_date,
+		);
+
+		//###  INSERT ###//
+		$this->db->insert('web_contact', $obj);
+		$id = $this->db->insert_id();
+
+		$res->status = true;
+		$res->datas = base_url('contact-us');
+		$res->massege = 'บันทึกสำเร็จ';
+		$res->status_code = '000';
+        
+		echo json_encode($res);
+	}
+
+
+	//### installation agent ###//
+	public function installation_agent() {  
+		$menu['mainmenu'] = 'installation_agent';
+		$menu['submenu'] = 'installation_agent';
+		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$this->load->view('desktop/header',$menu);
+		$this->load->view('desktop/installation_agent');
+		$this->load->view('desktop/footer');      
+	}
+	public function get_installation_agent_results() {  
+		//$cate_id = $this->input->post('cate_id');
+        $Query = "SELECT `register`.* FROM `register` WHERE active = 1";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

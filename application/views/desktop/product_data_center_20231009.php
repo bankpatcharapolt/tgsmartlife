@@ -1,0 +1,246 @@
+	<style>
+		iframe{width: 100% !important; min-height: auto !important;}
+	</style>
+	<style>
+		html{scroll-behavior:smooth}
+		/* * {font-family: sans-serif; }  */
+		.items div  { /* border: 1px solid gray; margin: 5px; padding: 10px; */ }
+		.pager div { float: left; border: 1px solid #e5e5e5; margin: 5px; padding: 10px; border-radius: 3px;}
+		.pager div.disabled { opacity: 0.25; }
+		.pager .pageNumbers a {display: inline-block; padding: 0 10px; color: gray; }
+		.pager .pageNumbers a.active {color: orange; }
+		.pager {overflow: hidden; }
+		.paginate-no-scroll .items div { height: 250px; }
+	</style>
+<!-- #BeginEditable "bodytag" -->
+       <!-- Breadcrumb Section Begin -->
+       <section class="breadcrumb-blog set-bg" data-setbg="<?=base_url('assete/theme/img/support-bg.jpg')?>">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>ศูนย์รวมข้อมูลผลิตภัณฑ์</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+	<section class="career">
+        <div class="container paginate">
+            <div class="row items" id="products-position">
+				<div class="col-lg-3">
+					<div class="img-data">
+  						<img src="<?=base_url('assete/theme/img/product-details/purifier-0-1-micron/purifier-0-1-micron-mini.png')?>" width="100" height="100">
+						<h4>เครื่องฟอกอากาศไอออน 0.1 ไมครอน</h4>
+					</div>
+				</div>
+    			<div class="col-lg-3">
+					<div class="img-data">
+  						<img src="<?=base_url('assete/theme/img/product-details/air-purifier/air-purifier-mini.png')?>" width="100" height="100">
+						<h4>เครื่องฟอกอากาศ</h4>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="img-data">
+  						<img src="<?=base_url('assete/theme/img/product-details/electric-cooker/electric-cooker-mini.png')?>" width="100" height="100">
+						<h4>เตาแม่เหล็กไฟฟ้า 2 หัว</h4>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="img-data">
+  						<img src="<?=base_url('assete/theme/img/product-details/water-purifier-hot-cold/water-purifier-hot-cold-mini.jpg')?>" width="100" height="100">
+						<h4>เครื่องกรองน้ำระบบ ร้อน เย็น</h4>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="img-data">
+  						<img src="<?=base_url('assete/theme/img/product-details/ro-water-purifier/ro-water-purifier-mini.png')?>" width="100" height="100">
+						<h4>เครื่องกรองน้ำระบบ RO</h4>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="img-data">
+  						<img src="<?=base_url('assete/theme/img/product-details/alkaline-water-purifier/alkaline-water-purifier-mini.png')?>" width="100" height="100">
+						<h4>เครื่องกรองน้ำอัลคาไลน์</h4>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="img-data">
+  						<img src="<?=base_url('assete/theme/img/product-details/cookware-set/cookware-set-mini.png')?>" width="100" height="100">
+						<h4>ภาชนะ Luxury ชุดหม้อฝาแก้ว</h4>
+					</div>
+				</div>
+			</div>
+			<div class="pager">
+				<div class="firstPage" style="cursor: pointer;">&laquo;</div>
+				<div class="previousPage" style="cursor: pointer;">&lsaquo;</div>
+				<div class="pageNumbers" style="cursor: pointer;"></div>
+				<div class="nextPage" style="cursor: pointer;">&rsaquo;</div>
+				<div class="lastPage" style="cursor: pointer;">&raquo;</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12 mb-5 mb-lg-0"  id="product-spec-position" style="text-align: center;">
+					<div class="img-data-info">
+  						<div>
+							<h5>เครื่องฟอกอากาศไอออน 0.1 ไมครอน</h5>
+							<p><a href="เครื่องฟอกอากาศไอออน 0.1 ไมครอน.pdf" target="_blank">คู่มือการใช้งาน เครื่องฟอกอากาศไอออน 0.1 ไมครอน</a></p>
+							<p><a href="#" target="_blank">ใบรับประกัน</a></p>
+						</div>
+					</div>
+					<div class="img-data-info">
+  						<div>
+							<h5>เครื่องฟอกอากาศ</h5>
+							<p><a href="เครื่องฟอกอากาศ.pdf" target="_blank">คู่มือการใช้งาน เครื่องฟอกอากาศ</a></p>
+							<p><a href="#" target="_blank">ใบรับประกัน</a></p>
+						</div>
+					</div>
+					<div class="img-data-info">
+  						<div>
+							<h5>เตาแม่เหล็กไฟฟ้า 2 หัว</h5>
+							<p><a href="#" target="_blank">คู่มือการใช้งาน เตาแม่เหล็กไฟฟ้า 2 หัว</a></p>
+							<p><a href="#" target="_blank">ใบรับประกัน</a></p>
+						</div>
+					</div>
+					<div class="img-data-info">
+  						<div>
+							<h5>เครื่องกรองน้ำระบบ ร้อน เย็น</h5>
+							<p><a href="เครื่องกรองน้ำระบบ-ร้อน-เย็น.jpg" target="_blank">คู่มือการใช้งาน เครื่องกรองน้ำระบบ ร้อน เย็น</a></p>
+							<p><a href="#" target="_blank">ใบรับประกัน</a></p>
+						</div>
+					</div>
+					<div class="img-data-info">
+  						<div>
+							<h5>เครื่องกรองน้ำระบบ RO</h5>
+							<p><a href="เครื่องกรองน้ำro.pdf" target="_blank">คู่มือการใช้งาน เครื่องกรองน้ำระบบ RO</a></p>
+							<p><a href="#" target="_blank">ใบรับประกัน</a></p>
+						</div>
+					</div>
+					<div class="img-data-info">
+  						<div>
+							<h5>เครื่องกรองน้ำอัลคาไลน์</h5>
+							<p><a href="เครื่องกรองน้ำ5ไส้กรอง.pdf" target="_blank">คู่มือการใช้งาน เครื่องกรองน้ำอัลคาไลน์</a></p>
+							<p><a href="#" target="_blank">ใบรับประกัน</a></p>
+						</div>
+					</div>
+					<div class="img-data-info">
+  						<div>
+							<h5>ภาชนะ Luxury ชุดหม้อฝาแก้ว</h5>
+							<p><a href="#" target="_blank">ใบรับประกัน</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			<style>
+				.img-data{
+					border: 1px solid rgba(0,0,0,.125);
+					border-radius: 0.25rem;
+					padding: 15px;
+					text-align: center;
+					cursor: pointer;
+					margin-bottom: 25px;
+				}
+				.img-data h4{
+					font-size: 1rem;
+					padding-top: 15px;
+					font-weight: 700;
+				}
+				.img-data-info {
+					display: none;
+					margin: 35px 0;
+					border-top: 1px solid rgba(0,0,0,.125);
+					padding-top: 25px;
+					font-weight: 700;
+				}	
+				.img-data-info h5{
+					font-size: 1rem;
+					font-weight: 700;
+					margin-bottom: 15px;
+				}
+				.img-data-info a, .img-data-info a:hover,
+				.img-data-info a:active, .img-data-info a:focus, 
+				.img-data-info a:visited
+				{
+					color: #007bff;
+					text-decoration: underline;
+					font-weight: normal;
+				}
+			</style>
+		</div>
+	</section>
+<!-- #EndEditable -->
+
+<script>
+	 var base_url = "<?=base_url();?>";
+    drawcontens(base_url);
+    function drawcontens(base_url){
+        //###  ressults ###//
+        var results = get_results(base_url);
+        if(results.datas.length > 0){
+        	var product = '';
+        	var product_spec = '';
+            $.each( results.datas, function( key, val ) {
+				product += '<div class="col-lg-3">';
+				product += '<a href="#product-spec-position">';
+				product += '<div class="img-data">';
+				product += '<img src="'+base_url+'/'+val.thumnal+'?random='+Math.random()+'" width="100" height="100">';
+				product += '<h4>'+val.name+'</h4>';
+				product += '</div>';
+				product += '</a>';
+				product += '</div>';
+
+				product_spec += '<div class="img-data-info">';
+				product_spec += '<div>';
+
+				if(val.name != '' && val.name != null){
+					product_spec += '<h5>'+val.name+'</h5>';
+				}
+				if(val.spec_link != '' && val.spec_link != null){
+					product_spec += '<p><a href="'+val.spec_link+'" target="_blank">คู่มือการใช้งาน '+val.name+'</a></p>';
+				}
+				if(val.spec_path != '' && val.spec_path != null){
+					product_spec += '<p><a href="'+val.spec_path+'" target="_blank">คู่มือการใช้งาน</a></p>';
+				}
+				if(val.spec_detail != '' && val.spec_detail != null){
+					product_spec += val.spec_detail;
+				}
+				product_spec += '</div>';
+				product_spec += '</div>';
+
+
+            });
+            $('.career #products-position').html(product);
+            $('.career #product-spec-position').html(product_spec);
+        }
+
+		const imgData = document.getElementsByClassName("img-data");
+		const imgDataInfo = document.getElementsByClassName("img-data-info");
+		for (let i = 0; i < imgData.length; i++) {
+			imgData[i].addEventListener("click", function() {
+				for (let a = 0; a < imgDataInfo.length; a++) {
+				imgDataInfo[a].style.display = "none";
+				}
+				imgDataInfo[i].style.display = "block";
+
+			});
+		}
+    }
+    function get_results(base_url){
+        var res = null;
+        $.ajax({
+            url: base_url+'Main/get_product_data_center_results', //ทำงานกับไฟล์นี้
+            data: '',  //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async:false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) { 
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+	$(".paginate").paginga({});
+</script>

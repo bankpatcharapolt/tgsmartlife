@@ -1,0 +1,161 @@
+
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+// require_once APPPATH . 'config/autoload.php'; // ตำแหน่งของไฟล์ Google API Client
+
+// use Google\Client;
+// use Google\Service\Oauth2;
+
+class Google_login extends CI_Controller
+{
+    //  private $client_id = '387821085879-hatbbs8n1unagfs4el7p8r2kd0k8tmqi.apps.googleusercontent.com';
+    //  private $client_secret = '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';
+
+   // production
+   private $client_id = '387821085879-483h8ej2me5qq618qtd0ce5mjk6u7tv2.apps.googleusercontent.com';
+   private $client_secret = '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';
+    public function __construct()
+    {
+        parent::__construct();
+
+        
+    }
+
+    public function   Is_already_register($id)
+    {
+        $this->db->where('login_oauth_uid', $id); 
+        $query = $this->db->get('users');
+        $result = ($query->num_rows() > 0)?$query->result():FALSE; 
+      
+        if ($query->num_rows() > 0) {
+           
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    public function callback() {
+        // This function will be called after the user gives consent on Google's OAuth consent screen
+        // It's set as the redirect URL in Google Developer Console
+        // Handle the callback logic here
+        // redirect('google_login');
+
+           
+      
+
+        include_once FCPATH . "vendor/autoload.php";
+
+        $google_client = new Google_Client();
+        $google_client->setClientId($this->client_id); //Define your ClientID
+        $google_client->setClientSecret($this->client_secret); //Define your Client Secret Key
+        $google_client->setRedirectUri(base_url('google_login/callback')); //Define your Redirect Uri
+
+
+        $google_client->addScope('email');
+
+        $google_client->addScope('profile');
+
+       
+
+        if (isset($_GET["code"])) {
+            $token = $google_client->fetchAccessTokenWithAuthCode($_GET["code"]);
+         
+            if (!isset($token["error"])) {
+                $google_client->setAccessToken($token['access_token']);
+
+                $this->session->set_userdata('access_token', $token['access_token']);
+
+                $google_service = new Google_Service_Oauth2($google_client);
+
+                $data = $google_service->userinfo->get();
+
+                $current_datetime = date('Y-m-d H:i:s');
+                $result = $this->Is_already_register($data['id']);
+                if ($result) {
+                    //update data
+                    $user_data = array(
+                        'fullname'  => $data['given_name'] ." " .$data['family_name'],
+                        'email'  => $data['email'],
+                        'updated' => $current_datetime
+                    );
+
+                    $this->Update_user_data($user_data, $data['id']);
+                
+                    $this->session->set_userdata('user_id', $result[0]->id);
+                    $this->session->set_userdata('username', $result[0]->username);
+                    $this->session->set_userdata('email', $result[0]->email);
+              
+                    redirect(base_url('')); 
+                } else {
+                    //insert data
+                    $user_data = array(
+                        'login_oauth_uid' => $data['id'],
+                        'username'=>$data['email'],
+                        'fullname'  => $data['given_name'] ." " .$data['family_name'],
+                        'email'  => $data['email'],
+                        'password'=>md5($data['email']),
+                        'created'  => $current_datetime
+                    );
+
+                    $this->Insert_user_data($user_data);
+                    $this->session->set_userdata('user_id', $this->db->insert_id());
+                    $this->session->set_userdata('username', $data['email']);
+                    $this->session->set_userdata('email', $data['email']);
+                    
+                    redirect(base_url('')); 
+                }
+             
+            }
+        }else{
+            redirect(base_url('login'));
+        }
+
+    }
+
+
+    function index()
+    {
+        include_once FCPATH . "vendor/autoload.php";
+
+        $google_client = new Google_Client();
+        $google_client->setClientId($this->client_id); //Define your ClientID
+        $google_client->setClientSecret($this->client_secret); //Define your Client Secret Key
+        $google_client->setRedirectUri(base_url('google_login/callback')); //Define your Redirect Uri
+        $google_client->addScope('email');
+        $google_client->addScope('profile');
+        if (!$this->input->get('code')) {
+            // Redirect to Google OAuth consent screen
+            $auth_url = $google_client->createAuthUrl();
+            redirect($auth_url);
+        } 
+        
+     
+    
+   
+    }
+
+    function Update_user_data($data, $id)
+    {
+        $this->db->where('login_oauth_uid', $id);
+        $this->db->update('users', $data);
+    }
+
+    function Insert_user_data($data)
+    {
+        $this->db->insert('users', $data);
+    }
+
+    function logout()
+    {
+        $this->session->unset_userdata('access_token');
+
+        $this->session->unset_userdata('user_data');
+
+        redirect('google_login/login');
+    }
+}
+
+
+?>

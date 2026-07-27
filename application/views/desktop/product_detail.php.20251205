@@ -1,0 +1,716 @@
+<!-- #BeginEditable "bodytag" -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<style>
+    #pdf-viewer {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ddd;
+    }
+
+    canvas {
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+<style> 
+    @media (max-width: 991.98px) {
+
+        /* Tablet and below */
+        .addtocart {
+            height: auto;
+        }
+    }
+
+    .addtocart {
+        background-color: #005EB8;
+        color: #fff;
+        border-radius: unset;
+        height: auto;
+        font-size: inherit;
+        /* ให้ไอคอนเท่ากับขนาดของปุ่ม */
+    }
+
+    .numberCart {
+        width: 45px;
+        height: 40px;
+        text-align: center;
+        border-radius: unset;
+        border: 1px solid #A4A4A4;
+        box-sizing: border-box;
+        background-color: #FFF;
+
+    }
+
+    div.form-increase {
+        position: relative;
+        top: -25px !important;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .value-button {
+        width: 40px;
+        height: 40px;
+        border-radius: unset;
+        border: 1px solid #A4A4A4;
+        box-sizing: border-box;
+        background-color: #FFF;
+
+    }
+
+    .value-button:hover {
+        cursor: pointer;
+    }
+
+    .product__details__text .sale_price {
+        color: #b7b7b7;
+        font-size: 18px;
+        font-weight: 400;
+        margin-left: 10px;
+        text-decoration: line-through;
+    }
+</style>
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>ผลิตภัณฑ์</h4>
+                    <div class="breadcrumb__links">
+                        <a href="<?= base_url(); ?>">หน้าแรก</a>
+                        <a href="<?= base_url('products'); ?>">สินค้าทั้งหมด</a>
+                        <span>เครื่องฟอกอากาศระบบสัมผัส</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- product Details Section Begin -->
+<section class="product__details spad">
+    <div class="product__details__pic">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 col-md-3" id="product-image-position">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-1.png">
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-2.png">
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-3.png">
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-4.png">
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-1.png">
+                                    <i class="fa fa-play"></i>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-9" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="img/product-details/air-purifier-ozone/thumb-1.png">
+                                    <i class="fa fa-play"></i>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-6 col-md-9" id="product-image-tab-position">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            <div class="product__details__pic__item">
+                                <img src="img/product-details/air-purifier-ozone/product-big.png" alt="">
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                            <div class="product__details__pic__item">
+                                <img src="img/product-details/air-purifier-ozone/product-big-1.png" alt="">
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-3" role="tabpanel">
+                            <div class="product__details__pic__item">
+                                <img src="img/product-details/air-purifier-ozone/product-big-2.png" alt="">
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-4" role="tabpanel">
+                            <div class="product__details__pic__item">
+                                <img src="img/product-details/air-purifier-ozone/product-big-3.png" alt="">
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-5" role="tabpanel">
+                            <div class="product__details__pic__item">
+                                <img src="img/product-details/air-purifier-ozone/product-big.png" alt="">
+                                <a href="https://video01.alibaba.com/vod-icbu/lyiYYDyzGqdphnerW6D/IDlRp3O8FEFSicP8K8Q%40%40sd.mp4?w=896&h=504&e=sd&t=2101311616884381039416195e9335&b=unknown_video_6751963&p=*_icbu_vod_publish&tr=mp4-264-sd" class="video-popup"><i class="fa fa-play"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3" id="product-content">
+                    <div class="product__details__text">
+                        <h4>Air Purifier Ozone Generator Smart</h4>
+                        <h3 class="text-danger">฿54,000.00 <span>฿59,000.00</span></h3>
+                        <p>พื้นที่ใช้งานสูงสุดถึง 96 ตารางเมตร ,ฆ่าเชื้อในอากาศให้สะอาดผ่านแสง UV เพื่อกำจัดเชื้อแบคทีเรีย,เซ็นเซอร์วัดคุณภาพอากาศความเร็วสูง พร้อมไฟสีแสดงสถานะ,ฟังก์ชั่นเพิ่มความชุ่มชื้นแบบระเหย ที่ปรับปรุงใหม่</p>
+                        <div class="product__details__cart__option">
+                            <h5 class="md-3">สั่งซื้อได้ที่</h5>
+                            <p class="call-center">Call Center : 063-746-6851</p>
+                        </div>
+                        <div class="product__details__cart__option">
+                            <ul>
+                                <li><span>รหัสสินค้า :</span> - </li>
+                                <li><span>หมวดหมู่ :</span>
+                                    <a href="#" rel="tag">เครื่องฟอกอากาศ</a>,
+                                    <a href="#" rel="tag">เครื่องฟอก </a>,
+                                    <a href="#" rel="tag">โปรโมชั่น</a>
+                                </li>
+                                <li><span>ป้ายกำกับ :</span>
+                                    <a href="#" rel="tag">เครื่องฟอกอากาศ</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="product__details__content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="product__details__tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item ">
+                                <a class="nav-link " data-toggle="tab" href="#tabs-7" role="tab">รายละเอียดสินค้า</a>
+
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-9999" role="tab">ข้อมูลรับประกันสินค้า</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-10" role="tab">คู่มือการใช้งาน</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+
+                            <div class="tab-pane" id="tabs-9999" role="tabpanel">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Details Section End -->
+<!-- Warranty Section  -->
+
+
+<!-- Related Section Begin -->
+<section class="related spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="related-title">สินค้าแนะนำ</h3>
+            </div>
+        </div>
+        <div class="row" id="product_related">
+            <div class="row-cols-5 col-md-6 col-sm-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
+                        <span class="label">New</span>
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>เครื่องฟอกอากาศ</h6>
+                        <div class="add-cart add-cart-online">
+                            <a href="#" class="add-cart-shopee"><img src="img/shopee-logo.png" alt=""></a>
+                            <a href="#" class="add-cart-lazada"><img src="img/lazada-logo.png" alt=""></a>
+                        </div>
+                        <span>ราคา <b class="h5 fw-7 text-danger">43,999.00 บาท</b></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row-cols-5 col-md-6 col-sm-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>เตาแม่เหล็กไฟฟ้า 2 หัว</h6>
+                        <div class="add-cart add-cart-online">
+                            <a href="#" class="add-cart-shopee"><img src="img/shopee-logo.png" alt=""></a>
+                            <a href="#" class="add-cart-lazada"><img src="img/lazada-logo.png" alt=""></a>
+                        </div>
+                        <span>ราคา <b class="h5 fw-7 text-danger">39,999.00 บาท</b></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row-cols-5 col-md-6 col-sm-6 col-sm-6">
+                <div class="product__item sale">
+                    <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
+                        <span class="label">Sale</span>
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>เครื่องกรองน้ำระบบ RO</h6>
+                        <div class="add-cart add-cart-online">
+                            <a href="#" class="add-cart-shopee"><img src="img/shopee-logo.png" alt=""></a>
+                            <a href="#" class="add-cart-lazada"><img src="img/lazada-logo.png" alt=""></a>
+                        </div>
+                        <span>ราคา <b class="h5 fw-7 text-danger">39,999.00 บาท</b></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row-cols-5 col-md-6 col-sm-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg">
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>เครื่องกรองน้ำอัลคาไลน์</h6>
+                        <div class="add-cart add-cart-online">
+                            <a href="#" class="add-cart-shopee"><img src="img/shopee-logo.png" alt=""></a>
+                            <a href="#" class="add-cart-lazada"><img src="img/lazada-logo.png" alt=""></a>
+                        </div>
+                        <span>ราคา <b class="h5 fw-7 text-danger">43,999.00 บาท</b></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row-cols-5 col-md-6 col-sm-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="img/product/product-5.jpg">
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>ภาชนะ Luxury ชุดหม้อฝาแก้ว</h6>
+                        <div class="add-cart add-cart-online">
+                            <a href="#" class="add-cart-shopee"><img src="img/shopee-logo.png" alt=""></a>
+                            <a href="#" class="add-cart-lazada"><img src="img/lazada-logo.png" alt=""></a>
+                        </div>
+                        <span>ราคา <b class="h5 fw-7 text-danger">39,999.00 บาท</b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Related Section End -->
+<!-- #EndEditable -->
+
+<script src="<?= base_url('assete/js/add_to_cart.js') ?>"></script>
+<script>
+    var base_url = "<?= base_url(); ?>";
+    drawcontens(base_url);
+
+    function drawcontens(base_url) {
+
+        //###  image ###//
+        var product_images = get_product_images(base_url);
+        if (product_images.datas.length > 0) {
+            //###  image  tablist ###//
+            var images_html = '<ul class="nav nav-tabs" role="tablist">';
+            $.each(product_images.datas, function(key, val) {
+                var actives = (key == 0) ? 'active' : '';
+                images_html += ' <li class="nav-item">';
+                images_html += '<a class="nav-link ' + actives + '" data-toggle="tab" href="#tabs-' + val.id + '" role="tab">';
+                images_html += '<div class="product__thumb__pic set-bg" data-setbg="' + base_url + '/' + val.path + '?random=' + Math.random() + '">';
+                images_html += '</div>';
+                images_html += '</a>';
+                images_html += '</li>';
+            });
+            images_html += '</ul>';
+            $('#product-image-position').html(images_html);
+
+            //###  image  tabpanel ###//
+            var images_tab_html = '<div class="tab-content">';
+            $.each(product_images.datas, function(key, val) {
+                var actives = (key == 0) ? 'active' : '';
+                images_tab_html += '<div class="tab-pane ' + actives + '" id="tabs-' + val.id + '" role="tabpanel">';
+                images_tab_html += '<div class="product__details__pic__item">';
+                images_tab_html += '<img src="' + base_url + '/' + val.path + '?random=' + Math.random() + '" alt="">';
+                images_tab_html += '</div>';
+                images_tab_html += '</div>';
+            });
+            images_tab_html += '</div>';
+            $('#product-image-tab-position').html(images_tab_html);
+        }
+
+        //###  ressults ###//
+        var results = get_results(base_url);
+        var contents = '';
+        if (results.datas.length > 0) {
+            var reslt = results.datas[0];
+
+            //### product-content ###//
+            $('.breadcrumb-option .breadcrumb__text span').html(reslt.name);
+            var product_content_html = '';
+            product_content_html += '<div class="product__details__text">';
+            product_content_html += '<h4>' + reslt.name + '</h4>';
+
+            var price_html = '';
+            if ((reslt.saleprice != null && reslt.saleprice != '') && reslt.saleprice > 0) {
+                price_html = '<h3 class="text-danger">฿' + addCommas(reslt.saleprice) + ' <span class="sale_price">฿' + addCommas(reslt.price) + '</span></h3>';
+            } else {
+                price_html = '<h3 class="text-danger">฿' + addCommas(reslt.price) + '</h3>';
+            }
+            product_content_html += price_html;
+            product_content_html += '<p>' + reslt.subtitle + '</p>';
+            product_content_html += '<div class="product__details__cart__option">';
+            // เพิ่ม input เพิ่มจำนวนสินค้า 
+            product_content_html += `<div class="form-increase d-flex align-items-center">
+                <button class="value-button btn btn-light mt-auto" id="decrease_${reslt.id}" onclick="decreaseValue(${reslt.id})" value="Decrease Value">-</button>
+                <input type="number" id="number_${reslt.id}" class="numberCart form-control mt-auto" value="1" style=" margin: 0;">
+                <button class="value-button btn btn-light mt-auto" id="increase_${reslt.id}" onclick="increaseValue(${reslt.id})" value="Increase Value">+</button>
+                <button class="btn btn-primary ml-4 ml-md-auto addtocart d-flex align-items-center" style="height:40px;" onclick="addToCart(${reslt.id})">เพิ่มไปยังรถเข็น</button>
+            </div></li>`;
+            product_content_html += '<h5 class="md-3">หรือสั่งซื้อได้ที่</h5>';
+
+            if (reslt.salerphone != null && reslt.salerphone != '') {
+                product_content_html += '<p class="call-center" style="margin-bottom: 5px;"><a  style="color: #fff;" href="#">Call Center : ' + reslt.salerphone + '</a></p>';
+            }
+
+            product_content_html += '<p class="line-tag" style=" margin-bottom: 5px; background-color: #005eb8; color: #fff; padding-left: 10px;">';
+            product_content_html += '<a href="" style="font-size: 20px;color: #fff;">LINE : @tgsmartlife</a>';
+            product_content_html += '</p>';
+            product_content_html += '</div>';
+            product_content_html += '<div class="product__details__cart__option">';
+            product_content_html += '<ul>';
+
+            product_content_html += '<li><span>รหัสสินค้า :</span> ' + reslt.productcode + '</li>';
+
+
+            // product_content_html += '<li><span>หมวดหมู่ :</span>';
+            // product_content_html += '<a href="#" rel="tag">เครื่องฟอกอากาศ</a>, ';
+            // product_content_html += '<a href="#" rel="tag">เครื่องฟอก </a>, ';
+            // product_content_html += '<a href="#" rel="tag">โปรโมชั่น</a>';						
+            // product_content_html += '</li>';
+            // product_content_html += '<li><span>ป้ายกำกับ :</span> ';
+            // product_content_html += '<a href="#" rel="tag">เครื่องฟอกอากาศ</a>';
+            // product_content_html += '</li>';
+            console.log(reslt);
+            product_content_html += '</ul>';
+
+            product_content_html += '</div>';
+            product_content_html += '</div>';
+            $('#product-content').html(product_content_html);
+
+            //### product-detail ###//
+            $('.product__details__tab ul li:first-child').html('<a class="nav-link active" data-toggle="tab" href="#tabs-' + reslt.id + '" role="tab">รายละเอียดสินค้า</a>');
+
+            var product_tab_content_html = '';
+            product_tab_content_html += '<div class="tab-pane active" id="tabs-' + reslt.id + '" role="tabpanel">';
+            product_tab_content_html += '<div class="product__details__tab__content">';
+            product_tab_content_html += '<div class="row">';
+            product_tab_content_html += '<div class="col-lg-12 col-md-12 col-sm-12">';
+            product_tab_content_html += reslt.detail;
+            product_tab_content_html += '</div>';
+            product_tab_content_html += '</div>';
+            product_tab_content_html += '</div>';
+            product_tab_content_html += '</div>';
+            $('.product__details__tab .tab-content').html(product_tab_content_html);
+
+            // warranty section 
+
+            var product_warranty_content_html = '';
+            product_warranty_content_html += '<div class="tab-pane " id="tabs-9999" role="tabpanel">';
+            product_warranty_content_html += '<div class="product__warranty__tab__content">';
+            product_warranty_content_html += '<div class="row">';
+            product_warranty_content_html += '<div class="col-lg-12 col-md-12 col-sm-12">';
+            product_warranty_content_html += reslt.warranty;
+            product_warranty_content_html += '</div>';
+            product_warranty_content_html += '</div>';
+            product_warranty_content_html += '</div>';
+            product_warranty_content_html += '</div>';
+            $('.product__details__tab .tab-content').append(product_warranty_content_html);
+
+            var product_manual_file = "";
+            product_manual_file += '<div class="tab-pane" id="tabs-10" role="tabpanel">';
+            product_manual_file += '<div class="product__warranty__tab__content" id="pdfView">';
+            product_manual_file += '<div class="row">';
+            product_manual_file += '<div class="col-lg-12 col-md-12 col-sm-12" id="pdf-viewer">';
+            if (reslt.manual_path != '' && reslt.manual_path != null) {
+                const filePath = reslt.manual_path;
+                const url = new URL(filePath, window.location.href); // Create a URL object
+                const fileName = url.pathname.split('/').pop(); // Extract the filename
+                console.log(fileName); // Output: tg_smartlife_timeline_20240519.pdf
+                var fullFilePath = base_url + "uploads/images/product/" + reslt.id + "/" + fileName;
+                product_manual_file += '<iframe src="'+fullFilePath+'" style="width:100%;height:100%;"></iframe>'; 
+               
+              //  readerPdf(base_url + "uploads/images/product/" + reslt.id + "/" + fileName);
+            }
+       
+            product_manual_file += '</div>';
+            product_manual_file += '</div>';
+            product_manual_file += '</div>';
+            product_manual_file += '</div>';
+
+            $('.product__details__tab .tab-content').append(product_manual_file);
+          
+          
+
+        }
+    }
+
+    function readerPdf(url) {
+            var loadingTask = pdfjsLib.getDocument(url);
+
+            loadingTask.promise.then(function(pdf) {
+                console.log('PDF loaded');
+
+                var numPages = pdf.numPages;
+                console.log('Number of pages: ' + numPages);
+                var pdfViewer = document.getElementById('pdf-viewer');
+
+                // ฟังก์ชันสำหรับเรนเดอร์หน้า PDF
+                function renderPage(pageNum) {
+                    pdf.getPage(pageNum).then(function(page) {
+                        console.log('Page ' + pageNum + ' loaded');
+
+                        var scale = 1.0; // ค่าขยายเริ่มต้น
+                        var viewport = page.getViewport({ scale: scale });
+
+                        // คำนวณขนาดที่เหมาะสม
+                        var containerWidth = pdfViewer.clientWidth;
+                        var containerHeight = pdfViewer.clientHeight;
+
+                        // ปรับขนาดของ scale ให้พอดีกับ container
+                        if (viewport.width > containerWidth || viewport.height > containerHeight) {
+                            scale = Math.min(containerWidth / viewport.width, containerHeight / viewport.height);
+                            viewport = page.getViewport({ scale: scale });
+                        }
+
+                        // สร้าง canvas สำหรับการเรนเดอร์
+                        var canvas = document.createElement('canvas');
+                        var context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        // ตรวจสอบขนาดของ canvas
+                        console.log(`Canvas size: ${canvas.width}x${canvas.height}`);
+
+                        pdfViewer.appendChild(canvas);
+
+                        // เรนเดอร์หน้า PDF ลงใน canvas
+                        var renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+                        var renderTask = page.render(renderContext);
+                        renderTask.promise.then(function() {
+                            console.log('Page ' + pageNum + ' rendered');
+                        }).catch(function(error) {
+                            console.error('Error rendering page ' + pageNum + ': ' + error);
+                        });
+                    }).catch(function(error) {
+                        console.error('Error loading page ' + pageNum + ': ' + error);
+                    });
+                }
+
+                // เรียกใช้ฟังก์ชัน renderPage สำหรับทุกหน้า
+                for (var i = 1; i <= numPages; i++) {
+                    renderPage(i);
+                }
+            }).catch(function(reason) {
+                console.error('Error loading PDF: ' + reason);
+            });
+        }
+    function get_results(base_url) {
+        var res = null;
+        $.ajax({
+            url: base_url + 'Main/get_product_detail_once', //ทำงานกับไฟล์นี้
+            data: {
+                'id': "<?= $id; ?>"
+            }, //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) {
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    function get_product_images(base_url) {
+        var res = null;
+        $.ajax({
+            url: base_url + 'Main/get_product_images', //ทำงานกับไฟล์นี้
+            data: {
+                'id': "<?= $id; ?>"
+            }, //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) {
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    draw_products_related(base_url);
+
+    function draw_products_related(base_url) {
+        var products_related = get_product_related(base_url, 2); // 2 = สินค้าแนะนำ
+        if (products_related.datas.length > 0) {
+            var products_related_html = '';
+            $.each(products_related.datas, function(key, related) {
+
+                products_related_html += '<div class="row-cols-5 col-md-6 col-sm-6 col-sm-6">';
+                products_related_html += '<a href="' + base_url + 'product_detail/' + related.id + '" style="color: #111111;">';
+                products_related_html += '<div class="product__item">';
+                products_related_html += '<div class="product__item__pic set-bg" data-setbg="' + base_url + '/' + related.thumnal + '?random=' + Math.random() + '">';
+
+                //### product tag ###//
+                if (related.tag != null && related.tag != '') {
+                    var products_tags = get_products_tag(base_url, related.tag);
+                    if (products_tags.datas.length > 0) {
+                        var tag_top = 10;
+                        $.each(products_tags.datas, function(key, tag) {
+                            var tag_styles = 'style="background: ' + tag.backgroundcolor + '; top: ' + tag_top + 'px;"';
+                            products_related_html += '<span class="label" ' + tag_styles + '>' + tag.name + '</span>';
+                            tag_top += 25;
+                        });
+                    }
+                }
+                //products_related_html += price_html;
+                //products_related_html += '<span class="label">'+related.name+'</span>';
+                // products_related_html += '<ul class="product__hover">';
+                // products_related_html += '<li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>';
+                // products_related_html += '<li><a href="#"><img src="img/icon/search.png" alt=""></a></li>';
+                // products_related_html += '</ul>';
+                products_related_html += '</div>';
+                products_related_html += '<div class="product__item__text">';
+                products_related_html += '<h6>' + related.name + '</h6>';
+                // products_related_html += '<div class="add-cart add-cart-online">';
+                // products_related_html += '<a href="#" class="add-cart-shopee"><img src="img/shopee-logo.png" alt=""></a>';
+                // products_related_html += '<a href="#" class="add-cart-lazada"><img src="img/lazada-logo.png" alt=""></a>';
+                // products_related_html += '</div>';
+                //products_related_html += '<span>ราคา  <b class="h5 fw-7 text-danger">43,999.00 บาท</b></span>';
+
+                // var price_html = '';
+                // if((related.saleprice != null && related.saleprice != '') && related.saleprice > 0){
+                //     price_html = '<span>ราคา  <b class="h5 fw-7 text-danger">'+addCommas(related.saleprice)+' บาท</b></span><span class="sale_price">฿'+addCommas(related.price)+'<span>';
+                // }else{
+                //     price_html = '<span>ราคา  <b class="h5 fw-7 text-danger">'+addCommas(related.price)+' บาท</b></span>';
+                // }
+                products_related_html += '<span>ราคา  <b class="h5 fw-7 text-danger">' + addCommas(related.price) + ' บาท</b></span>';
+
+                products_related_html += '</div>';
+                products_related_html += '</div>';
+                products_related_html += '</a>';
+                products_related_html += '</div>';
+
+            });
+            $('#product_related').html(products_related_html);
+        } else {
+            $('.related').css("display", "none");
+        }
+    }
+
+    function get_product_related(base_url, tag) {
+        var res = null;
+        $.ajax({
+            url: base_url + 'Main/get_product_related', //ทำงานกับไฟล์นี้
+            data: {
+                'tag': tag
+            }, //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) {
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    function get_products_tag(base_url, tag) {
+        var res = null;
+        $.ajax({
+            url: base_url + 'Main/get_products_tag', //ทำงานกับไฟล์นี้
+            data: {
+                'tag': tag
+            }, //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) {
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    function addCommas(numberString) {
+        numberString += '';
+        var x = numberString.split('.'),
+            x1 = x[0],
+            x2 = x.length > 1 ? '.' + x[1] : '',
+            rgxp = /(\d+)(\d{3})/;
+
+        while (rgxp.test(x1)) {
+            x1 = x1.replace(rgxp, '$1' + ',' + '$2');
+        }
+
+        return x1 + x2 + '.00';
+    }
+</script>

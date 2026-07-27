@@ -1,0 +1,931 @@
+
+	<style>
+        .tg__slider.owl-carousel .owl-item.active .tg__text h6 {
+            top: 0;
+            opacity: 1;
+        }
+        .tg__text h6 {
+            color: #005eb8;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 28px;
+            position: relative;
+            top: 100px;
+            opacity: 0;
+            -webkit-transition: all, 0.3s;
+            -o-transition: all, 0.3s;
+            transition: all, 0.3s;
+        }
+        .tg__text h2 {
+            color: #111111;
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 58px;
+            margin-bottom: 30px;
+            position: relative;
+            top: 100px;
+            opacity: 0;
+            -webkit-transition: all, 0.6s;
+            -o-transition: all, 0.6s;
+            transition: all, 0.6s;
+        }
+        .tg__text p {
+            font-size: 16px;
+            line-height: 28px;
+            margin-bottom: 35px;
+            position: relative;
+            top: 100px;
+            opacity: 0;
+            -webkit-transition: all, 0.9s;
+            -o-transition: all, 0.9s;
+            transition: all, 0.9s;
+        }
+        .tg__text .primary-btn {
+                position: relative;
+                top: 100px;
+                opacity: 0;
+                -webkit-transition: all, 1.1s;
+                -o-transition: all, 1.1s;
+                transition: all, 1.1s;
+        }
+        .product__item__text .sale_price {
+            color: #b7b7b7;
+            font-size: 18px;
+            font-weight: 400;
+            margin-left: 10px;
+            text-decoration: line-through;
+        }
+
+        .ftco-section {
+            padding-bottom: 5em;
+        }
+        .blog__item__review {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .testimony-wrap {
+            display: block;
+            position: relative;
+            padding: 30px 20px;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            border-radius: 10px;
+            -webkit-box-shadow: 0px 5px 21px -14px rgba(0, 0, 0, 0.14);
+            -moz-box-shadow: 0px 5px 21px -14px rgba(0, 0, 0, 0.14);
+            box-shadow: 0px 5px 21px -14px rgba(0, 0, 0, 0.14);
+            background: #f5f5f5;
+        }
+        .testimony-wrap .user-img {
+            min-width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            position: relative;
+        }
+        .user-img {
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+        .review_strong {
+            font-size: 16px;
+            color: #005eb8;
+            display: block;
+        }
+        .testimony-wrap .name {
+            font-weight: 500;
+            font-size: 16px;
+            margin-bottom: 0;
+        }
+
+        .banner__item {
+            position: relative;
+            overflow: hidden;
+        }
+        .banner__item__pic {
+            float: right;
+        }
+        .banner__item__text {
+            position: initial;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .banner__item__text h2 {
+            color: #111111;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 26px;
+        }
+
+
+        .owl-nav button {
+            position: absolute;
+            top: 50%;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            transition: all 0.3s ease-in-out;
+            }
+            .owl-nav button.owl-prev {
+            left: 0;
+            }
+            .owl-nav button.owl-next {
+            right: 0;
+            }
+
+            .owl-dots {
+            text-align: center;
+            padding-top: 1px;
+            }
+            .owl-dots button.owl-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: inline-block;
+            background: #ccc;
+            margin: 0 3px;
+            }
+            .owl-dots button.owl-dot.active {
+            background-color: #005eb8;
+            }
+            .owl-dots button.owl-dot:focus {
+            outline: none;
+            }
+            .owl-nav button {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(255, 255, 255, 0.38) !important;
+            }
+            span {
+                /* font-size: 70px;     */
+                position: relative;
+                top: -5px;
+            }
+            .owl-nav button:focus {
+                outline: none;
+            }
+
+
+    </style>
+<!-- #BeginEditable "bodytag" -->
+    <!-- tg Section Begin -->
+    <section class="tg">
+        <div class="tg__slider owl-carousel">
+            <!-- <div class="tg__items set-bg" data-setbg="<?=base_url('assete/theme/img/tg/tg-1.jpg')?>">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-7 col-md-8">
+                            <div class="tg__text">
+                                <h6>New Arrival</h6>
+                                <h2>Alkaline Water Purifier</h2>
+								<p>เครื่องกรองน้ำอัลคาไลน์ไฟฟ้า เครื่องกรองน้ำอัลคาไลน์ไฟฟ้าแบบไม่มีถังดื่ม RO 4 ขั้นตอน</p>
+                                <a href="alkaline-water-purifier-detail.html" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tg__items set-bg" data-setbg="<?=base_url('assete/theme/img/tg/tg-2.jpg')?>">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-7 col-md-8">
+                            <div class="tg__text">
+                                <h6>New Arrivaln</h6>
+                                <h2>Electric Induction Cooker</h2>
+                                <p>เตาแม่เหล็กไฟฟ้า2หัว เตาแม่เหล็กไฟฟ้า 2200วัตต์ เตาอินฟราเรด 85-280โวลต์</p>
+                                <a href="electric-cooker-detail.html" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </section>
+    <!-- tg Section End -->
+
+    <!-- Product Section Begin -->
+    <section class="product spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="filter__controls">
+                        <li class="active" data-filter="*">สินค้าแนะนำ</li>
+                        <li data-filter=".new-arrivals">สินค้าใหม่</li>
+                        <li data-filter=".hot-sales">สินค้ายอดนิยม</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row product__filter">
+				<!-- <div class="col-lg-4 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                    <div class="product__item" onclick="location.href='air-purifier-ozone-detail.html';">
+                        <div class="product__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/product/product-8.jpg')?>">
+                            <span class="label">New!</span>
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/heart.png')?>" alt=""></a></li>
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/search.png')?>" alt=""></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+							<h6>เครื่องฟอกอากาศระบบสัมผัส</h6>
+                            <span>ราคา  <b class="h5 fw-7 text-danger">54,000.00 บาท</b></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-md-6 col-sm-6 mix">
+                    <div class="product__item" onclick="location.href='air-purifier-super-hepa-detail.html';">
+                        <div class="product__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/product/product-1.jpg')?>">
+						<span class="label">New!</span>
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/heart.png')?>" alt=""></a></li>
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/search.png')?>" alt=""></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6>เครื่องกรองอากาศ  Wifi</h6>
+                            <span>ราคา  <b class="h5 fw-7 text-danger">54,000.00 บาท</b></span>
+                        </div>
+                    </div>
+                </div>
+				<div class="col-lg-4 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                    <div class="product__item" onclick="location.href='water-purifier-hot-cold-detail.html';">
+                        <div class="product__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/product/product-7.jpg')?>">
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/heart.png')?>" alt=""></a></li>
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/search.png')?>" alt=""></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+							<h6>เครื่องกรองน้ำระบบ ร้อน เย็น</h6>
+                            <span>ราคา  <b class="h5 fw-7 text-danger">43,999.00 บาท</b></span>
+                        </div>
+                    </div>
+                </div>
+				<div class="col-lg-4 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                    <div class="product__item" onclick="location.href='purifier-0-1-micron-detail.html';">
+                        <div class="product__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/product/product-6.jpg')?>">
+							<span class="label">New!</span>
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/heart.png')?>" alt=""></a></li>
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/search.png')?>" alt=""></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6>เครื่องฟอกอากาศไอออนคาร์บอน 0.1 ไมครอน</h6>
+                            <span>ราคา  <b class="h5 fw-7 text-danger">43,999.00 บาท</b></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+                    <div class="product__item" onclick="location.href='air-purifier-detail.html';">
+                        <div class="product__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/product/product-2.jpg')?>">
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/heart.png')?>" alt=""></a></li>
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/search.png')?>" alt=""></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6>เครื่องฟอกอากาศ</h6>
+                            <span>ราคา  <b class="h5 fw-7 text-danger">43,999.00 บาท</b></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                    <div class="product__item" onclick="location.href='electric-cooker-detail.html';">
+                        <div class="product__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/product/product-3.jpg')?>">
+                            <span class="label">New!</span>
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/heart.png')?>" alt=""></a></li>
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/search.png')?>" alt=""></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6>เตาแม่เหล็กไฟฟ้า 2 หัว</h6>
+                            <span>ราคา  <b class="h5 fw-7 text-danger">39,999.00 บาท</b></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+                    <div class="product__item" onclick="location.href='ro-water-purifier-detail.html';">
+                        <div class="product__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/product/product-4.jpg')?>">
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/heart.png')?>" alt=""></a></li>
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/search.png')?>" alt=""></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6>เครื่องกรองน้ำระบบ RO</h6>
+                            <span>ราคา  <b class="h5 fw-7 text-danger">39,999.00 บาท</b></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+                    <div class="product__item sale" onclick="location.href='cookware-set-detail.html';">
+                        <div class="product__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/product/product-5.jpg')?>">
+							<span class="label">Sale!</span>
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/heart.png')?>" alt=""></a></li>
+                                <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/search.png')?>" alt=""></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6>ภาชนะ Luxury ชุดหม้อฝาแก้ว</h6>
+                            <span>ราคา  <b class="h5 fw-7 text-danger">39,999.00 บาท</b></span>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+    <!-- Product Section End -->
+	
+	<!-- Banner Section Begin -->
+    <section class="banner spad"  style="background-color: #efefef">
+        <div class="container">
+            <div class="row" id="product-type-position" >
+                <div class="col-lg-7 offset-lg-4">
+                    <div class="banner__item">
+                        <div class="banner__item__pic">
+                            <img src="<?=base_url('assete/theme/img/banner/banner-1.jpg')?>" alt="">
+                        </div>
+                        <div class="banner__item__text">
+                            <h2>คัดสรรมาเพื่อคุณ</h2>
+                            <a href="product.html">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="banner__item banner__item--middle">
+                        <div class="banner__item__pic">
+                            <img src="<?=base_url('assete/theme/img/banner/banner-2.jpg')?>" alt="">
+                        </div>
+                        <div class="banner__item__text">
+                            <h2>เครื่องใช้ไฟฟ้าขนาดเล็ก</h2>
+                            <a href="product.html">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="banner__item banner__item--last">
+                        <div class="banner__item__pic">
+                            <img src="<?=base_url('assete/theme/img/banner/banner-3.jpg')?>" alt="">
+                        </div>
+                        <div class="banner__item__text">
+                            <h2>แบรนด์ชั้นนำที่ร่วมรายการ</h2>
+                            <a href="product.html">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner Section End -->
+
+
+    <!-- Instagram Section Begin -->
+    <section class="about spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+					<div class="about__pic">
+						<img src="<?=base_url('assete/theme/img/about/about-us.jpg')?>" alt="">
+					</div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="about__item">
+                        <h3>TG SMART LIFE</h3>
+                        <p><b>บริษัท ทีจี สมาร์ท ไลฟ์ จํากัด</b> ดำเนินการธุรกิจประเภท ผลิต และจำหน่าย เครื่องใช้ไฟฟ้าในครัวเรือน ภายใต้แบรนด์ TG Smart Life Smart Home 
+						เป็นบริษัทผู้นำทางด้านนวัตกรรมล้ำสมัย <br>
+						จำหน่ายสินค้าประเภทผลิตภัณฑ์มีดังนี้  เครื่องเคหภัณฑ์ครัวเรือน เฟอร์นิเจอร์เครื่องแก้ว เตาแม่เหล็กไฟฟ้า เครื่องครัวสแตนเลส
+						หม้อหุนแรงดันไฟฟ้า เครื่องฟอกอากาศ  เครื่องทําความเย็น เตาอบไมโครเวฟ เตารีดไฟฟ้า เครื่องดูดอากาศ   เครื่องใช้ไฟฟ้า อุปกรณ์ไฟฟ้า  แผงโซล่าเชล <br>
+						ผลิตภัณฑ์ได้รับการออกแบบมาเพื่อให้สดคล้องกับชีวิตไลฟ์สไตล์ของคนรุ่นใหม่  เพื่อเป็นการตอบสนองความต้องการของลูกค้าให้ครอบคลุมทุกกลุ่ม
+						</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Instagram Section End -->
+
+    <!-- Latest Blog Section Begin -->
+    <section class="latest">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <span>Latest knowledge</span>
+                        <h2>องค์ความรู้</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row knowledfge-position">
+                <!-- <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/blog/blog-1.jpg')?>"></div>
+                        <div class="blog__item__text">
+                            <span><img src="<?=base_url('assete/theme/img/icon/calendar.png')?>" alt=""> 1 October 2022</span>
+                            <h5>งานแสดงสินค้า <br>TG SMART LIFE 2022 </h5>
+                            <a href="blog-detail.html">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/blog/blog-2.jpg')?>"></div>
+                        <div class="blog__item__text">
+                            <span><img src="<?=base_url('assete/theme/img/icon/calendar.png')?>" alt=""> 2 October 2022</span>
+                            <h5>ทีจี สมาร์ท ไลฟ์ ออนทัวร์ <br>ช็อปสนั่น ส่งท้ายปี</h5>
+                            <a href="blog-detail-2.html">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/blog/blog-3.jpg')?>"></div>
+                        <div class="blog__item__text">
+                            <span><img src="<?=base_url('assete/theme/img/icon/calendar.png')?>" alt=""> 5 November 2022</span>
+                            <h5>ทีจี สมาร์ท ไลฟ์ บูธ <br>@ เทสโก้โลตัส สุขาภิบาล 1 </h5>
+                            <a href="blog-detail.html">Read More</a>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+    <!-- Latest Blog Section End -->
+
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row blog_review">
+				<div class="col-lg-12 mb-5 mb-lg-0">
+					<h5 class="blog__item__review">รีวิวตัวอย่างจาก <span style="color: #005eb8">ลูกค้า</span> ที่ใช้งานจริง</h5>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="featured-carousel owl-carousel">
+						
+                        <div class="item">
+                			<div class="testimony-wrap d-flex">
+                  				<div class="user-img" style="background-image: url(img/review/profile-review-01.jpg)"></div>
+                  				<div class="text pl-4">
+                  					<span class="quote d-flex align-items-center justify-content-center">
+                      					<i class="ion-ios-quote"></i>
+                   	 				</span>
+                    				<p>"ฉันใช้ระบบน้ำ Water Purifier UF รุ่น TG SMART LIFE เป็นเวลาหลายปีแล้วและฉันหาว่ามันเป็นเครื่องมือที่สำคัญในบ้านของฉัน! ระบบกรอง UF ทำงานได้อย่างมี ประสิทธิภาพในการกรอง ฉันรู้สึกมั่นใจในคุณภาพของน้ำ"</p>
+                    				<p class="name review_strong">คุณ นวลจันทร์ แซ่ตัง</p>
+                  				</div>
+                			</div>
+              			</div>
+						<div class="item">
+                			<div class="testimony-wrap d-flex">
+                  				<div class="user-img" style="background-image: url(img/review/profile-review-02.jpg)"></div>
+                  				<div class="text pl-4">
+                  					<span class="quote d-flex align-items-center justify-content-center">
+                      					<i class="ion-ios-quote"></i>
+                   	 				</span>
+                    				<p>"ผมใช้ระบบน Water Purifier UF รุ่น TG SMART LIFE ในบ้านของผมมานานหลายเดือนและฉันประทับใจกับประสิทธิภาพที่มันนำเสนอ! น้ำที่ได้มาหลังจากกระบวนการกรองมีรสชาติที่ดีและไม่มีกลิ่นแปลกๆ"</p>
+                    				<p class="name review_strong">คุณสกุลยา ยาดี</p>
+                  				</div>
+                			</div>
+              			</div>
+						<div class="item">
+                			<div class="testimony-wrap d-flex">
+                  				<div class="user-img" style="background-image: url(img/review/profile-review-04.jpg)"></div>
+                  				<div class="text pl-4">
+                  					<span class="quote d-flex align-items-center justify-content-center">
+                      					<i class="ion-ios-quote"></i>
+                   	 				</span>
+                    				<p>"ฉันใช้ระบบน Water Purifier UF รุ่น TG SMART LIFE ในบ้านของฉันมาเป็น เวลาสั้น แต่มันก็ได้แสดงให้ฉันเห็นความสามารถที่ดีในการกรองน ! น้ำ ที่ได้มาหลัง จากกระบวนการกรองมีรสชาติสดชื่นและมีคุณภาพดี"</p>
+                    				<p class="name review_strong">คุณ ทมยันต์ อยู่สิน</p>
+                  				</div>
+                			</div>
+              			</div>
+						<div class="item">
+                			<div class="testimony-wrap d-flex">
+                  				<div class="user-img" style="background-image: url(img/review/profile-review-05.jpg)"></div>
+                  				<div class="text pl-4">
+                  					<span class="quote d-flex align-items-center justify-content-center">
+                      					<i class="ion-ios-quote"></i>
+                   	 				</span>
+                    				<p>เครื่องกรองน้ำ อัลคาไลน์ไฟฟ้ามีระบบกรองที่ออกแบบมาให้มีความสามารถในการก รองน้ำ อย่างไวและมีประสิทธิภาพสูง ด้วยเทคโนโลยีการกรองที่ละเอียดและมีพื้นที่ การกรองมากกว่าเครื่องกรองน้ำ ทั่วไปและมีมาตรฐาน nsf รับรองผลิตภัณฑ์ค่ะ</p>
+                    				<p class="name review_strong">คุณละเอียด ศรีนาค</p>
+                  				</div>
+                			</div>
+              			</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+<!-- #EndEditable -->
+
+
+
+  
+<script>
+
+    var base_url = "<?=base_url();?>";
+
+    //## draw_tg_slide ##//
+    draw_tg_slide(base_url);
+    function draw_tg_slide(base_url){
+        //###  ressults ###//
+        var results = get_tg_slide_results(base_url);
+        var contents = '';
+        if(results.datas.length > 0){
+            $.each( results.datas, function( key, val ) {
+
+            //     <div class="tg__items set-bg" data-setbg="<?=base_url('assete/theme/img/tg/tg-1.jpg')?>">
+            //     <div class="container">
+            //         <div class="row">
+            //             <div class="col-xl-5 col-lg-7 col-md-8">
+            //                 <div class="tg__text">
+            //                     <h6>New Arrival</h6>
+            //                     <h2>Alkaline Water Purifier</h2>
+			// 					<p>เครื่องกรองน้ำอัลคาไลน์ไฟฟ้า เครื่องกรองน้ำอัลคาไลน์ไฟฟ้าแบบไม่มีถังดื่ม RO 4 ขั้นตอน</p>
+            //                     <a href="alkaline-water-purifier-detail.html" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+            //                 </div>
+            //             </div>
+            //         </div>
+            //     </div>
+            // </div>
+            
+
+                var imgs = (val.path != '')? base_url+val.path+'?random='+Math.random(): base_url+'/uploads/DocumentTh.png';
+                contents += '<div class="tg__items set-bg" data-setbg="'+imgs+'">';
+                contents += '<div class="container">';
+                contents += '<div class="row">';
+                contents += '<div class="col-xl-5 col-lg-7 col-md-8">';
+                contents += '<div class="tg__text">';
+                //contents += '<h6>New Arrival</h6>';
+                contents += '<h2>'+val.title+'</h2>';
+                contents += '<p>'+val.sub_title+'</p>';
+                if(val.link != '' && val.link != null){
+                    contents += '<a href="'+val.link+'"  class="primary-btn">Shop now  <span class="arrow_right"></span></a>';
+                }
+                contents += '</div>';
+                contents += '</div>';
+                contents += '</div>';
+                contents += '</div>';
+                contents += '</div>';
+            });
+            var position = '.tg .tg__slider';
+            $(position).html(null);
+            $(position).html(contents);
+        }
+    }
+    function get_tg_slide_results(base_url){
+        var res = null;
+        $.ajax({
+            url: base_url+'Main/get_home_tg_slide_results', //ทำงานกับไฟล์นี้
+            data: '',  //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async:false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) { 
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    //## drawroducts ##//
+    drawroducts(base_url);
+    function drawroducts(base_url){
+        //###  ressults ###//
+        var results = get_results(base_url);
+        var contents = '';
+        if(results.datas.length > 0){
+            $.each( results.datas, function( key, val ) {
+                // <div class="col-lg-4 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                //     <div class="product__item" onclick="location.href='air-purifier-ozone-detail.html';">
+                //         <div class="product__item__pic set-bg" data-setbg="<?=base_url('assete/theme/img/product/product-8.jpg')?>">
+                //             <span class="label">New!</span>
+                //             <ul class="product__hover">
+                //                 <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/heart.png')?>" alt=""></a></li>
+                //                 <li><a href="#"><img src="<?=base_url('assete/theme/img/icon/search.png')?>" alt=""></a></li>
+                //             </ul>
+                //         </div>
+                //         <div class="product__item__text">
+				// 			<h6>เครื่องฟอกอากาศระบบสัมผัส</h6>
+                //             <span>ราคา  <b class="h5 fw-7 text-danger">54,000.00 บาท</b></span>
+                //         </div>
+                //     </div>
+                // </div>
+                
+                //### product tag ###//
+                var products_tags = get_products_tag(base_url, val.tag);
+                var filter_tag = '';
+                if(val.tag != null && val.tag != ''){
+                    if(products_tags.datas.length > 0){
+                        $.each( products_tags.datas, function( key, tag ) {
+                            filter_tag += " product-tag-"+tag.id;
+                        });
+                    }
+                }
+
+                contents += '<div class="col-lg-4 col-md-6 col-sm-6 col-md-6 col-sm-6 mix '+filter_tag+' ">';
+                contents += '<a href="'+base_url+'product_detail/'+val.id+'" style="color: #111111;">';
+                contents += '<div class="product__item">';
+                contents += '<div class="product__item__pic set-bg" data-setbg="'+base_url+'/'+val.thumnal+'?random='+Math.random()+'">';
+                //### product tag ###//
+                if(val.tag != null && val.tag != ''){
+                    if(products_tags.datas.length > 0){
+                        var tag_top = 10;
+                        $.each( products_tags.datas, function( key, tag ) {
+                            var tag_styles = 'style="background: '+tag.backgroundcolor+'; top: '+tag_top+'px;"';
+                            contents += '<span class="label" '+tag_styles+'>'+tag.name+'</span>';
+                            tag_top += 25;
+                        });
+                    }
+                }
+                contents += '</div>';
+
+                contents += '<div class="product__item__text">';
+                contents += '<h6>'+val.name+'</h6>';
+                var price_html = '';
+                if((val.saleprice != null && val.saleprice != '') && val.saleprice > 0){
+                    price_html = '<span>ราคา  <b class="h5 fw-7 text-danger">'+addCommas(val.saleprice)+' บาท</b></span><span class="sale_price">฿'+addCommas(val.price)+'<span>';
+                }else{
+                    price_html = '<span>ราคา  <b class="h5 fw-7 text-danger">'+addCommas(val.price)+' บาท</b></span>';
+                }
+                contents += price_html;
+                contents += '</div>';
+                contents += '</div>';
+                contents += '</a>';
+                contents += '</div>';
+            });
+            var position = '.product .product__filter';
+            $(position).html(null);
+            $(position).html(contents);
+        }
+    }
+    function get_results(base_url){
+        var res = null;
+        $.ajax({
+            url: base_url+'Main/get_home_products_results', //ทำงานกับไฟล์นี้
+            data: '',  //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async:false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) { 
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+    function get_products_tag(base_url, tag){
+        var res = null;
+        $.ajax({
+            url: base_url+'Main/get_products_tag', //ทำงานกับไฟล์นี้
+            data: {
+                'tag':tag
+            },  //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async:false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) { 
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    //## drawproducttags ##//
+    drawproducttags(base_url);
+    function drawproducttags(base_url){
+        //###  tag ###//
+        var product_tags = get_product_tags(base_url);
+        var tags = '';
+        if(product_tags.datas.length > 0){
+            tags += '<li class="active" data-filter="*">สินค้าทั้งหมด</li>';
+            $.each( product_tags.datas, function( key, val ) {
+                
+                var filter_class = ".product-tag-"+val.id;
+                tags += '<li data-filter="'+filter_class+'">'+val.name+'</li>';
+            });
+        }
+        var tags_position = '.product .filter__controls';
+        $(tags_position).html(null);
+        $(tags_position).html(tags);
+
+    }
+    function get_product_tags(base_url){
+        var res = null;
+        $.ajax({
+            url: base_url+'Main/get_product_tags_used', //ทำงานกับไฟล์นี้
+            data: '',  //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async:false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) { 
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+    function addCommas(numberString) {
+        numberString += '';
+        var x = numberString.split('.'),
+            x1 = x[0],
+            x2 = x.length > 1 ? '.' + x[1] : '',
+            rgxp = /(\d+)(\d{3})/;
+
+        while (rgxp.test(x1)) {
+            x1 = x1.replace(rgxp, '$1' + ',' + '$2');
+        }
+
+        return x1 + x2;
+    }
+
+    //## drawproducttype ##//
+    drawproducttype(base_url);
+    function drawproducttype(base_url){
+        //###  ressults ###//
+        var results = get_producttype_results(base_url);
+        var contents = '';
+        if(results.datas.length > 0){
+            $.each( results.datas, function( key, val ) {
+                //contents += '<div class="col-lg-7 offset-lg-4">';
+                contents += '<div class="col-lg-4">';
+                contents += '<div class="banner__item">';
+                contents += '<div class="banner__item__pic">';
+                var imgs = (val.thumnal != '')? base_url+val.thumnal+'?random='+Math.random(): base_url+'/uploads/DocumentTh.png';
+                contents += '<img src="'+imgs+'" alt="">';
+                contents += '</div>';
+                contents += '<div class="banner__item__text">';
+                contents += '<h2>'+val.name+'</h2>';
+                contents += '<a href="'+val.link+'">Shop now</a>';
+                contents += '</div>';
+                contents += '</div>';
+                contents += '</div>';
+            });
+            var position = '#product-type-position';
+            $(position).html(null);
+            $(position).html(contents);
+        }
+    }
+    function get_producttype_results(base_url){
+        var res = null;
+        $.ajax({
+            url: base_url+'Main/get_producttype_results', //ทำงานกับไฟล์นี้
+            data: '',  //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async:false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) { 
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    //## drawknoeledges ##//
+    drawknoeledges(base_url);
+    function drawknoeledges(base_url){
+        //###  ressults ###//
+        var results = get_knoeledges_results(base_url);
+        var contents = '';
+        if(results.datas.length > 0){
+            $.each( results.datas, function( key, val ) {
+                contents += '<div class="col-lg-4 col-md-6 col-sm-6">';
+                contents += '<div class="blog__item">';
+
+                var imgs = (val['path'] != '')? base_url+val.picture+'?random='+Math.random(): base_url+'/uploads/DocumentTh.png';
+                contents += '<div class="blog__item__pic set-bg" data-setbg="'+imgs+'"></div>';
+                contents += '<div class="blog__item__text">';
+                contents += '<span><img src="'+base_url+'assete/theme/img/icon/calendar.png" alt=""> '+val.created+'</span>';
+                contents += '<h5>'+val.topic+'</h5>';
+                contents += '<a href="'+base_url+'knowledge_detail/'+val.id+'">Read More</a>';
+                contents += '</div>';
+                contents += '</div>';
+                contents += '</div>';
+            });
+            var position = '.knowledfge-position';
+            $(position).html(null);
+            $(position).html(contents);
+        }
+    }
+    function get_knoeledges_results(base_url){
+        var res = null;
+        $.ajax({
+            url: base_url+'Main/get_home_knowledge_results', //ทำงานกับไฟล์นี้
+            data: '',  //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async:false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) { 
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    //## drawreview ##//
+    drawreview(base_url);
+    function drawreview(base_url){
+        //###  ressults ###//
+        var results = get_review_results(base_url);
+        var contents = '';
+        if(results.datas.length > 0){
+            $.each( results.datas, function( key, val ) {
+
+                contents += '<div class="item">';
+                contents += '<a href="'+base_url+'review_detail/'+val.id+'">';
+                contents += '<div class="testimony-wrap d-flex">';
+                var imgs = (val.picture != '')? base_url+val.picture+'?random='+Math.random(): base_url+'/uploads/DocumentTh.png';
+                contents += '<div class="user-img" style="background-image: url('+imgs+')"></div>';
+                contents += '<div class="text pl-4">';
+                contents += '<span class="quote d-flex align-items-center justify-content-center">';
+                contents += '<i class="ion-ios-quote"></i>';
+                contents += '</span>';
+                contents += '<p>'+val.sub_header.slice(0, 75) + '...'+'</p>';
+                contents += '<p class="name review_strong">'+val.topic+'</p>';
+                contents += '</div>';
+                contents += '</div>';
+                contents += '</a>';
+                contents += '</div>';
+            });
+            var position = '.featured-carousel';
+            $(position).html(null);
+            $(position).html(contents);
+        }
+    }
+    function get_review_results(base_url){
+        var res = null;
+        $.ajax({
+            url: base_url+'Main/get_review_results', //ทำงานกับไฟล์นี้
+            data: '',  //ส่งตัวแปร
+            type: "POST",
+            dataType: 'json',
+            async:false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) { 
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+
+    //###  SEO ##//
+    //drawseo(base_url);
+    function drawseo(base_url){
+        var get_seo = get_seo_once(base_url);
+        if(get_seo.datas.length > 0){  
+            var resulted =   get_seo.datas[0];
+
+            $('head title').html(resulted.seo_title);
+            $('head meta[name="keywords"]').attr('content', resulted.seo_keyword);
+            $('head meta[name="description"]').attr('content', resulted.seo_description);
+            
+            $('head meta[property="og:url"]').attr('content', $(location).attr('href'));
+            $('head meta[property="og:title"]').attr('content', resulted.seo_title);
+            $('head meta[property="og:description"]').attr('content', resulted.seo_description);
+            
+            // if(reslt.thumnal != null && reslt.thumnal != ''){
+            //     $('head meta[property="og:image"]').attr('content', base_url+'/'+reslt.thumnal+'?random='+Math.random());
+            // }
+        }
+    }
+    function get_seo_once(base_url, $id){
+        var res = null;
+        $.ajax({
+            url: base_url+'Main/get_seo_once', //ทำงานกับไฟล์นี้
+            data: {'id': 1 },  // 1 = home
+            type: "POST",
+            dataType: 'json',
+            async:false,
+            success: function(data, status) {
+                res = data;
+            },
+            error: function(xhr, status, exception) { 
+                //console.log(xhr);
+            }
+        });
+        return res;
+    }
+</script>

@@ -1,0 +1,108 @@
+.fail-stat-sale{color: #d9530e;}
+.succ-stat-sale{color: #26b99a!important;}
+.input-valid {
+    border: 1px solid #fb48004d !important;
+    box-shadow: 0px 0px 3px #ff470063 !important;
+}
+.btn-light {
+    color: #212529bd;
+    background-color: #f8f9fa00;
+    border-color: #d5d9dc;
+    border-radius: inherit !important;
+}
+.mh .dropdown-menu { max-height: 200px;}
+.dropdown-item.active, .dropdown-item:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: #1abb9c;
+}
+
+.input-valid {
+    border: 1px solid #fb48004d !important;
+    box-shadow: 0px 0px 3px #ff470063 !important;
+}
+
+.inhabitedInput, input:checked { height: 19px; width: 19px;}
+
+.btn-paginations{padding: .1rem .4rem .1rem .3rem;border-radius: 0px; color:white;} 
+.focus-paginations{box-shadow: 1px 1px 0px 0px #2a3f54;color: #26b99a;}
+.panel_toolbox>li> .btn-success:hover { background: #1c866f !important; }
+.datepicker{padding-left: 13px !important;border-radius: 0rem !important;}
+
+.premise-modal .modal-content { border: inherit !important; }
+
+/*================= Multi Select  =========================*/
+.multiselect-container .multiselect-option.active:not(.multiselect-active-item-fallback){
+    background-color: #efefef !important;
+    color: #000 !important;
+
+}
+/*=========================================================*/
+/*================= Drag & drop file  =========================*/
+
+.drop-files input {
+    outline: 2px dashed #92b0b3;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    padding: 40px 0px 100px 35%;
+    text-align: center !important;
+    margin: 0;
+    width: 100% !important;
+    cursor: pointer;
+}
+.drop-files input:focus{     outline: 2px dashed #92b0b3;  outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #92b0b3;
+ }
+.drop-files{ position:relative}
+.color input{ background-color:#f1f1f1;}
+.drop-files:before {
+    position: absolute;
+    bottom: -7px;
+    left: 0;  pointer-events: none;
+    width: 100%;
+    right: 0;
+    height: 57px;
+    content: " or drag it here. ";
+    display: block;
+    margin: 0 auto;
+    color: #2ea591;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+/*=========================================================*/
+
+
+/*================= Premise =========================*/
+.premise-items{
+    text-align: center; 
+    margin-bottom: 15px;
+    position:  relative;}
+.thumnails-premise{
+    border: 2px #08080759 solid; border-radius: 7px;width: 100%;
+    /*height: 6rem; */
+    display: block;cursor:pointer;
+}
+.thumnails-premise-del{
+    background-color: #f1d7d7;
+    color: red;
+    width: 25px;
+    border: 1px solid red;
+    border-radius: 50%;
+    position: absolute;
+    right: 2px;
+    top: -7px;
+    text-align: center;
+    padding: 2px;
+    cursor: pointer;
+}
+.thumnails-premise-valid{
+    border: 1px solid #fd8a5c;
+    box-shadow: 0px 0px 6px #ff4700a3;
+}
+/*===========================================================*/
+
+.input-validat{color:#fb4800c4 !important;}

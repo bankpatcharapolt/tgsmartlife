@@ -1,0 +1,24 @@
+# =========================
+# CodeIgniter Logs
+# =========================
+writable/logs/*
+!writable/logs/index.html
+!writable/logs/.gitkeep
+
+# Cache
+writable/cache/*
+!writable/cache/index.html
+!writable/cache/.gitkeep
+
+# Session
+writable/session/*
+!writable/session/index.html
+!writable/session/.gitkeep
+
+# Debug Toolbar
+writable/debugbar/*
+
+# Uploads (ถ้าไม่ต้องการเก็บไฟล์ที่อัปโหลด)
+writable/uploads/*
+!writable/uploads/index.html
+!writable/uploads/.gitkeep

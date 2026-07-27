@@ -1,0 +1,2167 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+//require_once APPPATH . 'admin/Main.php';
+require_once APPPATH . '/libraries/Main.php';
+
+class Product extends Main {
+
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see https://codeigniter.com/userguide3/general/urls.html
+	 */
+	function __construct() { 
+    
+        parent::__construct(); 
+		
+    }
+	//###  PRODUCT   ###/
+	public function product_page(){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'product';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product');
+		$this->load->view('admin/footer');
+	}
+	public function product_add(){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'product';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_add');
+		$this->load->view('admin/footer');
+	}
+	public function product_edit($id){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'product';
+		$data['id'] = $id;
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_edit',$data);
+		$this->load->view('admin/footer');
+	}
+	public function get_product_onc() {   
+		$id = $this->input->post('id');
+        $this->db->select('*');
+        $this->db->where('id', $id);
+        $this->db->from('product'); 
+        $query = $this->db->get(); 
+        $result = ($query->num_rows() > 0)?$query->result_array():FALSE; 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product() {   
+		
+		$Query = " SELECT `product`.*, `product_category`.name as cate_name FROM `product` 
+		LEFT JOIN `product_category` on `product`.category = `product_category`.id  ORDER BY `product`.`sortting` asc  ";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function product_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+		//$productcode = Date('YmdHis');
+        $productcode = $this->input->post('productcode');
+        $name = $this->input->post('name');
+        $subtitle = $this->input->post('subtitle');
+        $counts = $this->input->post('counts');
+        $price = $this->input->post('price');
+        $saleprice = $this->input->post('saleprice');
+		$category = $this->input->post('category');
+		
+		$tag = '';
+		if(!empty($this->input->post('tag'))){ $tag = implode(",",$this->input->post('tag'));}
+
+		//$tag = implode(",",(!empty($this->input->post('tag')))?$this->input->post('tag'):null);
+		$detail = $this->input->post('detail');
+		$salerphone = $this->input->post('salerphone');
+		$seo = $this->input->post('seo');
+		$active = $this->input->post('active');
+
+        $obj = array(
+			'productcode'=>$productcode,
+			// 'thumnal' => '',
+			'name' => $name, 
+			'subtitle' => $subtitle, 
+			'counts' => $counts, 
+			'price' => $price, 
+			'saleprice' => $saleprice, 
+			'category' => $category,
+			'tag' => $tag,
+			'detail' => $detail,
+			'salerphone' => $salerphone,
+			'seo_id' => $seo,
+			'active' => $active
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('product', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			//$res->datas = base_url('admin/product');
+			$res->datas = base_url('admin_product');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("product", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product');
+			$res->datas = base_url('admin_product');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		
+		//###  thumnal ###///
+		if (!empty($_FILES['thumnal']['name'])) {
+			$upload = $this->do_upload_thumnel('thumnal', $id);
+			if($upload->status){
+				$img['thumnal'] = trim($upload->data);
+				$this->db->where('id', $id);
+				$this->db->update('product', $img);
+			}
+		}
+
+		//###  Files Image  ###//
+		$files = 'images';
+		$cpt = count($_FILES[$files]['name']);
+		if($cpt > 0){
+			for($i=0; $i < $cpt; $i++){  
+				$upload_image = $this->do_upload_image($files, $id, $i);
+				if($upload_image->status){
+					$obj_image = array( 
+						'path' => $upload_image->data,
+						'ref_id'=> $id,
+						'group' => 'product',
+						'created' => $curent_date,
+						'updated' => $curent_date
+					);  
+					$this->db->insert('images', $obj_image);
+				}
+			}  
+		}
+
+		$res->status = true;
+		$res->datas = base_url('admin_product');
+		$res->massege = 'บันทึกสำเร็จ';
+		$res->status_code = '000';
+
+
+		echo json_encode($res);
+	}
+	public function del_product(){
+		$id = $this->input->post('id');
+		$this->deleted_product($id);
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_tag_used() {   
+	
+		$Query = " SELECT * FROM product_tag WHERE active = '1'";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_type_used() {   
+	
+		$Query = " SELECT * FROM product_type WHERE active = '1'";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_category_used() {   
+	
+		$Query = " SELECT * FROM product_category WHERE active = '1'";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_images() {
+		$id = $this->input->post('id');
+		$Query = " SELECT * FROM images WHERE ref_id = '".$id."' and `group` = 'product' ";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function do_upload_thumnel($files, $id){
+        $res = new stdClass();
+        $config['allowed_types'] = 'jpeg|jpg|png'; //รูปแบบไฟล์ที่ อนุญาตให้ Upload ได้
+        $config['max_size']      = 0; //ขนาดไฟล์สูงสุดที่ Upload ได้ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_width']     = 0; //ขนาดความกว้างสูงสุด (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_height']    = 0;  //ขนาดความสูงสูงสดุ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config["overwrite"] = 	true;
+        //$config['encrypt_name']  = true; //กำหนดเป็น true ให้ระบบ
+
+        //##### thumanl name ####//
+		$_FILES[$files]['name'] = 'thumnal.'.pathinfo($_FILES[$files]['name'], PATHINFO_EXTENSION);
+		
+        ##### create path ####
+		$upload_path = "./uploads/images/product/".$id;
+		if (!file_exists($upload_path)) {
+			if (!mkdir($upload_path, 0777, true)) {//0777
+				die($upload_path.' Failed to create folders...');
+			}
+        }
+
+        //##### create img to dir ####//
+        $fullPath = $upload_path.'/'.$_FILES[$files]['name'];
+		@unlink($fullPath);
+		$config['upload_path'] = $upload_path; //Folder สำหรับ เก็บ ไฟล์ที่  Upload
+		$this->load->library('upload', $config);
+		
+		if ($this->upload->do_upload($files)) {
+			$path = $this->upload->data();
+            $res->status = true;
+            $res->data = $fullPath;
+		}else{
+            $res->status = false;
+            $res->message = $this->upload->display_errors();
+            $res->data = $fullPath;
+		}
+        return $res;
+    }
+	public function do_upload_image($files, $id, $i){
+        $res = new stdClass();
+        $config['allowed_types'] = 'jpeg|jpg|png|pdf|xlsx|xls'; //รูปแบบไฟล์ที่ อนุญาตให้ Upload ได้
+        $config['max_size']      = 0; //ขนาดไฟล์สูงสุดที่ Upload ได้ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_width']     = 0; //ขนาดความกว้างสูงสุด (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_height']    = 0;  //ขนาดความสูงสูงสดุ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config["overwrite"] = 	false;
+        //$config['encrypt_name']  = true; //กำหนดเป็น true ให้ระบบ
+
+		$_FILES['file']['name'] = $_FILES[$files]['name'][$i];
+		$_FILES['file']['type'] = $_FILES[$files]['type'][$i];
+		$_FILES['file']['tmp_name'] = $_FILES[$files]['tmp_name'][$i];
+		$_FILES['file']['error'] = $_FILES[$files]['error'][$i];
+		$_FILES['file']['size'] = $_FILES[$files]['size'][$i];
+
+        ##### name img ####
+        $_FILES['file']['name'] =  rand().".".pathinfo($_FILES[$files]['name'][$i], PATHINFO_EXTENSION);
+
+        ##### create path ####
+		$uploads_path = "./uploads/images/product/".$id;
+		if (!file_exists($uploads_path)) {
+			if (!mkdir($uploads_path, 0777, true)) {//0777
+				die($uploads_path.' Failed to create folders...');
+			}
+        }
+
+        ##### create img to dir ####
+        $fullPath = $uploads_path.'/'.$_FILES['file']['name'];
+		$config['upload_path'] = $uploads_path; //Folder สำหรับ เก็บ ไฟล์ที่  Upload
+		//$config['file_name'] = $_FILES['file']['name'];
+		
+		$this->load->library('upload', $config);
+		if ($this->upload->do_upload('file')) {
+			$path = $this->upload->data();
+            $res->status = true;
+			//$res->fileType = $_fileType;
+            $res->data = $fullPath;
+		}else{
+            $res->status = false;
+            $res->message = $this->upload->display_errors();
+            $res->data = $fullPath;
+		}
+        return $res;
+    }
+	public function del_image() { 
+		$id = $this->input->post('id');
+		$ref_id = $this->input->post('ref_id');
+
+		$Query = " SELECT * FROM images WHERE id = '".$id."' AND ref_id = '".$ref_id."' AND `group` = 'product'";
+		$result = $this->db->query($Query)->result();
+
+		//### del imgage ###///
+		foreach($result as $item){
+			unlink($item->path);
+			//$this->db->query(" DELETE FROM product_image  WHERE id ='".$item->id."' AND product_cate = '".$cate_id."' AND product_id = '".$product_id."'");
+			$this->db->where('id', $item->id);
+			$this->db->where('ref_id', $item->ref_id);
+			$this->db->where('group', 'product');
+    		$this->db->delete('images');
+		}
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+		
+	}
+	public function update_product_sorting(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		
+		$id = $this->input->post('id');
+        $sortable = $this->input->post('sortable');
+		
+        $obj = array( 
+			'sortting' => $sortable,
+		); 
+
+		$obj['updated'] = date(date_format(date_create(),"Y-m-d H:i:s"));
+        $this->db->where("id", $id);
+        $this->db->update("product", $obj); 
+
+		$res->status = true;
+		//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+		$res->datas = base_url('admin_product');
+		$res->massege = 'บันทึกสำเร็จ';
+		$res->status_code = '000';
+
+		echo json_encode($res);
+	}
+	public function get_product_seo_results() {  
+		//$cate_id = $this->input->post('cate_id');
+        $Query = "SELECT * FROM page_seo WHERE category = 'product'";
+		$result = $this->db->query($Query)->result_array();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+
+
+	//###   CATEGORY   ###/
+	public function category_page(){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'category';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_cate');
+		$this->load->view('admin/footer');
+	}
+	public function category_add(){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'category';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_cate_add');
+		$this->load->view('admin/footer');
+	}
+	public function category_edit($id){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'category';
+		$data['id'] = $id;
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_cate_edit',$data);
+		$this->load->view('admin/footer');
+	}
+	public function get_product_category_onc() {   
+		$id = $this->input->post('id');
+        $this->db->select('*');
+        $this->db->where('id', $id);
+        $this->db->from('product_category'); 
+        $query = $this->db->get(); 
+        $result = ($query->num_rows() > 0)?$query->result_array():FALSE; 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_category() {   
+		
+		$Query = " SELECT * FROM product_category ";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function category_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+        $name = $this->input->post('name');
+		$active = $this->input->post('active');
+		
+        $obj = array( 
+			'name' => $name,
+			//'detail' => $detail,
+			'active' => $active
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('product_category', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_product_category');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("product_category", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_product_category');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		echo json_encode($res);
+	}
+	public function del_category() {   
+
+		$id = $this->input->post('id');
+		//### delete category ###///
+		$this->db->where('id', $id);
+		$this->db->delete('product_category');
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+
+	//###   TAG   ###/
+	public function tag_page(){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'tag';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_tag');
+		$this->load->view('admin/footer');
+	}
+	public function tag_add(){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'tag';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_tag_add');
+		$this->load->view('admin/footer');
+	}
+	public function tag_edit($id){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'tag';
+		$data['id'] = $id;
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_tag_edit',$data);
+		$this->load->view('admin/footer');
+	}
+	public function get_product_tag_onc() {   
+		$id = $this->input->post('id');
+        $this->db->select('*');
+        $this->db->where('id', $id);
+        $this->db->from('product_tag'); 
+        $query = $this->db->get(); 
+        $result = ($query->num_rows() > 0)?$query->result_array():FALSE; 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_tag() {   
+		
+		$Query = " SELECT * FROM product_tag ";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function tag_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+        $name = $this->input->post('name');
+        $backgroundcolor = $this->input->post('backgroundcolor');
+		$active = $this->input->post('active');
+		
+        $obj = array( 
+			'name' => $name,
+			'backgroundcolor' => $backgroundcolor,
+			'active' => $active
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('product_tag', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_product_tag');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("product_tag", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_product_tag');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		echo json_encode($res);
+	}
+	public function del_tag() {   
+
+		$id = $this->input->post('id');
+		//### delete category ###///
+		$this->db->where('id', $id);
+		$this->db->delete('product_tag');
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+	//###   TYPE   ###/
+	public function type_page(){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'type';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_type');
+		$this->load->view('admin/footer');
+	}
+	public function type_add(){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'type';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_type_add');
+		$this->load->view('admin/footer');
+	}
+	public function type_edit($id){	
+		$menu['mainmenu'] = 'product';
+		$menu['submenu'] = 'type';
+		$data['id'] = $id;
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_type_edit',$data);
+		$this->load->view('admin/footer');
+	}
+	public function get_product_type_onc() {   
+		$id = $this->input->post('id');
+        $this->db->select('*');
+        $this->db->where('id', $id);
+        $this->db->from('product_type'); 
+        $query = $this->db->get(); 
+        $result = ($query->num_rows() > 0)?$query->result_array():FALSE; 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_type() {   
+		
+		$Query = " SELECT * FROM product_type ";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function type_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+        $name = $this->input->post('name');
+        $link = $this->input->post('link');
+		$active = $this->input->post('active');
+		
+        $obj = array( 
+			'name' => $name,
+			'link' => $link,
+			'active' => $active
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('product_type', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_product_type');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("product_type", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_product_type');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  thumnal ###///
+		if (!empty($_FILES['thumnal']['name'])) {
+			$upload = $this->type_do_upload_thumnel('thumnal', $id);
+			if($upload->status){
+				$img['thumnal'] = trim($upload->data);
+				$this->db->where('id', $id);
+				$this->db->update('product_type', $img);
+			}
+		}
+
+		echo json_encode($res);
+	}
+	public function type_do_upload_thumnel($files, $id){
+        $res = new stdClass();
+        $config['allowed_types'] = 'jpeg|jpg|png'; //รูปแบบไฟล์ที่ อนุญาตให้ Upload ได้
+        $config['max_size']      = 0; //ขนาดไฟล์สูงสุดที่ Upload ได้ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_width']     = 0; //ขนาดความกว้างสูงสุด (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_height']    = 0;  //ขนาดความสูงสูงสดุ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config["overwrite"] = 	true;
+        //$config['encrypt_name']  = true; //กำหนดเป็น true ให้ระบบ
+
+        //##### thumanl name ####//
+		$_FILES[$files]['name'] = 'thumnal.'.pathinfo($_FILES[$files]['name'], PATHINFO_EXTENSION);
+		
+        ##### create path ####
+		$upload_path = "./uploads/images/product_type/".$id;
+		if (!file_exists($upload_path)) {
+			if (!mkdir($upload_path, 0777, true)) {//0777
+				die($upload_path.' Failed to create folders...');
+			}
+        }
+
+        //##### create img to dir ####//
+        $fullPath = $upload_path.'/'.$_FILES[$files]['name'];
+		@unlink($fullPath);
+		$config['upload_path'] = $upload_path; //Folder สำหรับ เก็บ ไฟล์ที่  Upload
+		$this->load->library('upload', $config);
+		
+		if ($this->upload->do_upload($files)) {
+			$path = $this->upload->data();
+            $res->status = true;
+            $res->data = $fullPath;
+		}else{
+            $res->status = false;
+            $res->message = $this->upload->display_errors();
+            $res->data = $fullPath;
+		}
+        return $res;
+    }
+	public function del_type() {   
+
+		$id = $this->input->post('id');
+		//### delete category ###///
+		$this->db->where('id', $id);
+		$this->db->delete('product_type');
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	
+	//###   SPEC   ###/
+	public function spec_page(){	
+		$menu['mainmenu'] = 'spec';
+		$menu['submenu'] = 'spec';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_spec');
+		$this->load->view('admin/footer');
+	}
+	public function spec_action($product_id){	
+		$menu['mainmenu'] = 'spec';
+		$menu['submenu'] = 'spec';
+		$data['product_id'] = $product_id;
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_spec_action',$data);
+		$this->load->view('admin/footer');
+	}
+	public function get_product_spec_onc() {   
+		$product_id = $this->input->post('product_id');
+
+		$Query = "SELECT `product_spec`.*, `product`.`name` FROM `product_spec`
+		LEFT JOIN `product` ON `product_spec`.`product_id` = `product`.`id`
+		WHERE `product_spec`.`product_id` = ".$product_id;
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_spec() {   
+		
+		$Query = "SELECT `product`.*, `product_category`.name as cate_name 
+		, `product_spec`.`link` as link 
+		, `product_spec`.`file_path` as file_path 
+		, `product_spec`.`detail` as product_spec_detail 
+		FROM `product` 
+		LEFT JOIN `product_category` on `product`.category = `product_category`.id
+		LEFT JOIN `product_spec` on `product`.`id` = `product_spec`.`product_id`";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function spec_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+		$product_id = $this->input->post('product');
+        $link = $this->input->post('link');
+        $detail = $this->input->post('detail');
+		
+        $obj = array( 
+			'product_id' => $product_id,
+			'link' => $link,
+			'detail' => $detail,
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('product_spec', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_product_spec');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->where("product_id", $product_id);
+            $this->db->update("product_spec", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_product_spec');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		//###  thumnal ###///
+		if (!empty($_FILES['pdfFile']['name'])) {
+			$upload = $this->do_upload_pdffile('pdfFile', $product_id);
+			if($upload->status){
+				$pdf['file_path'] = trim($upload->data);
+				$this->db->where('id', $id);
+				$this->db->update('product_spec', $pdf);
+			}
+		}
+
+		echo json_encode($res);
+	}
+	public function do_upload_pdffile($files, $product_id){
+        $res = new stdClass();
+        $config['allowed_types'] = 'pdf'; //รูปแบบไฟล์ที่ อนุญาตให้ Upload ได้
+        $config['max_size']      = 0; //ขนาดไฟล์สูงสุดที่ Upload ได้ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_width']     = 0; //ขนาดความกว้างสูงสุด (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_height']    = 0;  //ขนาดความสูงสูงสดุ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config["overwrite"] = 	true;
+        //$config['encrypt_name']  = true; //กำหนดเป็น true ให้ระบบ
+
+        //##### thumanl name ####//
+		$_FILES[$files]['name'] = 'product.'.pathinfo($_FILES[$files]['name'], PATHINFO_EXTENSION);
+		
+        ##### create path ####
+		$upload_path = "./uploads/product_spec/pdf/product/".$product_id;
+		if (!file_exists($upload_path)) {
+			if (!mkdir($upload_path, 0777, true)) {//0777
+				die($upload_path.' Failed to create folders...');
+			}
+        }
+
+        //##### create img to dir ####//
+        $fullPath = $upload_path.'/'.$_FILES[$files]['name'];
+		@unlink($fullPath);
+		$config['upload_path'] = $upload_path; //Folder สำหรับ เก็บ ไฟล์ที่  Upload
+		$this->load->library('upload', $config);
+		
+		if ($this->upload->do_upload($files)) {
+			$path = $this->upload->data();
+            $res->status = true;
+            $res->data = $fullPath;
+		}else{
+            $res->status = false;
+            $res->message = $this->upload->display_errors();
+            $res->data = $fullPath;
+		}
+        return $res;
+    }
+	public function del_spec() {   
+
+		$id = $this->input->post('id');
+		//### delete category ###///
+		$this->db->where('id', $id);
+		$this->db->delete('product_spec');
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function del_spec_PDF() {   
+
+		$id = $this->input->post('id');
+		$product_id = $this->input->post('product_id');
+		$curent_date = Date('Y-m-d H:i:s');
+
+		$Query = " SELECT * FROM product_spec WHERE id = '".$id."' AND product_id = '".$product_id."' ";
+		$result = $this->db->query($Query)->result();
+
+		//### del PDF ###///
+		foreach($result as $item){
+			
+			//### del files ###///
+			$this->load->helper('file');
+			delete_files('./uploads/product_spec/pdf/product/'.$item->product_id.'/', true); // Delete files into the folder
+			@rmdir('./uploads/product_spec/pdf/product/'.$item->product_id.'/'); // Delete the folder
+
+			//### update files ###///
+			$obj['file_path'] = '';
+			$obj['updated'] = $curent_date;
+			$this->db->where("id", $item->id);
+			$this->db->where("product_id", $item->product_id);
+			$this->db->update("product_spec", $obj); 
+		}
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+		
+	}
+
+	//###   REGIS PRODUCT   ###/
+	public function regis_page(){	
+		$menu['mainmenu'] = 'regis';
+		$menu['submenu'] = 'regis';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_regis');
+		$this->load->view('admin/footer');
+	}
+	public function regis_add(){	
+		$menu['mainmenu'] = 'regis';
+		$menu['submenu'] = 'regis';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_regis_add');
+		$this->load->view('admin/footer');
+	}
+	public function regis_edit($id){	
+		$menu['mainmenu'] = 'regis';
+		$menu['submenu'] = 'regis';
+		$data['id'] = $id;
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/product_regis_edit',$data);
+		$this->load->view('admin/footer');
+	}
+	public function get_product_regis_onc() {   
+		$id = $this->input->post('id');
+
+		$Query = "SELECT `product_regis`.*, `product`.`name` FROM `product_regis`
+		LEFT JOIN `product` ON `product_regis`.`product_id` = `product`.`id`
+		WHERE `product_regis`.`id` = ".$id;
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_regis() {   
+		
+		$Query = " SELECT `product_regis`.*,`product`.`productcode`,`product`.`name`,`product`.`thumnal` FROM `product_regis` LEFT JOIN `product` on `product_regis`.`product_id` = `product`.id ";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function regis_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+		$product_id = $this->input->post('product');
+		$bill_number = $this->input->post('bill_number');
+		$tel_cus = $this->input->post('tel_cus');
+		$tel_idcart = $this->input->post('tel_idcart');
+        $link = $this->input->post('link');
+        $detail = $this->input->post('detail');
+		
+        $obj = array( 
+			'product_id' => $product_id,
+			'bill_number' => $bill_number,
+			'tel_cus' => $tel_cus,
+			'tel_idcart' => $tel_idcart,
+			'link' => $link,
+			'detail' => $detail,
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('product_regis', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_product_regis');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->where("product_id", $product_id);
+            $this->db->update("product_regis", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_product_regis');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		//###  thumnal ###///
+		if (!empty($_FILES['pdfFile']['name'])) {
+			$upload = $this->do_upload_regis('pdfFile', $product_id);
+			if($upload->status){
+				$pdf['file_path'] = trim($upload->data);
+				$this->db->where('id', $id);
+				$this->db->update('product_regis', $pdf);
+			}
+		}
+
+		echo json_encode($res);
+	}
+	public function do_upload_regis($files, $product_id){
+        $res = new stdClass();
+        $config['allowed_types'] = 'pdf'; //รูปแบบไฟล์ที่ อนุญาตให้ Upload ได้
+        $config['max_size']      = 0; //ขนาดไฟล์สูงสุดที่ Upload ได้ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_width']     = 0; //ขนาดความกว้างสูงสุด (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_height']    = 0;  //ขนาดความสูงสูงสดุ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config["overwrite"] = 	true;
+        //$config['encrypt_name']  = true; //กำหนดเป็น true ให้ระบบ
+
+        //##### thumanl name ####//
+		$_FILES[$files]['name'] = 'product.'.pathinfo($_FILES[$files]['name'], PATHINFO_EXTENSION);
+		
+        ##### create path ####
+		$upload_path = "./uploads/product_regis/pdf/product/".$product_id;
+		if (!file_exists($upload_path)) {
+			if (!mkdir($upload_path, 0777, true)) {//0777
+				die($upload_path.' Failed to create folders...');
+			}
+        }
+
+        //##### create img to dir ####//
+        $fullPath = $upload_path.'/'.$_FILES[$files]['name'];
+		@unlink($fullPath);
+		$config['upload_path'] = $upload_path; //Folder สำหรับ เก็บ ไฟล์ที่  Upload
+		$this->load->library('upload', $config);
+		
+		if ($this->upload->do_upload($files)) {
+			$path = $this->upload->data();
+            $res->status = true;
+            $res->data = $fullPath;
+		}else{
+            $res->status = false;
+            $res->message = $this->upload->display_errors();
+            $res->data = $fullPath;
+		}
+        return $res;
+    }
+	public function del_regis() {   
+
+		$id = $this->input->post('id');
+		//### delete category ###///
+		$this->db->where('id', $id);
+		$this->db->delete('product_regis');
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function del_regis_PDF() {   
+
+		$id = $this->input->post('id');
+		$product_id = $this->input->post('product_id');
+		$curent_date = Date('Y-m-d H:i:s');
+
+		$Query = " SELECT * FROM product_regis WHERE id = '".$id."' AND product_id = '".$product_id."' ";
+		$result = $this->db->query($Query)->result();
+
+		//### del PDF ###///
+		foreach($result as $item){
+			
+			//### del files ###///
+			$this->load->helper('file');
+			delete_files('./uploads/product_regis/pdf/product/'.$item->product_id.'/', true); // Delete files into the folder
+			@rmdir('./uploads/product_regis/pdf/product/'.$item->product_id.'/'); // Delete the folder
+
+			//### update files ###///
+			$obj['file_path'] = '';
+			$obj['updated'] = $curent_date;
+			$this->db->where("id", $item->id);
+			$this->db->where("product_id", $item->product_id);
+			$this->db->update("product_regis", $obj); 
+		}
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+		
+	}
+
+	
+	//###   SLIDE   ###/
+	public function slide_page(){	
+		$menu['mainmenu'] = 'slide';
+		$menu['submenu'] = 'slide';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/slide_page');
+		$this->load->view('admin/footer');
+	}
+	public function slide_add(){	
+		$menu['mainmenu'] = 'slide';
+		$menu['submenu'] = 'slide';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/slide_add');
+		$this->load->view('admin/footer');
+	}
+	public function slide_edit($id){	
+		$menu['mainmenu'] = 'slide';
+		$menu['submenu'] = 'slide';
+		$data['id'] = $id;
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/slide_edit',$data);
+		$this->load->view('admin/footer');
+	}
+	public function get_slide_onc() {   
+		$id = $this->input->post('id');
+
+		$Query = "SELECT `slide`.* FROM `slide`  WHERE `slide`.`id` = ".$id;
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_slide() {   
+		
+		$Query = "SELECT `slide`.* FROM `slide` ORDER BY `sortting` asc ";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function slide_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+        $title = $this->input->post('title');
+        $sub_title = $this->input->post('sub_title');
+        $link = $this->input->post('link');
+        $active = $this->input->post('active');
+		
+        $obj = array( 
+			'title' => $title,
+			'sub_title' => $sub_title,
+			'link' => $link,
+			'active' => $active,
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('slide', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_slide');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("slide", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_slide');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		//###  thumnal ###///
+		if (!empty($_FILES['image']['name'])) {
+			$upload = $this->do_upload_slide('image', $id);
+			if($upload->status){
+				$pdf['path'] = trim($upload->data);
+				$this->db->where('id', $id);
+				$this->db->update('slide', $pdf);
+			}
+		}
+
+		echo json_encode($res);
+	}
+	public function do_upload_slide($files, $id){
+        $res = new stdClass();
+        $config['allowed_types'] = 'jpeg|jpg|png'; //รูปแบบไฟล์ที่ อนุญาตให้ Upload ได้
+        $config['max_size']      = 0; //ขนาดไฟล์สูงสุดที่ Upload ได้ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_width']     = 0; //ขนาดความกว้างสูงสุด (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_height']    = 0;  //ขนาดความสูงสูงสดุ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config["overwrite"] = 	true;
+        //$config['encrypt_name']  = true; //กำหนดเป็น true ให้ระบบ
+
+        //##### thumanl name ####//
+		$_FILES[$files]['name'] = 'image_slide.'.pathinfo($_FILES[$files]['name'], PATHINFO_EXTENSION);
+		
+        ##### create path ####
+		$upload_path = "./uploads/slide/".$id;
+		if (!file_exists($upload_path)) {
+			if (!mkdir($upload_path, 0777, true)) {//0777
+				die($upload_path.' Failed to create folders...');
+			}
+        }
+
+        //##### create img to dir ####//
+        $fullPath = $upload_path.'/'.$_FILES[$files]['name'];
+		@unlink($fullPath);
+		$config['upload_path'] = $upload_path; //Folder สำหรับ เก็บ ไฟล์ที่  Upload
+		$this->load->library('upload', $config);
+		
+		if ($this->upload->do_upload($files)) {
+			$path = $this->upload->data();
+            $res->status = true;
+            $res->data = $fullPath;
+		}else{
+            $res->status = false;
+            $res->message = $this->upload->display_errors();
+            $res->data = $fullPath;
+		}
+        return $res;
+    }
+	public function del_slide_image() {   
+
+		$id = $this->input->post('id');
+		$Query = " SELECT * FROM slide WHERE id = '".$id."' ";
+		$result = $this->db->query($Query)->result();
+
+		//### del PDF ###///
+		foreach($result as $item){
+			
+			//### del files ###///
+			$this->load->helper('file');
+			delete_files('./uploads/slide/'.$item->product_id.'/', true); // Delete files into the folder
+			@rmdir('./uploads/slide/'.$item->product_id.'/'); // Delete the folder
+		}
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function del_slide_result() {   
+
+		$id = $this->input->post('id');
+		$curent_date = Date('Y-m-d H:i:s');
+
+		$Query = " SELECT * FROM slide WHERE id = '".$id."' ";
+		$result = $this->db->query($Query)->result();
+
+		//### del PDF ###///
+		foreach($result as $item){
+			
+			//### del files ###///
+			$this->load->helper('file');
+			delete_files('./uploads/slide/'.$item->id.'/', true); // Delete files into the folder
+			@rmdir('./uploads/slide/'.$item->id.'/'); // Delete the folder
+
+			//### DElete files ###///]
+			$this->db->where('id', $item->id);
+    		$this->db->delete('slide');
+		}
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+		
+	}
+	public function update_slide_sorting(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		
+		$id = $this->input->post('id');
+        $sortable = $this->input->post('sortable');
+		
+        $obj = array( 
+			'sortting' => $sortable,
+		); 
+
+		$obj['updated'] = date(date_format(date_create(),"Y-m-d H:i:s"));
+        $this->db->where("id", $id);
+        $this->db->update("slide", $obj); 
+
+		$res->status = true;
+		//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+		$res->datas = base_url('admin_slide');
+		$res->massege = 'บันทึกสำเร็จ';
+		$res->status_code = '000';
+
+		echo json_encode($res);
+	}
+
+	
+	
+	//###   General Setting   ###/
+	public function generalsetting_page(){	
+		$menu['mainmenu'] = 'generalsetting';
+		$menu['submenu'] = 'generalsetting';
+		$this->load->view('admin/header',$menu);
+		$this->load->view('admin/generalsetting_page');
+		$this->load->view('admin/footer');
+	}
+	public function callcenter_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+        $text = $this->input->post('callcenter');
+		$active = $this->input->post('active');
+		
+        $obj = array( 
+			'text' => $text,
+			'method' => 'callcenter',
+			'active' => $active,
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('general_setting', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("general_setting", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		echo json_encode($res);
+	}
+	public function get_callcenter_onc() {   
+		$id = $this->input->post('id');
+
+		$Query = "SELECT `general_setting`.* FROM `general_setting`  WHERE `general_setting`.`method` = 'callcenter'";
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	
+	public function companyname_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+        $text = $this->input->post('companyname');
+		$active = $this->input->post('active');
+		
+        $obj = array( 
+			'text' => $text,
+			'method' => 'companyname',
+			'active' => $active,
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('general_setting', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("general_setting", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		echo json_encode($res);
+	}
+	public function get_companyname_onc() {   
+		$id = $this->input->post('id');
+
+		$Query = "SELECT `general_setting`.* FROM `general_setting`  WHERE `general_setting`.`method` = 'companyname'";
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+	public function servicenumber_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+        $text = $this->input->post('servicenumber');
+		$active = $this->input->post('active');
+		
+        $obj = array( 
+			'text' => $text,
+			'method' => 'servicenumber',
+			'active' => $active,
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('general_setting', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("general_setting", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		echo json_encode($res);
+	}
+	public function get_servicenumber_onc() {   
+		$id = $this->input->post('id');
+
+		$Query = "SELECT `general_setting`.* FROM `general_setting`  WHERE `general_setting`.`method` = 'servicenumber'";
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	
+	public function emailcompany_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+        $text = $this->input->post('emailcompany');
+		$active = $this->input->post('active');
+		
+        $obj = array( 
+			'text' => $text,
+			'method' => 'emailcompany',
+			'active' => $active,
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('general_setting', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("general_setting", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		echo json_encode($res);
+	}
+	public function get_emailcompany_onc() {   
+		$id = $this->input->post('id');
+
+		$Query = "SELECT `general_setting`.* FROM `general_setting`  WHERE `general_setting`.`method` = 'emailcompany'";
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	
+	public function taxidentification_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+        $text = $this->input->post('taxidentification');
+		$active = $this->input->post('active');
+		
+        $obj = array( 
+			'text' => $text,
+			'method' => 'taxidentification',
+			'active' => $active,
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('general_setting', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("general_setting", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		echo json_encode($res);
+	}
+	public function get_taxidentification_onc() {   
+		$id = $this->input->post('id');
+
+		$Query = "SELECT `general_setting`.* FROM `general_setting`  WHERE `general_setting`.`method` = 'taxidentification'";
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+	public function facebook_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+        $text = $this->input->post('facebook');
+		$active = $this->input->post('active');
+		
+        $obj = array( 
+			'text' => $text,
+			'method' => 'facebook',
+			'active' => $active,
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('general_setting', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("general_setting", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		echo json_encode($res);
+	}
+	public function get_facebook_onc() {   
+		$id = $this->input->post('id');
+
+		$Query = "SELECT `general_setting`.* FROM `general_setting`  WHERE `general_setting`.`method` = 'facebook'";
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+	public function line_actions(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$action = $this->input->post('action');
+		$id = $this->input->post('id');
+        $text = $this->input->post('line');
+		$active = $this->input->post('active');
+		
+        $obj = array( 
+			'text' => $text,
+			'method' => 'line',
+			'active' => $active,
+		);
+
+		//###  INSERT ###//
+        if($action == 'insert'){
+			$obj['created'] = $curent_date;
+			$obj['updated'] = $curent_date;
+			$this->db->insert('general_setting', $obj);
+   			$id = $this->db->insert_id();
+
+			$res->status = true;
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+        }
+
+		//###  UPDATE ###//
+        if($action == 'update'){
+			$obj['updated'] = $curent_date;
+            $this->db->where("id", $id);
+            $this->db->update("general_setting", $obj); 
+			
+			$res->status = true;
+			//$res->datas = base_url('admin/product_cate_edit/'.$cate_id);
+			$res->datas = base_url('admin_generalsetting');
+			$res->massege = 'บันทึกสำเร็จ';
+			$res->status_code = '000';
+
+        }
+
+		echo json_encode($res);
+	}
+	public function get_line_onc() {   
+		$id = $this->input->post('id');
+
+		$Query = "SELECT `general_setting`.* FROM `general_setting`  WHERE `general_setting`.`method` = 'line'";
+		$result = $this->db->query($Query)->result(); 
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+
+
+	// 	$id = $this->input->post('id');
+	// 	$curent_date = Date('Y-m-d H:i:s');
+
+	// 	$Query = " SELECT * FROM slide WHERE id = '".$id."' ";
+	// 	$result = $this->db->query($Query)->result();
+
+	// 	//### del PDF ###///
+	// 	foreach($result as $item){
+			
+	// 		//### del files ###///
+	// 		$this->load->helper('file');
+	// 		delete_files('./uploads/slide/'.$item->id.'/', true); // Delete files into the folder
+	// 		@rmdir('./uploads/slide/'.$item->id.'/'); // Delete the folder
+
+	// 		//### DElete files ###///]
+	// 		$this->db->where('id', $item->id);
+    // 		$this->db->delete('slide');
+	// 	}
+
+	// 	$res = new stdClass();
+	// 	$res->status = true;
+	// 	$res->massege = 'ลบข้อมูล สำเร็จ';
+	// 	$res->status_code = '000';
+	// 	echo json_encode($res);
+		
+	// }
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	public function do_upload_product($files, $product_id, $lang){
+        $res = new stdClass();
+        $config['allowed_types'] = 'jpeg|jpg|png'; //รูปแบบไฟล์ที่ อนุญาตให้ Upload ได้
+        $config['max_size']      = 0; //ขนาดไฟล์สูงสุดที่ Upload ได้ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_width']     = 0; //ขนาดความกว้างสูงสุด (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_height']    = 0;  //ขนาดความสูงสูงสดุ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config["overwrite"] = 	true;
+        //$config['encrypt_name']  = true; //กำหนดเป็น true ให้ระบบ
+
+        ##### name img ####
+        $today = strtotime(date("d-m-Y H:i:s")); 
+		if (!empty($_FILES[$files]['name'])) {
+			$_FILES[$files]['name'] = 'product_'.$lang.'_'.$product_id.".".pathinfo($_FILES[$files]['name'], PATHINFO_EXTENSION);
+		}
+        ##### create path ####
+		$upload_path = "./uploaded/ImageUpload/product/".$product_id;
+		if (!file_exists($upload_path)) {
+			if (!mkdir($upload_path, 0777, true)) {//0777
+				die($upload_path.' Failed to create folders...');
+			}
+        }
+
+        ##### create img to dir ####
+        $fullPath = $upload_path.'/'.$_FILES[$files]['name'];
+		unlink($fullPath);
+		$config['upload_path'] = $upload_path; //Folder สำหรับ เก็บ ไฟล์ที่  Upload
+		$this->load->library('upload', $config);
+		
+		if ($this->upload->do_upload($files)) {
+			$path = $this->upload->data();
+            $res->status = true;
+            $res->message = $fullPath;
+		}else{
+            $res->status = false;
+            $res->message = $this->upload->display_errors();
+            $res->message = $fullPath;
+		}
+        return $res;
+    }
+	public function do_upload_product_image($files, $product_id, $i){
+        $res = new stdClass();
+        $config['allowed_types'] = 'jpeg|jpg|png|pdf|xlsx|xls'; //รูปแบบไฟล์ที่ อนุญาตให้ Upload ได้
+        $config['max_size']      = 0; //ขนาดไฟล์สูงสุดที่ Upload ได้ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_width']     = 0; //ขนาดความกว้างสูงสุด (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config['max_height']    = 0;  //ขนาดความสูงสูงสดุ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+        $config["overwrite"] = 	false;
+        //$config['encrypt_name']  = true; //กำหนดเป็น true ให้ระบบ
+
+		$_FILES['file']['name'] = $_FILES[$files]['name'][$i];
+		$_FILES['file']['type'] = $_FILES[$files]['type'][$i];
+		$_FILES['file']['tmp_name'] = $_FILES[$files]['tmp_name'][$i];
+		$_FILES['file']['error'] = $_FILES[$files]['error'][$i];
+		$_FILES['file']['size'] = $_FILES[$files]['size'][$i];
+
+        ##### name img ####
+		$_fileType = pathinfo($_FILES[$files]['name'][$i], PATHINFO_EXTENSION);
+        $_FILES['file']['name'] = rand().".".pathinfo($_FILES[$files]['name'][$i], PATHINFO_EXTENSION);
+
+        ##### create path ####
+		$upload_path = "./uploaded/ImageUpload/product/".$product_id;
+		if (!file_exists($upload_path)) {
+			if (!mkdir($upload_path, 0777, true)) {//0777
+				die($upload_path.' Failed to create folders...');
+			}
+        }
+
+        ##### create img to dir ####
+        $fullPath = $upload_path.'/'.$_FILES['file']['name'];
+		$config['upload_path'] = $upload_path; //Folder สำหรับ เก็บ ไฟล์ที่  Upload
+		//$config['file_name'] = $_FILES['file']['name'];
+		
+		$this->load->library('upload', $config);
+		if ($this->upload->do_upload('file')) {
+			$path = $this->upload->data();
+            $res->status = true;
+			$res->fileType = $_fileType;
+            $res->message = $fullPath;
+		}else{
+            $res->status = false;
+            $res->message = $this->upload->display_errors();
+            $res->message = $fullPath;
+		}
+        return $res;
+    }
+	public function del_product_image() {   
+		
+		$cate_id = $this->input->post('cate_id');
+		$product_id = $this->input->post('product_id');
+		$id = $this->input->post('id');
+
+		$Query = " SELECT * FROM product_image WHERE product_cate = '".$cate_id."' AND product_id = '".$product_id."' AND id = '".$id."'";
+		$result = $this->db->query($Query)->result();
+
+		//### del imgage ###///
+		foreach($result as $item){
+			unlink($item->path);
+
+			//$this->db->query(" DELETE FROM product_image  WHERE id ='".$item->id."' AND product_cate = '".$cate_id."' AND product_id = '".$product_id."'");
+			$this->db->where('id', $item->id);
+			$this->db->where('product_cate', $cate_id);
+			$this->db->where('product_id', $product_id);
+    		$this->db->delete('product_image');
+		}
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function deleted_product($product_id) { 
+		
+		//### del imgage files ###///
+		$dir_path = 'uploaded/ImageUpload/product/'.$product_id;
+		$del_path = './uploaded/ImageUpload/product/'.$product_id.'/';
+
+		$this->load->helper('file'); // Load codeigniter file helper
+		if(is_dir($dir_path))
+		{
+			delete_files($del_path, true); // Delete files into the folder
+			rmdir($del_path); // Delete the folder
+		}
+
+		//### del imgage files ###///
+		$this->db->where('id', $product_id);
+		$this->db->delete('products');
+
+		// //### del imgage ###///
+		$this->db->where('product_id', $product_id);
+		$this->db->delete('product_image');
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_image() {   
+		$product_id = $this->input->post('product_id');
+
+		$Query = " SELECT * FROM product_image WHERE product_id = '".$product_id."'  order by orders asc";
+		//$Query = " SELECT * FROM product_image WHERE product_id = '".$product_id."'  and file_type in('jpeg','jpg','png','pdf','xlsx','xls')  order by orders asc";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function get_product_by_cate() {  
+		$cate_id = $this->input->post('cate_id');
+        $Query = " SELECT p.*, pc.name_th cate_name 
+		FROM products p 
+		LEFT JOIN product_category pc ON p.category = pc.id
+		where p.category = '".$cate_id."'
+		order by p.orders asc
+		";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function update_product_table_sort(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		
+		$product_id = $this->input->post('product_id');
+        $sortable = $this->input->post('sortable');
+		
+        $obj = array( 
+			'orders' => $sortable,
+		); 
+
+		$obj['udate'] = date(date_format(date_create(),"Y-m-d H:i:s"));
+		$this->db->where("id", $product_id);
+		$this->db->update("products", $obj); 
+		
+		$res->status = true;
+		//$res->datas = base_url('admin/product_edit/'.$cate_id);
+		$res->datas = base_url('admin/product/');
+		$res->massege = 'บันทึกสำเร็จ';
+		$res->status_code = '000';
+
+		echo json_encode($res);
+	}
+	public function update_product_image_sort(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+
+		$product_cate = $this->input->post('category_id');
+        $product_id = $this->input->post('product_id');
+        $id = $this->input->post('image_id');
+		$sortable = $this->input->post('sortable');
+		
+        $obj = array( 
+			'orders' => $sortable,
+		); 
+
+		//$obj['udate'] = date(date_format(date_create(),"Y-m-d H:i:s"));
+		$this->db->where("id", $id);
+		$this->db->where("product_cate", $product_cate);
+		$this->db->where("product_id", $product_id);
+		$this->db->update("product_image", $obj); 
+		
+		$res->status = true;
+		$res->datas = base_url('admin/product_edit/'.$product_id);
+		$res->massege = 'บันทึกสำเร็จ';
+		$res->status_code = '000';
+
+		echo json_encode($res);
+	}
+
+	//## product files ###//
+	public function do_upload_files(){
+        $res = new stdClass();
+        $curent_date = Date('Y-m-d H:i:s');
+		$cate_id = $this->input->post('cate_id');
+		$product_id = $this->input->post('product_id');
+
+		$files = 'files-4-dowload';
+		$cpt = count($_FILES[$files]['name']);
+		if($cpt > 0){
+			for($i=0; $i < $cpt; $i++){    
+				$res = new stdClass();
+				$config['allowed_types'] = 'pdf|xlsx|xls'; //รูปแบบไฟล์ที่ อนุญาตให้ Upload ได้
+				$config['max_size']      = 0; //ขนาดไฟล์สูงสุดที่ Upload ได้ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+				$config['max_width']     = 0; //ขนาดความกว้างสูงสุด (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+				$config['max_height']    = 0;  //ขนาดความสูงสูงสดุ (กรณีไม่จำกัดขนาด กำหนดเป็น 0)
+				$config["overwrite"] = 	false;
+				//$config['encrypt_name']  = true; //กำหนดเป็น true ให้ระบบ
+
+				//$files = 'files-4-dowload';
+
+				$_FILES['file']['name'] = $_FILES[$files]['name'][$i];
+				$_FILES['file']['type'] = $_FILES[$files]['type'][$i];
+				$_FILES['file']['tmp_name'] = $_FILES[$files]['tmp_name'][$i];
+				$_FILES['file']['error'] = $_FILES[$files]['error'][$i];
+				$_FILES['file']['size'] = $_FILES[$files]['size'][$i];
+
+				##### name img ####
+				$_fileType = pathinfo($_FILES[$files]['name'][$i], PATHINFO_EXTENSION);
+				$_FILES['file']['name'] = rand().".".pathinfo($_FILES[$files]['name'][$i], PATHINFO_EXTENSION);
+
+				##### create path ####
+				$upload_path = "./uploaded/ImageUpload/product/".$product_id;
+				if (!file_exists($upload_path)) {
+					if (!mkdir($upload_path, 0777, true)) {//0777
+						die($upload_path.' Failed to create folders...');
+					}
+				}
+
+				##### create img to dir ####
+				$fullPath = $upload_path.'/'.$_FILES['file']['name'];
+				$config['upload_path'] = $upload_path; //Folder สำหรับ เก็บ ไฟล์ที่  Upload
+				//$config['file_name'] = $_FILES['file']['name'];
+				
+				$this->load->library('upload', $config);
+				if ($this->upload->do_upload('file')) {
+					$path = $this->upload->data();
+
+					$obj_product_file = array( 
+						'orders' => $i,
+						'product_cate' => $cate_id, 
+						'product_id' => $product_id, 
+						'path' => $fullPath,
+						'file_type' =>$_fileType,
+						'cdate' => date(date_format(date_create(),"Y-m-d H:i:s"))
+					);  
+					$this->db->insert('product_image', $obj_product_file);
+
+
+					$res->status = true;
+					$res->fileType = $_fileType;
+					$res->message = $fullPath;
+				}else{
+					$res->status = false;
+					$res->message = $this->upload->display_errors();
+					$res->message = $fullPath;
+				}
+			}
+		}
+
+		echo json_encode($res);
+	}
+	public function get_product_files() {   
+		$product_id = $this->input->post('product_id');
+
+		$Query = " SELECT * FROM product_image WHERE product_id = '".$product_id."' and file_type in('pdf','xlsx','xls') order by orders asc";
+		$result = $this->db->query($Query)->result();
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $result;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+	public function del_product_files() {   
+		
+		$cate_id = $this->input->post('cate_id');
+		$product_id = $this->input->post('product_id');
+		$id = $this->input->post('id');
+
+		$Query = " SELECT * FROM product_image WHERE product_cate = '".$cate_id."' AND product_id = '".$product_id."' AND id = '".$id."'";
+		$result = $this->db->query($Query)->result();
+
+		//### del imgage ###///
+		foreach($result as $item){
+			unlink($item->path);
+
+			//$this->db->query(" DELETE FROM product_image  WHERE id ='".$item->id."' AND product_cate = '".$cate_id."' AND product_id = '".$product_id."'");
+			$this->db->where('id', $item->id);
+			$this->db->where('product_cate', $cate_id);
+			$this->db->where('product_id', $product_id);
+    		$this->db->delete('product_image');
+		}
+
+		$res = new stdClass();
+		$res->status = true;
+		$res->massege = 'ลบข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res);
+	}
+
+
+}
