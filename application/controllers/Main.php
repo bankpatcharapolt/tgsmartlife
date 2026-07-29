@@ -386,23 +386,39 @@ private function get_product_spec_summary($product_id) {
 		$menu['mainmenu'] = 'register_product';
 		$menu['submenu'] = 'register_product';
 		$menu['seo'] = $this->get_seo_id(1)->datas;
+		$menu['service_management_url'] = $this->config->item('service_management_url');
 		$this->load->view('desktop/header',$menu);
-		$this->load->view('desktop/register_product');
+		$this->load->view('desktop/register_product', $menu);
 		$this->load->view('desktop/footer');                          
 	}
-	public function get_register_product_results() {  
+	public function get_register_product_results() {
 		$register_code = $this->input->post('register_code');
-		
-        $Query = "SELECT `product_regis`.*, `product`.`name` FROM `product_regis` 
-		LEFT JOIN `product` ON `product_regis`.`product_id` = `product`.`id`
-		where `product_regis`.`bill_number` = '".$register_code."' OR `product_regis`.`tel_cus` = '".$register_code."' OR `product_regis`.`tel_idcart` = '".$register_code."' ";
-		$result = $this->db->query($Query)->result_array();
+
+	
+		$result = $this->db
+			->select('product_regis.*, product.name AS name')
+			->from('product_regis')
+			->join('product', 'product.id = product_regis.product_id', 'left')
+			->group_start()
+				->where('product_regis.bill_number', $register_code)
+				->or_where('product_regis.tel_cus', $register_code)
+				->or_where('product_regis.tel_idcart', $register_code)
+			->group_end()
+			->get()->result_array();
 
 		$res = new stdClass();
 		$res->status = true;
 		$res->datas = $result;
 		$res->massege = 'ดึงข้อมูล สำเร็จ';
 		$res->status_code = '000';
+
+	
+		$res->map_token = null;
+		if (!empty($result) && !empty($result[0]['bill_number'])) {
+			$this->load->library('map_token');
+			$res->map_token = $this->map_token->generate($result[0]['bill_number']);
+		}
+
 		echo json_encode($res);
 	}
 

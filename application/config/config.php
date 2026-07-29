@@ -328,6 +328,14 @@ $config['cache_query_string'] = FALSE;
 */
 $config['encryption_key'] = '';
 
+// ใช้เซ็นชื่อ/ตรวจ token สำหรับ embed แผนที่แบบไม่ต้อง login ที่หน้า register-product —
+// ต้องเป็นค่าเดียวกันเป๊ะกับ $config['map_token_secret'] ในระบบ service_management
+// ห้ามให้ค่าต่างกัน ไม่งั้น token ที่ออกจากที่นี่จะตรวจไม่ผ่านฝั่งโน้น
+$config['map_token_secret'] = '9b5bed1b8011ae01c8638425d8bef98f97319e47d31b520c1fcaa43985cd08fb';
+
+// URL ฐานของระบบ service_management (ที่ /map อยู่) — แก้ตรงนี้ถ้า path เปลี่ยนหรือทดสอบบนเครื่อง local
+$config['service_management_url'] = 'https://tgsmartlife.com/service_management/';
+
 /*
 |--------------------------------------------------------------------------
 | Session Variables
