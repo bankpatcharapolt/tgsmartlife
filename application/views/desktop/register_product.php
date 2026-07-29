@@ -176,25 +176,7 @@
                 $('#rp-loading').removeClass('is-active');
                 var content = '';
                 if(data.datas.length > 0){
-                    var val = data.datas[0];
-                    content += '<div class="rp-result-card">';
-                    if(val.name != '' && val.name != null){
-                        content += '<h5>'+val.name+'</h5>';
-                    }
-                    if((val.link != '' && val.link != null) || (val.file_path != '' && val.file_path != null)){
-                        content += '<div class="rp-manual-links">';
-                        if(val.link != '' && val.link != null){
-                            content += '<a href="'+val.link+'" target="_blank">คู่มือการใช้งาน</a>';
-                        }
-                        if(val.file_path != '' && val.file_path != null){
-                            content += '<a href="'+val.file_path+'" target="_blank">คู่มือการใช้งาน (PDF)</a>';
-                        }
-                        content += '</div>';
-                    }
-                    if(val.detail != '' && val.detail != null){
-                        content += '<div class="rp-detail">'+val.detail+'</div>';
-                    }
-                    content += '</div>';
+                    // กรอบข้อมูลสินค้า (ชื่อ/คู่มือ/รายละเอียด) ซ่อนไว้ตามที่ขอ — ไม่ต้องสร้าง content ส่วนนี้อีก
                 } else {
                     content = '<div class="rp-empty">ไม่พบข้อมูลการลงทะเบียนสินค้า กรุณาตรวจสอบหมายเลขบิล</div>';
                 }
