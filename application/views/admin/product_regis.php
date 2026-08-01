@@ -143,8 +143,7 @@
                 dataType: 'json',
                 async:false,
                 success: function(data, status) {
-                    $('#table').DataTable().destroy();
-                    drawtable(base_url);
+                    location.reload();
                 },
                 error: function(xhr, status, exception) { 
                     //console.log(xhr);

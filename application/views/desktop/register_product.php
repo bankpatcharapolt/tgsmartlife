@@ -203,4 +203,17 @@
             }
         });
     });
+
+    // แผนที่ (iframe จากระบบ service_management) ส่งข้อความมาบอกถ้าค้นบิลนี้แล้วไม่มีข้อมูล
+    // การให้บริการเลยในระบบนั้น (ถึงจะเจอบิลฝั่งนี้ก็ตาม) — โชว์ "ไม่พบข้อมูล" ที่หน้านี้แทน iframe เปล่าๆ
+    // เช็ค origin ของข้อความให้ตรงกับระบบ service_management ที่ตั้งค่าไว้เท่านั้น กันข้อความจากที่อื่นปลอมมา
+    window.addEventListener('message', function(event) {
+        if (!SERVICE_MANAGEMENT_URL) return;
+        var expectedOrigin;
+        try { expectedOrigin = new URL(SERVICE_MANAGEMENT_URL).origin; } catch (e) { return; }
+        if (event.origin !== expectedOrigin) return;
+        if (event.data && event.data.source === 'tg_customer_map' && event.data.status === 'no_data') {
+            $('#register-map-position').html('<div class="rp-empty">ไม่พบข้อมูลการให้บริการของหมายเลขบิลนี้ในระบบ</div>');
+        }
+    });
 </script>
