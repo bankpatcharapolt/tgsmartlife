@@ -7,6 +7,9 @@
             <input name="base_url" value="<?=base_url();?>" type="hidden" >
             <ul class="nav navbar-right panel_toolbox">
                 <li>
+                    <button type="button" class="btn" style="color: #466889;" data-toggle="modal" data-target="#importExcelModal"><i class="fa fa-upload"></i> Import Excel</button>
+                </li>
+                <li>
                     <a href="<?=base_url('admin_product_regis_add');?>" class="btn add-product-cate" target="_blank"  style="color: #466889;"><i class="fa fa-plus"></i> ข้อมูลผลิตภันฑ์</a>
                 </li>
             </ul>
@@ -34,6 +37,31 @@
         </div>
     </div>
 </div>
+
+<!-- Modal: Import Excel -->
+<div class="modal fade" id="importExcelModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Import ข้อมูลจากไฟล์ Excel</h5>
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted" style="font-size: 13px;">
+            รองรับไฟล์ .xlsx (รูปแบบรายงานใบเสร็จรับเงิน) เท่านั้น — เลขที่เอกสารที่มีอยู่แล้วในระบบจะถูกข้าม
+            ไม่ import ซ้ำ ส่วนรหัสสินค้าจะจับคู่จาก "ชื่อสินค้า/บริการ" ในไฟล์กับชื่อสินค้าที่ตั้งไว้ในหน้าสินค้า
+            ถ้าหาไม่เจอจะปล่อยว่างไว้ (แก้ทีหลังได้ที่หน้าแก้ไขข้อมูล)
+        </p>
+        <input type="file" id="excel_import_file" accept=".xlsx" class="form-control">
+        <div id="import_result" style="margin-top: 12px; display:none;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+        <button type="button" class="btn btn-primary" id="btn_do_import"><i class="fa fa-upload"></i> Import</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!---- End Content ------>
 <script>
 
@@ -54,12 +82,14 @@
                 var bill_number = (val.bill_number != null)?val.bill_number:"";
                 var tel_cus = (val.tel_cus != null)?val.tel_cus:"";
                 var tel_idcart = (val.tel_idcart != null)?val.tel_idcart:"";
+                var productcode = (val.productcode != null)?val.productcode:"-";
+                var pname = (val.regis_name != null && val.regis_name !== '')?val.regis_name:((val.name != null)?val.name:"-");
                 tr += '<td style="vertical-align: inherit;">'+bill_number+'</td>';
-                tr += '<td style="vertical-align: inherit;">'+tel_cus+'</td>';
                 tr += '<td style="vertical-align: inherit;">'+tel_idcart+'</td>';
+                tr += '<td style="vertical-align: inherit;">'+tel_cus+'</td>';
 
-                tr += '<td style="vertical-align: inherit;">'+val.productcode+'</td>';
-                tr += '<td style="vertical-align: inherit;">'+val.name+'</td>';
+                tr += '<td style="vertical-align: inherit;">'+productcode+'</td>';
+                tr += '<td style="vertical-align: inherit;">'+pname+'</td>';
                 tr += '<td class="" style="text-align: center;vertical-align: inherit;">';
                 tr += '<ul class="" style="list-style: none; display: inline-flex; margin-bottom: 0rem; min-width: auto; padding-inline: 0px;">';
                 tr += '<li><a href="'+base_url+'admin_product_regis_edit/'+val.id+'" class="btn btn-round btn-warning" style="font-size: 11px; padding: 4px 8px;" data-toggle="tooltip" title="แก้ไข"><i class="fa fa-wrench"></i></a></li>';
@@ -123,5 +153,57 @@
         // return res;
         }
     }
+
+    //#### Import Excel ####//
+    var importSucceeded = false;
+    $('#importExcelModal').on('hidden.bs.modal', function(){
+        if (importSucceeded) { location.reload(); }
+    });
+    $('#btn_do_import').on('click', function(){
+        var fileInput = document.getElementById('excel_import_file');
+        if (!fileInput.files || fileInput.files.length === 0) {
+            alert('กรุณาเลือกไฟล์ .xlsx ก่อน');
+            return;
+        }
+        var fd = new FormData();
+        fd.append('excel_file', fileInput.files[0]);
+
+        var $btn = $(this);
+        var $result = $('#import_result');
+        $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> กำลัง Import...');
+        $result.hide().html('');
+
+        $.ajax({
+            url: base_url + 'admin/Product/regis_import',
+            type: 'POST',
+            data: fd,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function(data){
+                $btn.prop('disabled', false).html('<i class="fa fa-upload"></i> Import');
+                if (data.status) {
+                    var html = '<div class="alert alert-success" style="margin-bottom:8px;">' + data.massege + '</div>';
+                    if (data.unmatched_count > 0) {
+                        html += '<div class="alert alert-warning">';
+                        html += 'จับคู่สินค้าไม่เจอ ' + data.unmatched_count + ' ชื่อ (รหัสสินค้าถูกปล่อยว่างไว้ ให้ไปตั้งค่า "ชื่อสินค้า (สำหรับอ้างอิง)" ที่หน้าแก้ไขสินค้าให้ตรงกับชื่อด้านล่าง แล้ว import ใหม่ หรือแก้ไขรายการทีละอันที่หน้านี้):<br>';
+                        html += '<ul style="margin-bottom:0;">';
+                        data.unmatched_names.forEach(function(n){ html += '<li>' + $('<div>').text(n).html() + '</li>'; });
+                        html += '</ul></div>';
+                    }
+                    $result.show().html(html);
+                    $('#table').DataTable().destroy();
+                    drawtable(base_url);
+                    importSucceeded = true;
+                } else {
+                    $result.show().html('<div class="alert alert-danger">' + data.massege + '</div>');
+                }
+            },
+            error: function(){
+                $btn.prop('disabled', false).html('<i class="fa fa-upload"></i> Import');
+                $result.show().html('<div class="alert alert-danger">เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง</div>');
+            }
+        });
+    });
 </script>
     

@@ -331,6 +331,7 @@ private function get_product_spec_summary($product_id) {
 		//$productcode = Date('YmdHis');
         $productcode = $this->input->post('productcode');
         $name = $this->input->post('name');
+        $regis_name = $this->input->post('regis_name');
         $subtitle = $this->input->post('subtitle');
         $counts = $this->input->post('counts');
         $price = $this->input->post('price');
@@ -352,6 +353,7 @@ private function get_product_spec_summary($product_id) {
 			'productcode'=>$productcode,
 			// 'thumnal' => '',
 			'name' => $name, 
+			'regis_name' => $regis_name,
 			'subtitle' => $subtitle, 
 			'counts' => $counts, 
 			'price' => $price, 
@@ -1912,6 +1914,23 @@ public function save_dynamic_manual() {
 	}
 
 	//###   REGIS PRODUCT   ###/
+	// API: รายชื่อสินค้าสำหรับ dropdown ในหน้าแก้ไข/เพิ่มข้อมูลลงทะเบียนสินค้า
+	// แสดงเฉพาะสินค้าที่ตั้งค่า "ชื่อสินค้า (สำหรับอ้างอิง)" ไว้แล้วเท่านั้น ตามที่ระบุ
+	public function regis_product_options() {
+		$rows = $this->db
+			->select('id, regis_name')
+			->where('regis_name IS NOT NULL', null, false)
+			->where('regis_name !=', '')
+			->order_by('regis_name', 'ASC')
+			->get('product')
+			->result_array();
+		$res = new stdClass();
+		$res->status = true;
+		$res->datas = $rows;
+		$res->massege = 'ดึงข้อมูล สำเร็จ';
+		$res->status_code = '000';
+		echo json_encode($res, JSON_UNESCAPED_UNICODE);
+	}
 	public function regis_page(){	
 		$menu['mainmenu'] = 'regis';
 		$menu['submenu'] = 'regis';
@@ -1951,7 +1970,7 @@ public function save_dynamic_manual() {
 	}
 	public function get_product_regis() {   
 		
-		$Query = " SELECT `product_regis`.*,`product`.`productcode`,`product`.`name`,`product`.`thumnal` FROM `product_regis` LEFT JOIN `product` on `product_regis`.`product_id` = `product`.id ";
+		$Query = " SELECT `product_regis`.*,`product`.`productcode`,`product`.`name`,`product`.`regis_name`,`product`.`thumnal` FROM `product_regis` LEFT JOIN `product` on `product_regis`.`product_id` = `product`.id ";
 		$result = $this->db->query($Query)->result();
 
 		$res = new stdClass();
@@ -1961,6 +1980,156 @@ public function save_dynamic_manual() {
 		$res->status_code = '000';
 		echo json_encode($res);
 	}
+
+	// Import ข้อมูลจากไฟล์ Excel (รายงานใบเสร็จรับเงิน) เข้า product_regis
+	// รหัสสินค้า (product_id) ได้จากจับคู่ "ชื่อสินค้า/บริการ" ในไฟล์ กับ product.regis_name ก่อน
+	// ถ้าไม่เจอ ลองจับคู่กับ product.name แทน ถ้ายังไม่เจอใส่ null (ตามที่ระบุ)
+	public function regis_import() {
+		$res = new stdClass();
+		$res->status = false;
+
+		if (empty($_FILES['excel_file']['tmp_name']) || !is_uploaded_file($_FILES['excel_file']['tmp_name'])) {
+			$res->massege = 'กรุณาเลือกไฟล์ Excel (.xlsx)';
+			echo json_encode($res, JSON_UNESCAPED_UNICODE); return;
+		}
+		$ext = strtolower(pathinfo($_FILES['excel_file']['name'], PATHINFO_EXTENSION));
+		if ($ext !== 'xlsx') {
+			$res->massege = 'รองรับเฉพาะไฟล์ .xlsx เท่านั้น';
+			echo json_encode($res, JSON_UNESCAPED_UNICODE); return;
+		}
+
+		$this->load->library('Xlsx_reader');
+		try {
+			$rows = $this->xlsx_reader->read($_FILES['excel_file']['tmp_name']);
+		} catch (Exception $e) {
+			$res->massege = 'อ่านไฟล์ไม่สำเร็จ: ' . $e->getMessage();
+			echo json_encode($res, JSON_UNESCAPED_UNICODE); return;
+		}
+
+		// หาแถวหัวตารางแบบไดนามิก (ไม่ fix เลขแถวตายตัว เผื่อรายงานคนละช่วงวันที่มีความยาว
+		// ส่วนหัว/ข้อมูลบริษัทไม่เท่ากัน) — ต้องเจอทั้ง "เลขที่เอกสาร" และ "ชื่อสินค้า/บริการ" ในแถวเดียวกัน
+		$headerRowIdx = null;
+		$col = [];
+		foreach ($rows as $i => $row) {
+			if (in_array('เลขที่เอกสาร', $row, true) && in_array('ชื่อสินค้า/บริการ', $row, true)) {
+				$headerRowIdx = $i;
+				foreach ($row as $ci => $label) { $col[trim((string) $label)] = $ci; }
+				break;
+			}
+		}
+		if ($headerRowIdx === null) {
+			$res->massege = 'ไม่พบแถวหัวตารางในไฟล์ (ต้องมีคอลัมน์ "เลขที่เอกสาร" และ "ชื่อสินค้า/บริการ")';
+			echo json_encode($res, JSON_UNESCAPED_UNICODE); return;
+		}
+
+		// preload สินค้าทั้งหมดไว้จับคู่ในหน่วยความจำ (ไม่ query ทีละแถว)
+		$products = $this->db->select('id, name, regis_name')->get('product')->result_array();
+		$byRegisName = [];
+		$byName = [];
+		foreach ($products as $p) {
+			if (!empty($p['regis_name'])) { $byRegisName[trim($p['regis_name'])] = $p['id']; }
+			if (!empty($p['name']))       { $byName[trim($p['name'])] = $p['id']; }
+		}
+
+		// preload เลขที่เอกสารที่มีอยู่แล้ว -> id (เพื่ออัปเดตแถวเดิมถ้าเจอซ้ำ แทนที่จะข้าม ตามที่ระบุ)
+		$existingBills = [];
+		foreach ($this->db->select('id, bill_number')->get('product_regis')->result_array() as $r) {
+			if (!empty($r['bill_number'])) { $existingBills[trim($r['bill_number'])] = $r['id']; }
+		}
+
+		$curent_date = date('Y-m-d H:i:s');
+		$inserted = 0; $matched = 0; $skippedEmpty = 0; $updatedDup = 0;
+		$unmatchedNames = [];
+
+		$this->db->trans_begin();
+
+		for ($i = $headerRowIdx + 1; $i < count($rows); $i++) {
+			$row = $rows[$i];
+			$bill_number = isset($col['เลขที่เอกสาร']) ? trim((string) ($row[$col['เลขที่เอกสาร']] ?? '')) : '';
+			if ($bill_number === '') { $skippedEmpty++; continue; }
+
+			$productName = isset($col['ชื่อสินค้า/บริการ']) ? trim((string) ($row[$col['ชื่อสินค้า/บริการ']] ?? '')) : '';
+			$product_id = null;
+			if ($productName !== '') {
+				if (isset($byRegisName[$productName]))    { $product_id = $byRegisName[$productName]; $matched++; }
+				elseif (isset($byName[$productName]))     { $product_id = $byName[$productName]; $matched++; }
+				else { $unmatchedNames[$productName] = true; }
+			}
+
+			$tel_idcart = isset($col['เลขที่ 13 หลัก']) ? trim((string) ($row[$col['เลขที่ 13 หลัก']] ?? '')) : '';
+
+			// เลขที่เอกสารซ้ำกับที่มีอยู่แล้ว -> อัปเดตข้อมูลสินค้า + เลขบัตรประชาชนของแถวเดิม
+			// (ไม่แตะ ชื่อลูกค้า/สาขา/แท็ก/วันที่/รายละเอียด ของแถวเดิม เพราะระบุให้อัปเดตเฉพาะ
+			// ข้อมูลสินค้ากับเลขบัตรประชาชนเท่านั้น — ส่วนเบอร์โทรลูกค้าไม่มีคอลัมน์ต้นทางในไฟล์นี้
+			// เลยไม่มีค่าใหม่ให้อัปเดต จึงไม่แตะค่าเดิมที่มีอยู่)
+			if (isset($existingBills[$bill_number])) {
+				$updateObj = [
+					'product_id' => $product_id,
+					'updated'    => $curent_date,
+				];
+				if ($tel_idcart !== '') { $updateObj['tel_idcart'] = $tel_idcart; }
+				$this->db->where('id', $existingBills[$bill_number])->update('product_regis', $updateObj);
+				$updatedDup++;
+				continue;
+			}
+
+			$customer_name = isset($col['ชื่อลูกค้า'])       ? trim((string) ($row[$col['ชื่อลูกค้า']] ?? '')) : '';
+			$branch        = isset($col['สาขา'])             ? trim((string) ($row[$col['สาขา']] ?? '')) : '';
+			$tags          = isset($col['แท็ก'])             ? trim((string) ($row[$col['แท็ก']] ?? '')) : '';
+
+			$purchase_date = null;
+			if (isset($col['วันที่ออก'])) {
+				$raw = trim((string) ($row[$col['วันที่ออก']] ?? ''));
+				if (preg_match('#^(\d{1,2})/(\d{1,2})/(\d{4})$#', $raw, $m)) {
+					$purchase_date = sprintf('%04d-%02d-%02d', $m[3], $m[2], $m[1]);
+				}
+			}
+
+			$detailParts = [];
+			if (isset($col['คำอธิบาย'])) {
+				$d = trim((string) ($row[$col['คำอธิบาย']] ?? ''));
+				if ($d !== '') { $detailParts[] = $d; }
+			}
+			if (isset($col['หมายเหตุ'])) {
+				$n = trim((string) ($row[$col['หมายเหตุ']] ?? ''));
+				if ($n !== '') { $detailParts[] = $n; }
+			}
+
+			$obj = [
+				'product_id'    => $product_id,
+				'bill_number'   => $bill_number,
+				'customer_name' => ($customer_name !== '') ? $customer_name : null,
+				'tel_idcart'    => ($tel_idcart !== '') ? $tel_idcart : null,
+				'branch'        => ($branch !== '') ? $branch : null,
+				'tags'          => ($tags !== '') ? $tags : null,
+				'purchase_date' => $purchase_date,
+				'detail'        => !empty($detailParts) ? implode("\n", $detailParts) : null,
+				'created'       => $curent_date,
+				'updated'       => $curent_date,
+			];
+			$this->db->insert('product_regis', $obj);
+			$existingBills[$bill_number] = $this->db->insert_id(); // กันไฟล์เดียวกันมี bill_number ซ้ำกันเองในไฟล์ด้วย
+			$inserted++;
+		}
+
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+			$res->massege = 'บันทึกข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง';
+			echo json_encode($res, JSON_UNESCAPED_UNICODE); return;
+		}
+		$this->db->trans_commit();
+
+		$res->status = true;
+		$res->status_code = '000';
+		$res->massege = "นำเข้าข้อมูลใหม่สำเร็จ {$inserted} รายการ, อัปเดตข้อมูลสินค้า/เลขบัตรประชาชนของรายการที่มีเลขที่เอกสารซ้ำ {$updatedDup} รายการ (จับคู่สินค้าได้ {$matched} รายการ, ข้ามแถวว่าง {$skippedEmpty} รายการ)";
+		$res->inserted = $inserted;
+		$res->updated = $updatedDup;
+		$res->matched = $matched;
+		$res->unmatched_count = count($unmatchedNames);
+		$res->unmatched_names = array_values(array_keys($unmatchedNames));
+		echo json_encode($res, JSON_UNESCAPED_UNICODE);
+	}
+
 	public function regis_actions(){
         $res = new stdClass();
         $curent_date = Date('Y-m-d H:i:s');
@@ -1999,7 +2168,6 @@ public function save_dynamic_manual() {
         if($action == 'update'){
 			$obj['updated'] = $curent_date;
             $this->db->where("id", $id);
-            $this->db->where("product_id", $product_id);
             $this->db->update("product_regis", $obj); 
 			
 			$res->status = true;

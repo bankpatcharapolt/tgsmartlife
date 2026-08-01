@@ -197,6 +197,8 @@ $route['admin_faq_sub_action/(.*)'] = 'admin/Faq/faq_action/$1';
 $route['admin_product_regis'] = 'admin/Product/regis_page';
 $route['admin_product_regis_add'] = 'admin/Product/regis_add';
 $route['admin_product_regis_edit/(.*)'] = 'admin/Product/regis_edit/$1';
+$route['admin_product_regis_import'] = 'admin/Product/regis_import';
+$route['admin_product_regis_product_options'] = 'admin/Product/regis_product_options';
 
 $route['admin_slide'] = 'admin/Product/slide_page';
 $route['admin_slide_add'] = 'admin/Product/slide_add';

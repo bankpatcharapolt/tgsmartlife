@@ -32,6 +32,7 @@
                         <th class="column-title" style="width: 2%;"></th>
                         <th class="column-title" style="width: 11%;">รหัสสินค้า</th>
                         <th class="column-title" style="width: 11%;">สินค้า</th>
+                        <th class="column-title" style="width: 11%;">ชื่อสินค้า (อ้างอิง)</th>
                         <th class="column-title" style="width: 10%;">Sub title</th>
                         <th class="column-title" style="width: 10%;">ราคา</th>
                         <th class="column-title" style="width: 10%;">ราคาที่ลด</th>
@@ -66,6 +67,7 @@
                 tr += '<td style="vertical-align: inherit;padding: .2rem;"> <img class="thumnails-premise img-add" src="'+imgs+'" alt="image" style="border: unset; width: 100%;" /></td>';
                 tr += '<td style="vertical-align: inherit;">'+val.productcode+'</td>';
                 tr += '<td style="vertical-align: inherit;">'+val.name+'</td>';
+                tr += '<td style="vertical-align: inherit;">'+(val.regis_name || '-')+'</td>';
                 tr += '<td style="vertical-align: inherit;">'+val.subtitle+'</td>';
                 tr += '<td style="vertical-align: inherit;">'+val.price+'</td>';
                 tr += '<td style="vertical-align: inherit;">'+val.saleprice+'</td>';
@@ -83,7 +85,7 @@
                 }
                 tr += '<td style="vertical-align: inherit; text-align: center;">'+displaystatus+'</td>';
                 
-                tr += '<td class="" style="text-align: center;vertical-align: inherit;">';
+                tr += '<td class="no-drag" style="text-align: center;vertical-align: inherit;">';
                 tr += '<ul class="" style="list-style: none; display: inline-flex; margin-bottom: 0rem; min-width: auto; padding-inline: 0px;">';
                 tr += '<li><a href="'+base_url+'admin_product_edit/'+val.id+'" class="btn btn-round btn-warning" style="font-size: 11px; padding: 4px 8px;" data-toggle="tooltip" title="แก้ไข"><i class="fa fa-wrench"></i></a></li>';
                 tr += '<li><button class="btn btn-round btn-danger" style="font-size: 11px; padding: 4px 8px;" data-toggle="tooltip" title="ลบสินค้า" onclick="delImage('+val.id+')"><i class="fa fa-trash"></i></button></li>';
@@ -103,9 +105,16 @@
                     [50, 100], [50, 100],
                 ],
                 "aoColumnDefs": [
-                    { "bSortable": false, "aTargets": [6] }, 
+                    { "bSortable": false, "aTargets": [7] }, 
                     //{ "bSearchable": false, "aTargets": [ 0, 1, 2, 3 ] }
                 ]
+            });
+
+            // กันปุ่มแก้ไข/ลบ ในแถวโดน sortable จับเป็นการลาก (กดค้างบนปุ่มแล้วลากได้โดยไม่ตั้งใจ)
+            // ผูกตรงกับปุ่มใหม่ทุกครั้งที่วาดตารางใหม่ ไม่ใช้ event delegation เพราะต้องให้
+            // ทำงานก่อน listener ของ sortable เสมอ ไม่ว่า sortable จะไปผูกไว้ที่ element ไหน
+            $(tableid+' .no-drag').on('mousedown touchstart', function(e){
+                e.stopPropagation();
             });
         }
     }

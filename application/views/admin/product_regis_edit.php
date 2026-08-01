@@ -12,12 +12,13 @@
         <form method="post" action="<?//=base_url('admin/Product/product_actions');?>" enctype="multipart/form-data" id="action-form">
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="id"  id="id" value="<?=$id;?>">
-                <input type="hidden" name="product" id="product" value="">
                 <div class="col-md-12">
                     <div class="form-group row">
                         <div class="col-md-6 ">
                             <label class="control-label">Product</label>
-                            <input type="text" class="form-control"  name="product_name" id="product_name" readonly >
+                            <select class="form-control" name="product" id="product">
+                                <option value="">-- เลือกสินค้า --</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -75,17 +76,40 @@
     var base_url = $('input[name="base_url"]').val();
     CKEDITOR.replace('detail', {height  : '500px',});
 
+    //###  รายชื่อสินค้าสำหรับ dropdown (เฉพาะสินค้าที่ตั้งชื่ออ้างอิงไว้แล้ว) ###//
+    function loadProductOptions(selectedId){
+        $.ajax({
+            url: base_url + 'admin/Product/regis_product_options',
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+            success: function(data){
+                var $sel = $('#product');
+                $sel.find('option:not(:first)').remove();
+                if (data.datas) {
+                    data.datas.forEach(function(p){
+                        var opt = $('<option>').val(p.id).text(p.regis_name);
+                        if (selectedId != null && String(p.id) === String(selectedId)) {
+                            opt.prop('selected', true);
+                        }
+                        $sel.append(opt);
+                    });
+                }
+            },
+            error: function(){}
+        });
+    }
+
     //###  FORM ###//
     drawform(base_url);
     function drawform(base_url){
         var results = get_results(base_url);
         if(results){
             //$('form#action-form #id').val(results.datas[0].id);
-            $('form#action-form #product').val(results.datas[0].product_id);
+            loadProductOptions(results.datas[0].product_id);
             $('form#action-form #bill_number').val(results.datas[0].bill_number);
             $('form#action-form #tel_cus').val(results.datas[0].tel_cus);
             $('form#action-form #tel_idcart').val(results.datas[0].tel_idcart);
-            $('form#action-form #product_name').val(results.datas[0].name);
             $('form#action-form #link').val(results.datas[0].link);
             $('form#action-form #detail').val(results.datas[0].detail);
 

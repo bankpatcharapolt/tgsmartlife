@@ -42,6 +42,12 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12 ">
+                            <label class="control-label">ชื่อสินค้า (สำหรับอ้างอิงหน้าลงทะเบียน/รับประกันสินค้า)</label>
+                            <input type="text" class="form-control" name="regis_name" id="regis_name" placeholder="ชื่อสินค้าตามที่ใช้ในเอกสารใบเสร็จ/รับประกัน อาจไม่ตรงกับ Name ด้านบน">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12 ">
                             <label class="control-label">Sub Title</label>
                             <!-- <input type="text" class="form-control" name="subtitle" id="subtitle" > -->
                             <textarea class="form-control" rows="5" id="subtitle" name="subtitle"></textarea>
