@@ -119,7 +119,7 @@
                 tr += '<td class="col-mobile-hide" style="vertical-align: middle;">'+cateHtml+'</td>';
 
                 var cycleHtml = '<span class="text-muted">-</span>';
-                if (val.service_cycle_value && val.service_cycle_unit) {
+                if (Number(val.service_cycle_value) > 0 && val.service_cycle_unit) {
                     var unitLabel = (val.service_cycle_unit === 'year') ? 'ปี' : 'เดือน';
                     cycleHtml = '<span class="badge" style="background:#eef2ff;color:#4338ca;font-weight:500;font-size:12px;padding:4px 10px;border-radius:12px;">'
                               + val.service_cycle_value + ' ' + unitLabel + '</span>';

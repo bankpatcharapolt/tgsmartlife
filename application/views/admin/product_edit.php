@@ -349,7 +349,7 @@
             $('form#action-form #category').val(results.datas[0].category).change();
             $('form#action-form #detail').val(results.datas[0].detail);
             $('form#action-form #warranty').val(results.datas[0].warranty);
-            $('form#action-form #service_cycle_value').val(results.datas[0].service_cycle_value);
+            $('form#action-form #service_cycle_value').val(Number(results.datas[0].service_cycle_value) > 0 ? results.datas[0].service_cycle_value : '');
             $('form#action-form #service_cycle_unit').val(results.datas[0].service_cycle_unit || 'month');
             $('form#action-form #salerphone').val(results.datas[0].salerphone);
             $('form#action-form #seo').val(results.datas[0].seo_id).change();

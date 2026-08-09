@@ -347,6 +347,14 @@ private function get_product_spec_summary($product_id) {
 		$warranty = $this->input->post('warranty');
 		$service_cycle_value = $this->input->post('service_cycle_value');
 		$service_cycle_unit = $this->input->post('service_cycle_unit');
+		// ไม่กรอกตัวเลข (หรือกรอกไม่ใช่จำนวนเต็มบวก) ให้ถือว่า "ไม่ได้ตั้งค่า" ทั้งคู่ ไม่บันทึกเป็น 0
+		// (ช่อง select หน่วยไม่มีตัวเลือกว่าง จะ submit ค่ามาเสมอแม้ไม่ได้ตั้งใจกรอก เลยต้องเช็คจากตัวเลขเป็นหลัก)
+		if ($service_cycle_value === '' || $service_cycle_value === null || !ctype_digit((string) $service_cycle_value) || (int) $service_cycle_value <= 0) {
+			$service_cycle_value = null;
+			$service_cycle_unit = null;
+		} else {
+			$service_cycle_value = (int) $service_cycle_value;
+		}
 		$salerphone = $this->input->post('salerphone');
 		$seo = $this->input->post('seo');
 		$active = $this->input->post('active');
