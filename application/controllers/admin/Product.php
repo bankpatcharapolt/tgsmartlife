@@ -345,6 +345,8 @@ private function get_product_spec_summary($product_id) {
 		//$tag = implode(",",(!empty($this->input->post('tag')))?$this->input->post('tag'):null);
 		$detail = $this->input->post('detail');
 		$warranty = $this->input->post('warranty');
+		$service_cycle_value = $this->input->post('service_cycle_value');
+		$service_cycle_unit = $this->input->post('service_cycle_unit');
 		$salerphone = $this->input->post('salerphone');
 		$seo = $this->input->post('seo');
 		$active = $this->input->post('active');
@@ -363,6 +365,8 @@ private function get_product_spec_summary($product_id) {
 			'tag' => $tag,
 			'detail' => $detail,
 			'warranty' => $warranty,
+			'service_cycle_value' => $service_cycle_value,
+			'service_cycle_unit' => $service_cycle_unit,
 			'salerphone' => $salerphone,
 			'seo_id' => $seo,
 			'active' => $active

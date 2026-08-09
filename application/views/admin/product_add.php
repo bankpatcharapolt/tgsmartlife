@@ -114,6 +114,19 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <div class="col-md-4">
+                            <label class="control-label">ระยะเวลารอบบริการ (สำหรับคำนวณนัดบริการ)</label>
+                            <input type="number" min="1" step="1" class="form-control" name="service_cycle_value" id="service_cycle_value" placeholder="เช่น 6">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label">หน่วย</label>
+                            <select class="form-control" name="service_cycle_unit" id="service_cycle_unit">
+                                <option value="month">เดือน</option>
+                                <option value="year">ปี</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <div class="col-md-8 ">
                             <label class="control-label">Saler phone</label>
                             <input type="text" class="form-control" name="salerphone" id="salerphone" >
