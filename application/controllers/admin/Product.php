@@ -56,6 +56,12 @@ class Product extends Main {
         $query = $this->db->get(); 
         $result = ($query->num_rows() > 0)?$query->result_array():FALSE; 
 
+		// ชื่อสินค้าอ้างอิงหลายชื่อ (product_regis_name) — join ด้วย \n พอดีสำหรับใส่ใน textarea ตรงๆ
+		if ($result !== FALSE) {
+			$rn_rows = $this->db->select('regis_name')->where('product_id', $id)->order_by('id', 'ASC')->get('product_regis_name')->result_array();
+			$result[0]['regis_names'] = implode("\n", array_column($rn_rows, 'regis_name'));
+		}
+
 		$res = new stdClass();
 		$res->status = true;
 		$res->datas = $result;
@@ -65,29 +71,29 @@ class Product extends Main {
 	}
 	public function get_product() {   
 		
-		$Query = " SELECT `product`.*, `product_category`.name as cate_name FROM `product` 
-		LEFT JOIN `product_category` on `product`.category = `product_category`.id  ORDER BY `product`.`sortting` asc  ";
+		$Query = " SELECT `product`.*, `product_category`.name as cate_name, `rn`.`regis_name`
+		FROM `product` 
+		LEFT JOIN `product_category` on `product`.category = `product_category`.id
+		LEFT JOIN (
+			SELECT `product_id`, GROUP_CONCAT(`regis_name` SEPARATOR ', ') AS `regis_name`
+			FROM `product_regis_name`
+			GROUP BY `product_id`
+		) `rn` ON `rn`.`product_id` = `product`.`id`
+		ORDER BY `product`.`sortting` asc  ";
 		$result = $this->db->query($Query)->result();
 
 
 		$subCategoryList = $this->getSubcategoryList();
 		//echo '<PRE>';print_r($subCategoryList);exit();
+		// สร้าง lookup map ไว้ล่วงหน้าครั้งเดียว (เดิมวนลูปซ้อนเทียบทีละสินค้ากับทุกหมวดหมู่ย่อย
+		// ช้าขึ้นเรื่อยๆ ตามจำนวนสินค้าคูณจำนวนหมวดหมู่ย่อย พอมีสินค้าเยอะขึ้นเลยเห็นได้ชัดว่าช้า)
+		$subCategoryById = [];
+		foreach ($subCategoryList as $subValue) {
+			$subCategoryById[$subValue->id] = $subValue;
+		}
 		foreach($result as $key => $value){
 			$sub_category_id = $value->sub_category_id;
-			
-			$index = false; 
-			foreach ($subCategoryList as $subKey => $subValue) {
-				if ($subValue->id == $sub_category_id) {
-					$index = $subKey; 
-					break; 
-				}
-			}
-			if ($index !== false) {
-			
-				$result[$key]->sub_category_name = $subCategoryList[$index]->subcategory_name;
-			}else{
-				$result[$key]->sub_category_name = "";
-			}
+			$result[$key]->sub_category_name = isset($subCategoryById[$sub_category_id]) ? $subCategoryById[$sub_category_id]->subcategory_name : "";
 		}
 
 		$res = new stdClass();
@@ -331,7 +337,7 @@ private function get_product_spec_summary($product_id) {
 		//$productcode = Date('YmdHis');
         $productcode = $this->input->post('productcode');
         $name = $this->input->post('name');
-        $regis_name = $this->input->post('regis_name');
+        $regis_names_raw = $this->input->post('regis_names'); // array: ชื่อสินค้าอ้างอิงหลายชื่อ (แต่ละช่องกรอก)
         $subtitle = $this->input->post('subtitle');
         $counts = $this->input->post('counts');
         $price = $this->input->post('price');
@@ -363,7 +369,6 @@ private function get_product_spec_summary($product_id) {
 			'productcode'=>$productcode,
 			// 'thumnal' => '',
 			'name' => $name, 
-			'regis_name' => $regis_name,
 			'subtitle' => $subtitle, 
 			'counts' => $counts, 
 			'price' => $price, 
@@ -406,6 +411,63 @@ private function get_product_spec_summary($product_id) {
 			$res->massege = 'บันทึกสำเร็จ';
 			$res->status_code = '000';
         }
+
+		//###  ชื่อสินค้าอ้างอิง (หลายชื่อ) ###///
+		// รับจากช่องกรอกหลายช่อง (regis_names[]) ตัดช่องว่างออก ตัดชื่อซ้ำออก แล้วแทนที่ชุดเดิมทั้งหมด
+		// ของสินค้านี้ด้วยชุดใหม่ (ลบแล้วเพิ่มใหม่ ง่ายกว่า diff ทีละชื่อ และจำนวนชื่อต่อสินค้าไม่เยอะ)
+		$regis_names = [];
+		if (is_array($regis_names_raw)) {
+			foreach ($regis_names_raw as $rn_input) {
+				$rn_input = trim((string) $rn_input);
+				if ($rn_input !== '') { $regis_names[$rn_input] = true; }
+			}
+		}
+
+		// ถ้าเป็นการแก้ไข (ไม่ใช่เพิ่มใหม่) เช็คก่อนว่าชื่ออ้างอิงที่กำลังจะถูกลบออก (มีอยู่เดิมแต่ไม่อยู่
+		// ในชุดใหม่ที่ส่งมา) มีบิลใน product_regis ที่เคย import จับคู่ด้วยชื่อนั้นไว้หรือเปล่า
+		// (เช็คจาก matched_regis_name ที่บันทึกไว้ตอน import เท่านั้น — บิลที่ import มาก่อนจะมีคอลัมน์นี้
+		// จะไม่ถูกตรวจพบ เพราะไม่มีข้อมูลบันทึกไว้ว่าจับคู่ด้วยชื่อไหน)
+		$affectedBillsWarning = [];
+		if ($action === 'update') {
+			$existingNames = array_column(
+				$this->db->select('regis_name')->where('product_id', $id)->get('product_regis_name')->result_array(),
+				'regis_name'
+			);
+			$removedNames = array_diff($existingNames, array_keys($regis_names));
+			foreach ($removedNames as $removedName) {
+				$affectedRows = $this->db
+					->select('id, bill_number')
+					->where('product_id', $id)
+					->where('matched_regis_name', $removedName)
+					->get('product_regis')
+					->result_array();
+				if (!empty($affectedRows)) {
+					$affectedBillsWarning[$removedName] = array_column($affectedRows, 'bill_number');
+					// เคลียร์การจับคู่ทิ้ง เพราะชื่ออ้างอิงที่เคยใช้จับคู่ไม่มีอยู่กับสินค้านี้แล้ว
+					$this->db
+						->where('product_id', $id)
+						->where('matched_regis_name', $removedName)
+						->update('product_regis', ['product_id' => null, 'matched_regis_name' => null]);
+				}
+			}
+		}
+
+		$this->db->where('product_id', $id)->delete('product_regis_name');
+		foreach (array_keys($regis_names) as $rn) {
+			$this->db->insert('product_regis_name', [
+				'product_id'  => $id,
+				'regis_name'  => $rn,
+				'created'     => $curent_date,
+			]);
+		}
+		if (!empty($affectedBillsWarning)) {
+			$res->warning = 'ชื่ออ้างอิงที่ลบออกมีบิลที่เคย import จับคู่ไว้แล้ว ระบบได้ยกเลิกการจับคู่ (product_id) ของบิลเหล่านั้นให้อัตโนมัติ: ';
+			$parts = [];
+			foreach ($affectedBillsWarning as $rn => $bills) {
+				$parts[] = "\"{$rn}\" (" . implode(', ', $bills) . ')';
+			}
+			$res->warning .= implode(' / ', $parts);
+		}
 
 		
 		//###  thumnal ###///
@@ -1927,13 +1989,14 @@ public function save_dynamic_manual() {
 
 	//###   REGIS PRODUCT   ###/
 	// API: รายชื่อสินค้าสำหรับ dropdown ในหน้าแก้ไข/เพิ่มข้อมูลลงทะเบียนสินค้า
-	// แสดงเฉพาะสินค้าที่ตั้งค่า "ชื่อสินค้า (สำหรับอ้างอิง)" ไว้แล้วเท่านั้น ตามที่ระบุ
+	// แสดงเฉพาะสินค้าที่ตั้งค่า "ชื่อสินค้าอ้างอิง" ไว้อย่างน้อย 1 ชื่อ (ใน product_regis_name)
+	// label ด้วยชื่อสินค้าหลัก (name) เพราะตอนนี้มีชื่ออ้างอิงได้หลายชื่อ เอาชื่อเดียวมาโชว์จะกำกวม
 	public function regis_product_options() {
 		$rows = $this->db
-			->select('id, regis_name')
-			->where('regis_name IS NOT NULL', null, false)
-			->where('regis_name !=', '')
-			->order_by('regis_name', 'ASC')
+			->distinct()
+			->select('product.id, product.name')
+			->join('product_regis_name', 'product_regis_name.product_id = product.id', 'inner')
+			->order_by('product.name', 'ASC')
 			->get('product')
 			->result_array();
 		$res = new stdClass();
@@ -1982,7 +2045,14 @@ public function save_dynamic_manual() {
 	}
 	public function get_product_regis() {   
 		
-		$Query = " SELECT `product_regis`.*,`product`.`productcode`,`product`.`name`,`product`.`regis_name`,`product`.`thumnal` FROM `product_regis` LEFT JOIN `product` on `product_regis`.`product_id` = `product`.id ";
+		$Query = " SELECT `product_regis`.*,`product`.`productcode`,`product`.`name`,`product`.`thumnal`, `rn`.`regis_name`
+			FROM `product_regis`
+			LEFT JOIN `product` on `product_regis`.`product_id` = `product`.id
+			LEFT JOIN (
+				SELECT `product_id`, GROUP_CONCAT(`regis_name` SEPARATOR ', ') AS `regis_name`
+				FROM `product_regis_name`
+				GROUP BY `product_id`
+			) `rn` ON `rn`.`product_id` = `product`.`id` ";
 		$result = $this->db->query($Query)->result();
 
 		$res = new stdClass();
@@ -2035,12 +2105,15 @@ public function save_dynamic_manual() {
 		}
 
 		// preload สินค้าทั้งหมดไว้จับคู่ในหน่วยความจำ (ไม่ query ทีละแถว)
-		$products = $this->db->select('id, name, regis_name')->get('product')->result_array();
-		$byRegisName = [];
+		// ชื่ออ้างอิงตอนนี้มีได้หลายชื่อต่อสินค้า (product_regis_name) — จับคู่ได้ทุกชื่อ ไม่ใช่แค่ชื่อเดียว
+		$products = $this->db->select('id, name')->get('product')->result_array();
 		$byName = [];
 		foreach ($products as $p) {
-			if (!empty($p['regis_name'])) { $byRegisName[trim($p['regis_name'])] = $p['id']; }
-			if (!empty($p['name']))       { $byName[trim($p['name'])] = $p['id']; }
+			if (!empty($p['name'])) { $byName[trim($p['name'])] = $p['id']; }
+		}
+		$byRegisName = [];
+		foreach ($this->db->select('product_id, regis_name')->get('product_regis_name')->result_array() as $rn) {
+			if (!empty($rn['regis_name'])) { $byRegisName[trim($rn['regis_name'])] = $rn['product_id']; }
 		}
 
 		// preload เลขที่เอกสารที่มีอยู่แล้ว -> id (เพื่ออัปเดตแถวเดิมถ้าเจอซ้ำ แทนที่จะข้าม ตามที่ระบุ)
@@ -2062,8 +2135,9 @@ public function save_dynamic_manual() {
 
 			$productName = isset($col['ชื่อสินค้า/บริการ']) ? trim((string) ($row[$col['ชื่อสินค้า/บริการ']] ?? '')) : '';
 			$product_id = null;
+			$matched_regis_name = null; // บันทึกไว้เฉพาะตอนจับคู่ผ่านชื่ออ้างอิงจริงๆ (ไม่ใช่ fallback ชื่อหลัก)
 			if ($productName !== '') {
-				if (isset($byRegisName[$productName]))    { $product_id = $byRegisName[$productName]; $matched++; }
+				if (isset($byRegisName[$productName]))    { $product_id = $byRegisName[$productName]; $matched_regis_name = $productName; $matched++; }
 				elseif (isset($byName[$productName]))     { $product_id = $byName[$productName]; $matched++; }
 				else { $unmatchedNames[$productName] = true; }
 			}
@@ -2076,8 +2150,9 @@ public function save_dynamic_manual() {
 			// เลยไม่มีค่าใหม่ให้อัปเดต จึงไม่แตะค่าเดิมที่มีอยู่)
 			if (isset($existingBills[$bill_number])) {
 				$updateObj = [
-					'product_id' => $product_id,
-					'updated'    => $curent_date,
+					'product_id'         => $product_id,
+					'matched_regis_name' => $matched_regis_name,
+					'updated'            => $curent_date,
 				];
 				if ($tel_idcart !== '') { $updateObj['tel_idcart'] = $tel_idcart; }
 				$this->db->where('id', $existingBills[$bill_number])->update('product_regis', $updateObj);
@@ -2108,8 +2183,9 @@ public function save_dynamic_manual() {
 			}
 
 			$obj = [
-				'product_id'    => $product_id,
-				'bill_number'   => $bill_number,
+				'product_id'         => $product_id,
+				'matched_regis_name' => $matched_regis_name,
+				'bill_number'        => $bill_number,
 				'customer_name' => ($customer_name !== '') ? $customer_name : null,
 				'tel_idcart'    => ($tel_idcart !== '') ? $tel_idcart : null,
 				'branch'        => ($branch !== '') ? $branch : null,

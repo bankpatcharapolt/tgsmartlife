@@ -90,8 +90,8 @@
                 tr += '<td class="drag-handle" title="ลากเพื่อเรียงลำดับ"><i class="fa fa-arrows"></i><span class="order-no">'+no+'</span></td>';
 
                 if (val.thumnal) {
-                    var imgs = base_url+val.thumnal+'?random='+Math.random();
-                    tr += '<td style="vertical-align: middle;"><img src="'+imgs+'" alt="'+esc(val.name)+'" style="width:48px;height:48px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;" /></td>';
+                    var imgs = base_url+val.thumnal;
+                    tr += '<td style="vertical-align: middle;"><img src="'+imgs+'" alt="'+esc(val.name)+'" loading="lazy" style="width:48px;height:48px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;" /></td>';
                 } else {
                     tr += '<td style="vertical-align: middle;"><div style="width:48px;height:48px;border-radius:8px;border:1px dashed #d1d5db;background:#f9fafb;display:flex;align-items:center;justify-content:center;color:#c1c7cd;"><i class="fa fa-image"></i></div></td>';
                 }

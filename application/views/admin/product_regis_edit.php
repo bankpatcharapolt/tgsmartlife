@@ -88,7 +88,7 @@
                 $sel.find('option:not(:first)').remove();
                 if (data.datas) {
                     data.datas.forEach(function(p){
-                        var opt = $('<option>').val(p.id).text(p.regis_name);
+                        var opt = $('<option>').val(p.id).text(p.name);
                         if (selectedId != null && String(p.id) === String(selectedId)) {
                             opt.prop('selected', true);
                         }

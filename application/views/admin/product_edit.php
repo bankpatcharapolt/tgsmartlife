@@ -42,8 +42,11 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12 ">
-                            <label class="control-label">ชื่อสินค้า (สำหรับอ้างอิงหน้าลงทะเบียน/รับประกันสินค้า)</label>
-                            <input type="text" class="form-control" name="regis_name" id="regis_name" placeholder="ชื่อสินค้าตามที่ใช้ในเอกสารใบเสร็จ/รับประกัน อาจไม่ตรงกับ Name ด้านบน">
+                            <label class="control-label">ชื่อสินค้าอ้างอิง (สำหรับหน้าลงทะเบียน/รับประกันสินค้า — ใส่ได้หลายชื่อ)</label>
+                            <div id="regis-names-list"></div>
+                            <button type="button" class="btn btn-round btn-success" id="btn-add-regis-name" style="font-size: 12px; padding: 5px 12px; margin-top: 4px;">
+                                <i class="fa fa-plus"></i> เพิ่มชื่ออ้างอิง
+                            </button>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -177,6 +180,19 @@
     var base_url = $('input[name="base_url"]').val();
     CKEDITOR.replace('detail', {height  : '500px',});
     CKEDITOR.replace('warranty', {height  : '500px',});
+
+    //###  ชื่อสินค้าอ้างอิง (เพิ่ม/ลบได้หลายชื่อ) ##//
+    function addRegisNameRow(value) {
+        var row = $('<div>', { class: 'regis-name-row', style: 'display:flex; gap:8px; margin-bottom:6px; align-items:center;' });
+        var input = $('<input>', { type: 'text', class: 'form-control', name: 'regis_names[]',
+            placeholder: 'ชื่อสินค้าตามที่ใช้ในเอกสารใบเสร็จ/รับประกัน อาจไม่ตรงกับ Name ด้านบน', value: value || '' });
+        var btnRemove = $('<button>', { type: 'button', class: 'btn btn-round btn-danger', style: 'font-size: 11px; padding: 4px 8px; flex-shrink:0;' })
+            .html('<i class="fa fa-trash"></i>')
+            .on('click', function() { row.remove(); });
+        row.append(input).append(btnRemove);
+        $('#regis-names-list').append(row);
+    }
+    $('#btn-add-regis-name').on('click', function() { addRegisNameRow(''); });
     
     $(document).ready(function(){
         $('#category').trigger('change');  
@@ -341,7 +357,10 @@
             }
             $('form#action-form #productcode').val(results.datas[0].productcode);
             $('form#action-form #name').val(results.datas[0].name);
-            $('form#action-form #regis_name').val(results.datas[0].regis_name);
+            var existingRegisNames = (results.datas[0].regis_names || '').split('\n').filter(function(s){ return s.trim() !== ''; });
+            if (existingRegisNames.length === 0) { existingRegisNames = ['']; }
+            $('#regis-names-list').empty();
+            existingRegisNames.forEach(function(n){ addRegisNameRow(n); });
             $('form#action-form #subtitle').val(results.datas[0].subtitle);
             $('form#action-form #counts').val(results.datas[0].counts);
             $('form#action-form #price').val(results.datas[0].price);
@@ -517,6 +536,9 @@
             contentType: false,
             processData: false,
             success:function(response){ //หากทำงานสำเร็จ จะรับค่ามาจาก JSON หลังจากนั้นก็ให้ทำงานตามที่เรากำหนดได้
+                if (response.warning) {
+                    alert(response.warning);
+                }
                 window.location.href = response.datas;
                 // $("#loading-spinner").hide();
                 // if(response.status){
