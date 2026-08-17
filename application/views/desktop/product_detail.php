@@ -386,7 +386,7 @@ line-height: normal;">สินค้าแนะนำ</h3>
      <?php $this->load->view('desktop/product_interest'); ?>
 <!-- Shop Section End -->
 
-<script src="<?= base_url('assete/js/add_to_cart.js') ?>"></script>
+<script src="<?= base_url('assete/js/add_to_cart.js?d=202608171430') ?>"></script>
 <script>
     var base_url = "<?= base_url(); ?>";
     drawcontens(base_url);
@@ -721,7 +721,7 @@ height:41px;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
-line-height: normal;" onclick="addToCart(${reslt.id})"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="16" viewBox="0 0 15 16" fill="none">
+line-height: normal;" onclick="addToCart(${reslt.id}, this)"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="16" viewBox="0 0 15 16" fill="none">
   <path d="M12.1836 14.8631C12.7248 14.8631 13.1636 14.3892 13.1636 13.8046C13.1636 13.22 12.7248 12.7461 12.1836 12.7461C11.6424 12.7461 11.2036 13.22 11.2036 13.8046C11.2036 14.3892 11.6424 14.8631 12.1836 14.8631Z" fill="black" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M5.64992 14.8631C6.19114 14.8631 6.62992 14.3892 6.62992 13.8046C6.62992 13.22 6.19114 12.7461 5.64992 12.7461C5.10868 12.7461 4.66992 13.22 4.66992 13.8046C4.66992 14.3892 5.10868 14.8631 5.64992 14.8631Z" fill="black" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M2.71 2.16132H13.8167L12.51 9.92357H4.01667L2.71 2.16132ZM2.71 2.16132C2.60111 1.69088 2.05667 0.75 0.75 0.75" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

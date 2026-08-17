@@ -525,7 +525,7 @@ aspect-ratio: 63/43;"></a>
     <script type="text/javascript">
         var base_url = "<?= base_url() ?>";
     </script>
-    <script src="<?= base_url('assete/js/add_to_cart.js') ?>"></script>
+    <script src="<?= base_url('assete/js/add_to_cart.js?d=202608171430') ?>"></script>
     <script type="text/javascript">
         var user_id = '<?php echo isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0 ?>';
         var cartData = JSON.parse(localStorage.getItem('cartData')) || {};

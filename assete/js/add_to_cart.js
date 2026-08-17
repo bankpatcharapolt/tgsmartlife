@@ -34,6 +34,10 @@ function ajaxaddToCartMember(product_id , amount , is_replace = false){
 function addToCart(product_id , clickedButton = null) {
     var amount = $("#number_" + product_id).val(); // ดึงค่าจำนวนสินค้าจาก input
 
+    // เล่น animation บินไปยังไอคอนตะกร้า (#cart-count) ทันทีที่กดปุ่ม — ทำงานทั้งกรณี login และไม่ login
+    if (clickedButton) {
+        flyToCartAnimation(clickedButton);
+    }
 
     // แสดงข้อความสำหรับผู้ใช้ (ในที่นี้คือแสดง alert)
     if (user_id != 0) {
@@ -80,12 +84,6 @@ function addToCart(product_id , clickedButton = null) {
         for (var i = 0; i < cartCountElement2.length; i++) {
             cartCountElement2[i].innerText = newCount;
         }
-
-
-        // if (clickedButton) {
-         
-        //     flyToCartAnimation(clickedButton);
-        // }
         
     }
 }
@@ -99,6 +97,7 @@ function addToCart(product_id , clickedButton = null) {
 function flyToCartAnimation(clickedButton) {
     const flyer = document.createElement('div');
     flyer.classList.add('fly-to-cart-item');
+    flyer.innerHTML = '<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 15 16\' fill=\'none\'><path d=\'M12.1251 14.8631C12.6636 14.8631 13.1001 14.3892 13.1001 13.8046C13.1001 13.2201 12.6636 12.7461 12.1251 12.7461C11.5867 12.7461 11.1501 13.2201 11.1501 13.8046C11.1501 14.3892 11.5867 14.8631 12.1251 14.8631Z\' fill=\'#007bff\' stroke=\'#007bff\' stroke-width=\'1.8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/><path d=\'M5.6249 14.8631C6.16336 14.8631 6.5999 14.3892 6.5999 13.8046C6.5999 13.2201 6.16336 12.7461 5.6249 12.7461C5.08642 12.7461 4.6499 13.2201 4.6499 13.8046C4.6499 14.3892 5.08642 14.8631 5.6249 14.8631Z\' fill=\'#007bff\' stroke=\'#007bff\' stroke-width=\'1.8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/><path d=\'M2.7 2.16132H13.75L12.45 9.92357H4L2.7 2.16132ZM2.7 2.16132C2.59166 1.69088 2.05 0.75 0.75 0.75\' stroke=\'#007bff\' stroke-width=\'1.8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/><path d=\'M12.4501 9.92363H4.00007H2.85007C1.69027 9.92363 1.07507 10.4749 1.07507 11.3349C1.07507 12.195 1.69027 12.7463 2.85007 12.7463H12.1251\' stroke=\'#007bff\' stroke-width=\'1.8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/></svg>';
     document.body.appendChild(flyer);
 
     const cartTarget = document.getElementById('cart-count'); 
@@ -109,15 +108,15 @@ function flyToCartAnimation(clickedButton) {
         return;
     }
 
-    // A. ตำแหน่งเริ่มต้น (ปุ่มที่ถูกคลิก)
+    // A. ตำแหน่งเริ่มต้น (ปุ่มที่ถูกคลิก) — 13 = ครึ่งหนึ่งของขนาดไอคอน (26px) เพื่อจัดกึ่งกลาง
     const startRect = clickedButton.getBoundingClientRect();
-    const startX = startRect.left + startRect.width / 2 - 10; 
-    const startY = startRect.top + startRect.height / 2 - 10;
+    const startX = startRect.left + startRect.width / 2 - 13; 
+    const startY = startRect.top + startRect.height / 2 - 13;
     
     // B. ตำแหน่งเป้าหมาย (#cart-count)
     const targetRect = cartTarget.getBoundingClientRect();
-    const targetX = targetRect.left + targetRect.width / 2 - 10;
-    const targetY = targetRect.top + targetRect.height / 2 - 10;
+    const targetX = targetRect.left + targetRect.width / 2 - 13;
+    const targetY = targetRect.top + targetRect.height / 2 - 13;
 
     // 1. กำหนดสไตล์เริ่มต้น (ตำแหน่ง)
     flyer.style.left = `${startX}px`;
@@ -134,6 +133,12 @@ function flyToCartAnimation(clickedButton) {
     // 3. ลบ Element เมื่อ Animation เสร็จสิ้น
     flyer.addEventListener('transitionend', () => {
         flyer.remove();
+
+        // 4. ทำให้ตัวเลขจำนวนสินค้ากระเด้งเล็กน้อยตอนของบินไปถึง
+        cartTarget.classList.add('cart-count-bump');
+        setTimeout(() => {
+            cartTarget.classList.remove('cart-count-bump');
+        }, 350);
     });
 }
 function countTotalStorage(){

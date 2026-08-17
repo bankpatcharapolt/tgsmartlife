@@ -262,7 +262,7 @@ window.onresize = updateCartButtonTextByWrap;
 <!-- Shop Section End -->
 <!-- #EndEditable -->
 
-<script src="<?=base_url('assete/js/add_to_cart.js?d=202512142017')?>"></script>
+<script src="<?=base_url('assete/js/add_to_cart.js?d=202608171430')?>"></script>
 <script>
 
 

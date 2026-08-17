@@ -4546,12 +4546,26 @@ line-height: 150%; /* 24px */
     /* กำหนดระยะเวลา 0.7 วินาที และใช้ฟังก์ชัน Cubic Bezier เพื่อให้ดูเหมือน 'กระเด้ง' */
     transition: all 0.7s cubic-bezier(0.5, -0.5, 0.5, 1.5); 
     
-    /* สไตล์ของวัตถุจำลอง (Pop-up) */
-    width: 20px;
-    height: 20px;
-    background-color: #007bff; /* สีน้ำเงิน: เปลี่ยนได้ตามต้องการ */
-    border-radius: 50%; /* ทำให้เป็นวงกลม */
+    /* สไตล์ของวัตถุจำลอง (ไอคอนตะกร้าเล็กๆ) */
+    width: 26px;
+    height: 26px;
     opacity: 1;
+    pointer-events: none; /* กันไม่ให้บังคลิกระหว่างบิน */
     
     /* ตั้งค่าเริ่มต้น: วัตถุจะถูกวางที่ตำแหน่งเริ่มต้นด้วย JS ก่อน แล้ว CSS จะย้ายมัน */
+}
+.fly-to-cart-item svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* กระเด้งเล็กน้อยที่ตัวเลขจำนวนสินค้า (#cart-count) ตอนของที่บินมาถึง */
+@keyframes cartCountBump {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+}
+.cart-count-bump {
+    animation: cartCountBump 0.35s ease;
 }

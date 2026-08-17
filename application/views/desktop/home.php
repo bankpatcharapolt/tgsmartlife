@@ -545,7 +545,7 @@ input[type=number] {
 <!-- #EndEditable -->
 
 
-<script src="<?=base_url('assete/js/add_to_cart.js')?>"></script>
+<script src="<?=base_url('assete/js/add_to_cart.js?d=202608171430')?>"></script>
   
 <script>
 
@@ -721,7 +721,7 @@ function draw_tg_slide(base_url){
                 <button class="value-button btn btn-light mt-auto" id="decrease_${val.id}" onclick="decreaseValue(${val.id})" value="Decrease Value">-</button>
                 <input type="number" id="number_${val.id}" class="numberCart form-control mt-auto" value="1" style="margin: 0;">
                 <button class="value-button btn btn-light mt-auto" id="increase_${val.id}" onclick="increaseValue(${val.id})" value="Increase Value">+</button>
-                <button class="btn btn-primary ml-4 ml-md-auto addtocart d-flex align-items-center" style="height:40px;" onclick="addToCart(${val.id})">เพิ่มไปยังรถเข็น</button>
+                <button class="btn btn-primary ml-4 ml-md-auto addtocart d-flex align-items-center" style="height:40px;" onclick="addToCart(${val.id}, this)">เพิ่มไปยังรถเข็น</button>
             </div>`;
 
             
